@@ -3,8 +3,13 @@ import './App.css'
 import { SlSocialInstagram } from "react-icons/sl";
 import { TiSocialYoutube } from "react-icons/ti";
 import { BsTwitch } from "react-icons/bs";
-import casino from './1win.png'
-import instrucciones from './instrucciones.gif'
+import casino from './1win.png';
+import instrucciones from './instrucciones.gif';
+import mp from './mp.webp';
+import cripto from './crypto.webp'
+import astro from './astro.webp'
+
+
 // Componente para representar un enlace individual
 const LinkItem = ({ parrafo, title, url, imagen, isImage, gif }) => {
   
@@ -48,10 +53,15 @@ const App = () => {
       <img src={'https://yt3.ggpht.com/xfC9kFjSXQfQqJizTG-_HxE-BnuuQbfbWypn-zLDkFCdgd-NlHG-w2BuKTurVRNaorb5E9d8=s600-c-k-c0x00ffffff-no-rj-rp-mo'} style={{ display: 'flex', width: '100px', height: '100px', borderRadius: '50%', margin: '0 auto' }}></img>
       <h3 style={{ textAlign: 'center', color: 'white', fontStyle: 'italic' }}>eldenguee</h3>
       <LinkTree links={links} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', justifyContent: 'center', marginTop: '15PX' }}>
+      {/* <div style={{ display: 'flex', alignItems: 'center', gap: '20px', justifyContent: 'center', marginTop: '15PX' }}>
         <a href="https://www.instagram.com/eldengueee/" style={{ textDecoration: 'none' }}><SlSocialInstagram style={{ color: 'white' }} /></a>
         <a href="https://www.youtube.com/@dengueetimba" style={{ textDecoration: 'none' }}> <TiSocialYoutube style={{ color: 'white' }} /></a>
         <a href="https://www.twitch.tv/eldenguee" style={{ textDecoration: 'none' }}><BsTwitch style={{ color: 'white' }} /></a>
+      </div> */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', justifyContent: 'center', marginTop: '15PX' }}>
+       <img src={mp} style={{width:'20%'}}/>
+       <img src={cripto} style={{width:'20%'}} />
+       <img src={astro} style={{width:'20%'}} />
       </div>
       <h4 style={{color:'white', textAlign:'center'}}>Depósito Mínimo AR$2000</h4>
     </div>
