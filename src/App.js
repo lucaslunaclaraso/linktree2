@@ -6,17 +6,17 @@ import { BsTwitch } from "react-icons/bs";
 import casino from './1win.png'
 import instrucciones from './instrucciones.gif'
 // Componente para representar un enlace individual
-const LinkItem = ({ title, url, imagen, isImage, gif }) => {
-  console.log(isImage)
+const LinkItem = ({ parrafo, title, url, imagen, isImage, gif }) => {
+  
   return (
     <div className="link-item">
-      {isImage ? 
-        <a href={url} target="_blank" rel="noopener noreferrer" style={{width:'10%'}}>
-          <img src={ gif ? instrucciones : casino} alt style={{width: gif ?'100%' :'50%'}} />
+      {isImage ?
+        <a href={url} target="_blank" rel="noopener noreferrer" style={{ width: '10%' }}>
+          <img src={gif ? instrucciones : casino} alt style={{ width: gif ? '100%' : '50%' }} />
         </a>
-    
-    :
-        <a href={url} target="_blank" rel="noopener noreferrer"> {title}</a>
+
+        :
+        <a href={url} target="_blank" rel="noopener noreferrer"> {parrafo ? <p>{title} <br/> <span style={{fontSize:'12px', color:'grey'}}>+500 de bonus en los primeros 4 depósitos</span> <br/> <span style={{fontSize:'12px', color:'grey'}}>+30% de rakeback semanal</span></p> :title}</a>
 
       }
     </div>
@@ -28,7 +28,7 @@ const LinkTree = ({ links }) => {
   return (
     <div className="link-tree">
       {links.map((link, index) => (
-        <LinkItem key={index} title={link.title} url={link.url}  imagen={link.imagen} isImage={link.isImage} gif={link.gif}/>
+        <LinkItem key={index} title={link.title} url={link.url} imagen={link.imagen} isImage={link.isImage} gif={link.gif} parrafo={link.parrafo} />
       ))}
     </div>
   );
@@ -38,7 +38,7 @@ const LinkTree = ({ links }) => {
 const App = () => {
   const links = [
     { url: 'https://1win.lat/?open=register#p2g0', isImage: true },
-    { title: 'Código: dengue1win', url: '' },
+    { title: 'Código: dengue1win', url: '', parrafo: true },
     { isImage: true, url: '', gif: true },
     // Agrega más enlaces según sea necesario
   ];
