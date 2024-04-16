@@ -16,7 +16,7 @@ const LinkItem = ({ parrafo, title, url, imagen, isImage, gif }) => {
         </a>
 
         :
-        <a href={url} target="_blank" rel="noopener noreferrer"> {parrafo ? <p>{title} <br/> <span style={{fontSize:'12px', color:'grey'}}>+500 de bonus en los primeros 4 depósitos</span> <br/> <span style={{fontSize:'12px', color:'grey'}}>+30% de rakeback semanal</span></p> :title}</a>
+        <a href={url} target="_blank" rel="noopener noreferrer"> {parrafo ? <p>{title} <br/> <span style={{fontSize:'12px', color:'grey'}}>+500% de bonus en los primeros 4 depósitos</span> <br/> <span style={{fontSize:'12px', color:'grey'}}>+30% de rakeback semanal</span></p> :title}</a>
 
       }
     </div>
