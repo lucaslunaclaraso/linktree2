@@ -53,6 +53,7 @@ const App = () => {
         <a href="https://www.youtube.com/@dengueetimba" style={{ textDecoration: 'none' }}> <TiSocialYoutube style={{ color: 'white' }} /></a>
         <a href="https://www.twitch.tv/eldenguee" style={{ textDecoration: 'none' }}><BsTwitch style={{ color: 'white' }} /></a>
       </div>
+      <h4 style={{color:'white', textAlign:'center'}}>Depósito Mínimo AR$2000</h4>
     </div>
   );
 };
