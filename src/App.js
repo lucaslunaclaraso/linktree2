@@ -4,14 +4,15 @@ import { SlSocialInstagram } from "react-icons/sl";
 import { TiSocialYoutube } from "react-icons/ti";
 import { BsTwitch } from "react-icons/bs";
 import casino from './1win.png'
+import instrucciones from './instrucciones.gif'
 // Componente para representar un enlace individual
-const LinkItem = ({ title, url, imagen, isImage }) => {
+const LinkItem = ({ title, url, imagen, isImage, gif }) => {
   console.log(isImage)
   return (
     <div className="link-item">
       {isImage ? 
         <a href={url} target="_blank" rel="noopener noreferrer" style={{width:'10%'}}>
-          <img src={casino} alt style={{width:'50%'}} />
+          <img src={ gif ? instrucciones : casino} alt style={{width: gif ?'100%' :'50%'}} />
         </a>
     
     :
@@ -27,7 +28,7 @@ const LinkTree = ({ links }) => {
   return (
     <div className="link-tree">
       {links.map((link, index) => (
-        <LinkItem key={index} title={link.title} url={link.url}  isImage={link.isImage}/>
+        <LinkItem key={index} title={link.title} url={link.url}  imagen={link.imagen} isImage={link.isImage} gif={link.gif}/>
       ))}
     </div>
   );
@@ -38,7 +39,7 @@ const App = () => {
   const links = [
     { url: 'https://1win.lat/?open=register#p2g0', isImage: true },
     { title: 'Código: dengue1win', url: '' },
-    { title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", url: '' },
+    { isImage: true, url: '', gif: true },
     // Agrega más enlaces según sea necesario
   ];
 
