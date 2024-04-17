@@ -17,7 +17,7 @@ const LinkItem = ({ parrafo, title, url, imagen, isImage, gif }) => {
     <div className="link-item">
       {isImage ?
         <a href={url} target="_blank" rel="noopener noreferrer" style={{ width: '10%' }}>
-          <img src={gif ? instrucciones : casino} alt style={{ width: gif ? '100%' : '50%' }} />
+          <img src={gif ? instrucciones : casino} alt style={{ width: gif ? '100%' : '35%' }} />
         </a>
 
         :
