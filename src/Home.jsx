@@ -11,8 +11,18 @@ import axios from 'axios'
 
 
 // Componente para representar un enlace individual
+
 const LinkItem = ({ parrafo, title, url, imagen, isImage, gif }) => {
 
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(title)
+      .then(() => {
+        alert('Texto copiado al portapapeles: ' + title);
+      })
+      .catch(err => {
+        console.error('Error al copiar el texto: ', err);
+      });
+  };
   const nuevoClick = async () => {
     const response = await axios.post('https://apidengue.vercel.app/')
 
@@ -25,7 +35,9 @@ const LinkItem = ({ parrafo, title, url, imagen, isImage, gif }) => {
         </a>
 
         :
-        <a href={url} target="_blank" rel="noopener noreferrer"> {parrafo ? <p>{title} <br /> <span style={{ fontSize: '12px', color: 'grey' }}>+500% de bonus en los primeros 4 depósitos</span> <br /> <span style={{ fontSize: '12px', color: 'grey' }}>+30% de rakeback semanal</span></p> : title}</a>
+        <>
+          {parrafo ? <p > <span style={{cursor:'pointer'}} onClick={() => copyToClipboard()}> {title} </span> <br /> <span style={{ fontSize: '12px', color: 'grey' }}>+500% de bonus en los primeros 4 depósitos</span> <br /> <span style={{ fontSize: '12px', color: 'grey' }}>+30% de rakeback semanal</span></p> : title}
+        </>
 
       }
     </div>
