@@ -4,26 +4,25 @@ import axios from 'axios'
 
 function Stats(props) {
     const [clicks, setClicks] = useState();
-    console.log(clicks)
-    console.log(clicks?.length)
+
     const [isLoading, setIsLoading] = useState(true);
     const getClicks = async () => {
-        const res = await axios.get('http://localhost:3001/')
+        const res = await axios.get('https://apidengue.vercel.app/')
         setClicks(res.data)
         setIsLoading(false)
     }
     const getClicksDay = async () => {
-        const res = await axios.get('http://localhost:3001/daily')
+        const res = await axios.get('https://apidengue.vercel.app/daily')
         setClicks(res.data)
         setIsLoading(false)
     }
     const getClicksWeekly = async () => {
-        const res = await axios.get('http://localhost:3001/weekly')
+        const res = await axios.get('https://apidengue.vercel.app/weekly')
         setClicks(res.data)
         setIsLoading(false)
     }
     const getClicksMonthly = async () => {
-        const res = await axios.get('http://localhost:3001/monthly')
+        const res = await axios.get('https://apidengue.vercel.app/monthly')
         setClicks(res.data)
         setIsLoading(false)
     }
