@@ -64,7 +64,7 @@ function Stats(props) {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
             <h3 style={{ color: 'white' }}>Cantidad de clicks </h3>
-            <h1 style={{ color: 'white' }}>{isLoading ? '' : clicks?.length == 1 ? clicks[clicks?.length - 1]?.count : `Total: ${clicks?.length}`}</h1>
+            {/* <h1 style={{ color: 'white' }}>{isLoading ? '' : clicks?.length == 1 ? clicks[clicks?.length - 1]?.count : `Total: ${clicks?.length}`}</h1> */}
             {
                 filtro.total &&
                 <h1 style={{ color: 'white' }}>{isLoading ? '' :  `Total: ${clicks?.length}`}</h1>
@@ -72,17 +72,17 @@ function Stats(props) {
             }
             {
                 filtro.dia && 
-                <h1 style={{ color: 'white' }}>{isLoading ? '' :  `Total por día: ${clicks[clicks?.length -1]?.length}`}</h1>
+                <h1 style={{ color: 'white' }}>{isLoading ? '' :  `Total por día: ${clicks[clicks?.length -1]?.count}`}</h1>
 
             }
             {
                 filtro.semana && 
-                <h1 style={{ color: 'white' }}>{isLoading ? '' :  `Total por semana: ${clicks[clicks?.length -1]?.length}`}</h1>
+                <h1 style={{ color: 'white' }}>{isLoading ? '' :  `Total por semana: ${clicks[clicks?.length -1]?.count}`}</h1>
 
             }
             {
                 filtro.mes && 
-                <h1 style={{ color: 'white' }}>{isLoading ? '' :  `Total por mes: ${clicks[clicks?.length -1]?.length}`}</h1>
+                <h1 style={{ color: 'white' }}>{isLoading ? '' :  `Total por mes: ${clicks[clicks?.length -1]?.count}`}</h1>
 
             }
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
