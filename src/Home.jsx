@@ -63,7 +63,7 @@ const Home = () => {
 
 
   const links = [
-    { url: 'https://1win.lat/?open=register#p2g0', isImage: true },
+    { url: 'https://1wfsi.com/v3/aggressive-casino', isImage: true },
     { title: 'Código: dengue1win', url: '', parrafo: true },
     { isImage: true, url: '', gif: true },
     // Agrega más enlaces según sea necesario
