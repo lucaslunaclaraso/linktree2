@@ -5,7 +5,6 @@ import './tabla.css';
 
 function Stats(props) {
     const [clicks, setClicks] = useState([]);
-    const [clicksTable, setClicksTable] = useState([]);
     const [filteredClicks, setFilteredClicks] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [pageCount, setPageCount] = useState(0);
@@ -23,8 +22,7 @@ function Stats(props) {
     const getClicks = async () => {
         const res = await axios.get('https://apidengue.vercel.app/');
         setClicks(res.data);
-        setClicksTable(res.data);
-        setFilteredClicks(res.data);
+        applyFilters(res.data, timestampFilter, ipFilter);
         setPageCount(Math.ceil(res.data.length / clicksPerPage));
         setFiltro({
             total: true,
@@ -38,6 +36,7 @@ function Stats(props) {
     const getClicksDay = async () => {
         const res = await axios.get('https://apidengue.vercel.app/daily');
         setClicks(res.data);
+        applyFilters(res.data, timestampFilter, ipFilter);
         setFiltro({
             total: false,
             dia: true,
@@ -50,6 +49,7 @@ function Stats(props) {
     const getClicksWeekly = async () => {
         const res = await axios.get('https://apidengue.vercel.app/weekly');
         setClicks(res.data);
+        applyFilters(res.data, timestampFilter, ipFilter);
         setFiltro({
             total: false,
             dia: false,
@@ -62,6 +62,7 @@ function Stats(props) {
     const getClicksMonthly = async () => {
         const res = await axios.get('https://apidengue.vercel.app/monthly');
         setClicks(res.data);
+        applyFilters(res.data, timestampFilter, ipFilter);
         setFiltro({
             total: false,
             dia: false,
@@ -78,22 +79,25 @@ function Stats(props) {
     const handleFilterChange = (e) => {
         const value = e.target.value;
         setTimestampFilter(value);
-        filterClicks(value, ipFilter);
+        applyFilters(clicks, value, ipFilter);
     };
 
     const handleIpFilterChange = (e) => {
         const value = e.target.value;
         setIpFilter(value);
-        filterClicks(timestampFilter, value);
+        applyFilters(clicks, timestampFilter, value);
     };
 
-    const filterClicks = (timestampFilter, ipFilter) => {
+    const applyFilters = (clicks, timestampFilter, ipFilter) => {
         let filtered = clicks;
         if (timestampFilter) {
-            filtered = filtered.filter(click => click.timestamp.includes(timestampFilter));
+            filtered = filtered.filter(click => {
+                const clickDate = new Date(click.timestamp).toLocaleDateString();
+                return clickDate.includes(timestampFilter);
+            });
         }
         if (ipFilter) {
-            filtered = filtered.filter(click => click.ip.includes(ipFilter));
+            filtered = filtered.filter(click => click.ip && click.ip.includes(ipFilter));
         }
         setFilteredClicks(filtered);
         setPageCount(Math.ceil(filtered.length / clicksPerPage));
@@ -109,7 +113,7 @@ function Stats(props) {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
-            <h3 style={{ color: 'white' }}>Cantidad de clicks </h3>
+            <h3 style={{ color: 'white' }}>Cantidad de clicks</h3>
             {
                 filtro.total &&
                 <h1 style={{ color: 'white' }}>{isLoading ? '' : `Total: ${clicks?.length}`}</h1>
@@ -127,10 +131,10 @@ function Stats(props) {
                 <h1 style={{ color: 'white' }}>{isLoading ? '' : `Total por mes: ${clicks[clicks?.length - 1]?.count}`}</h1>
             }
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <button onClick={() => getClicksDay()}>Por día</button>
-                <button onClick={() => getClicksWeekly()}>Por Semana</button>
-                <button onClick={() => getClicksMonthly()}>Por Mes</button>
-                <button onClick={() => getClicks()}>Total</button>
+                <button onClick={getClicksDay}>Por día</button>
+                <button onClick={getClicksWeekly}>Por Semana</button>
+                <button onClick={getClicksMonthly}>Por Mes</button>
+                <button onClick={getClicks}>Total</button>
             </div>
             <div style={{ display: 'flex', gap: '10px', margin: '10px 0' }}>
                 <input
@@ -149,15 +153,15 @@ function Stats(props) {
             <table>
                 <thead>
                     <tr>
-                        <th style={{color:'white'}}>Registro de Click</th>
-                        <th style={{color:'white'}}>IP</th>
+                        <th style={{ color: 'white' }}>Registro de Click</th>
+                        <th style={{ color: 'white' }}>IP</th>
                     </tr>
                 </thead>
                 <tbody>
                     {currentClicks.map(click => (
                         <tr key={click._id}>
-                            <td style={{color:'white'}}>{new Date(click.timestamp).toLocaleString()}</td>
-                            <td style={{color:'white'}}>{click.ip}</td>
+                            <td style={{ color: 'white' }}>{new Date(click.timestamp).toLocaleString()}</td>
+                            <td style={{ color: 'white' }}>{click.ip}</td>
                         </tr>
                     ))}
                 </tbody>
