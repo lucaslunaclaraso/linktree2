@@ -52,3 +52,17 @@ h1 {
     gap: 10px;
   }
 }
+
+@font-face {
+  font-family: 'PoetsenOne';
+  src: url('./fuente/PoetsenOne-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Belerofonte';
+  src: url('./fuente/Belerofonte.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
