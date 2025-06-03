@@ -16,7 +16,7 @@ export default function Callback() {
     const code = searchParams.get('code');
     const state = searchParams.get('state'); // URL original (por ejemplo, "/sorteo/123")
     const code_verifier = localStorage.getItem('kick_code_verifier');
-console.log('state', state)
+    console.log('state', state)
 
     if (code && code_verifier) {
       try {
@@ -36,26 +36,21 @@ console.log('state', state)
         }
 
         const data = await res.json();
-        
+
 
         if (data.access_token) {
-          // Guardar el token
           localStorage.setItem('kick_token', JSON.stringify(data));
-
           // Obtener datos del usuario
-          const userRes = await fetch('https://id.kick.com/api/v1/user', {
-              headers: {
-                  Authorization: `Bearer ${data.access_token}`,
-              },
+          const response = await fetch('https://api.kick.com/public/v1/users', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${data.access_token}`,
+              'Accept': 'application/json',
+            },
           });
 
-          if (!userRes.ok) {
-              throw new Error(`HTTP error al obtener usuario! status: ${userRes.status}`);
-          }
-
-          const userData = await userRes.json();
+          const userData = await response.json();
           console.log('User data:', userData);
-
           // Guardar el nombre de usuario (ajusta según la estructura de userData)
           const username = userData?.username || userData?.login ; // Fallback
           localStorage.setItem('kick_user', username);
@@ -64,9 +59,9 @@ console.log('state', state)
           // Forzar recarga completa a la URL original
           const redirectTo = state ? decodeURIComponent(state) : '/';
           window.location.href = redirectTo;
-      } else {
+        } else {
           throw new Error('No se recibió un access_token válido');
-      }
+        }
       } catch (err) {
         console.error('Error al obtener el token:', err);
         localStorage.setItem('kick_token', JSON.stringify({ error: 'Token inválido' }));
