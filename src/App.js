@@ -22,9 +22,13 @@ function App() {
 
     const RutaPrivada = ({ children }) => {
         const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
-        const usuarioKick =localStorage.getItem('kick_user')
+        const usuarioKick = localStorage.getItem('kick_user')
 
-        if (usuario !== ('Lucas Luna' || 'Luis San Cristobal') || usuarioKick !== ('lucaslunacl' || 'eldenguee')) {
+        // Verificar si el usuario es válido (incluye tanto fbUser como kick_user)
+        const isValidUser =
+            (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
+            (usuarioKick === 'lucaslunacl' || usuarioKick === 'eldenguee');
+        if (!isValidUser) {
             return <Home isMobile={isMobile} />
         }
 
@@ -38,10 +42,10 @@ function App() {
                 <Route exact path='/' element={<Home isMobile={isMobile} />} />
                 <Route path='/stats' element={<Stats />} />
 
-                <Route path='/panel' element={<RutaPrivada><CrearSorteo isMobile={isMobile} sorteos={sorteos} setSorteos={setSorteos}/></RutaPrivada>} />
+                <Route path='/panel' element={<RutaPrivada><CrearSorteo isMobile={isMobile} sorteos={sorteos} setSorteos={setSorteos} /></RutaPrivada>} />
 
                 <Route path="/sorteos" element={<RutaPrivada><ListadoSorteos sorteos={sorteos} /> </RutaPrivada>} />
-                
+
                 <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} /> </RutaPrivada>} />
                 <Route path="/callback" element={<Callback />} />
             </Routes>
