@@ -77,7 +77,7 @@ function App() {
     
             const criptoRandom = crypto.randomUUID()
             
-            const state = encodeURIComponent(location.pathname);
+            const state = isSorteoRoute ? encodeURIComponent(location.pathname) : encodeURIComponent('/');
             const params = new URLSearchParams({
                 response_type: 'code',
                 client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
