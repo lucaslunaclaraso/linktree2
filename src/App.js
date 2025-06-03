@@ -22,9 +22,9 @@ function App() {
 
     const RutaPrivada = ({ children }) => {
         const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
+        const usuarioKick =localStorage.getItem('kick_user')
 
-
-        if (usuario !== ('Lucas Luna' || 'Luis San Cristobal')) {
+        if (usuario !== ('Lucas Luna' || 'Luis San Cristobal') || usuarioKick !== ('lucaslunacl' || 'eldenguee')) {
             return <Home isMobile={isMobile} />
         }
 

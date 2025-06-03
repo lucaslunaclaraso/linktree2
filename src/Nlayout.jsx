@@ -68,50 +68,50 @@ function Nlayout(props) {
         })(document, 'script', 'facebook-jssdk');
     }, []);
     const [user, setUser] = useState(null); // State to store user data (name, logged-in status)
-    useEffect(() => {
-        // Check Facebook login status on component mount
-        if (window.FB) {
-            window.FB.getLoginStatus((response) => {
-                if (response.status === 'connected') {
-                    // User is logged in, fetch their data
-                    fetchUserData();
-                } else {
-                    // User is not logged in, check localStorage for cached user data
-                    const storedUser = localStorage.getItem('fbUser');
-                    console.log('storedUser', storedUser)
-                    if (storedUser) {
-                        setUser(JSON.parse(storedUser));
-                    }
-                }
-            });
-        }
-    }, []);
-    const handleFacebookLogin = () => {
-        if (user) {
-            // If user is logged in, log them out
-            window.FB.logout(() => {
-                setUser(null);
-                localStorage.removeItem('fbUser');
-                localStorage.removeItem('fbAccessToken');
-                console.log('User logged out');
-            });
-        } else {
-            // Trigger Facebook login
-            window.FB.login(
-                (response) => {
-                    if (response.authResponse) {
-                        const accessToken = response.authResponse.accessToken;
-                        console.log('Facebook Access Token:', accessToken);
-                        // Fetch user data directly from Facebook
-                        fetchUserData(accessToken);
-                    } else {
-                        console.log('User cancelled login or did not fully authorize.');
-                    }
-                },
-                { scope: 'public_profile,email' } // Request necessary permissions
-            );
-        }
-    };
+    // useEffect(() => {
+    //     // Check Facebook login status on component mount
+    //     if (window.FB) {
+    //         window.FB.getLoginStatus((response) => {
+    //             if (response.status === 'connected') {
+    //                 // User is logged in, fetch their data
+    //                 fetchUserData();
+    //             } else {
+    //                 // User is not logged in, check localStorage for cached user data
+    //                 const storedUser = localStorage.getItem('fbUser');
+    //                 console.log('storedUser', storedUser)
+    //                 if (storedUser) {
+    //                     setUser(JSON.parse(storedUser));
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }, []);
+    // const handleFacebookLogin = () => {
+    //     if (user) {
+    //         // If user is logged in, log them out
+    //         window.FB.logout(() => {
+    //             setUser(null);
+    //             localStorage.removeItem('fbUser');
+    //             localStorage.removeItem('fbAccessToken');
+    //             console.log('User logged out');
+    //         });
+    //     } else {
+    //         // Trigger Facebook login
+    //         window.FB.login(
+    //             (response) => {
+    //                 if (response.authResponse) {
+    //                     const accessToken = response.authResponse.accessToken;
+    //                     console.log('Facebook Access Token:', accessToken);
+    //                     // Fetch user data directly from Facebook
+    //                     fetchUserData(accessToken);
+    //                 } else {
+    //                     console.log('User cancelled login or did not fully authorize.');
+    //                 }
+    //             },
+    //             { scope: 'public_profile,email' } // Request necessary permissions
+    //         );
+    //     }
+    // };
 
    
     const redirectUri = "/callback";
@@ -144,21 +144,22 @@ function Nlayout(props) {
         window.location.href = `https://id.kick.com/oauth/authorize?${params.toString()}`;
     };
 
-    const fetchUserData = (accessToken) => {
-        window.FB.api('/me', { fields: 'name,email' }, (fbResponse) => {
-            console.log('fbResponse', fbResponse)
-            if (fbResponse && !fbResponse.error) {
-                // Store user data and access token
-                localStorage.setItem('fbUser', JSON.stringify(fbResponse.name));
-                localStorage.setItem('fbAccessToken', accessToken);
+    // const fetchUserData = (accessToken) => {
+    //     window.FB.api('/me', { fields: 'name,email' }, (fbResponse) => {
+    //         console.log('fbResponse', fbResponse)
+    //         if (fbResponse && !fbResponse.error) {
+    //             // Store user data and access token
+    //             localStorage.setItem('fbUser', JSON.stringify(fbResponse.name));
+    //             localStorage.setItem('fbAccessToken', accessToken);
 
-                setUser({ name: fbResponse.name });
-                handleClose(); // Close modal after successful login
-            } else {
-                console.error('Error fetching user data:', fbResponse.error);
-            }
-        });
-    };
+    //             setUser({ name: fbResponse.name });
+    //             handleClose(); // Close modal after successful login
+    //         } else {
+    //             console.error('Error fetching user data:', fbResponse.error);
+    //         }
+    //     });
+    // };
+
     const tokenKick = localStorage.getItem('kick_token');
 
     const parsedToken = JSON.parse(tokenKick);
@@ -263,7 +264,7 @@ function Nlayout(props) {
                     <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '15px' }}>
 
                         {
-                            ((user || usuario)  === ('Lucas Luna' || 'Luis San Cristobal') || (user?.name) === ("lucaslunacl" || "eldenguee"))&&
+                             ( user?.name || usuario === ('Lucas Luna' || 'Luis San Cristobal' || "lucaslunacl" || "eldenguee") )&&
 
                             <Button
 
@@ -291,7 +292,7 @@ function Nlayout(props) {
                             </Button>
                         }
                         {
-                           ( (user?.name || usuario) === ('Lucas Luna' || 'Luis San Cristobal') || (user?.name) === ("lucaslunacl" || "eldenguee")) &&
+                           ( user?.name || usuario === ('Lucas Luna' || 'Luis San Cristobal' || "lucaslunacl" || "eldenguee") )  &&
 
                             <Button
                                 onClick={toPanel}
