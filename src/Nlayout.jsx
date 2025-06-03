@@ -288,7 +288,7 @@ function Nlayout(props) {
                                         transform: 'scale(1.05)',
                                     },
                                 }}
-                                href='/sorteos'
+                                href='/listado'
                             >
                                 Sorteos
                             </Button>

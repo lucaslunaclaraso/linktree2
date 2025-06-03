@@ -60,7 +60,7 @@ function App() {
         const isSorteoRoute = location.pathname.startsWith('/sorteo/');
         // Verificar si el usuario es válido (incluye tanto fbUser como kick_user)
         const isValidUser =
-        !isSorteoRoute || // Si no es una ruta /sorteo/, no requiere autenticación
+        isSorteoRoute || // Si es sorteo, todos pueden acceder
         (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
         (usuarioKick === 'lucaslunacl' || usuarioKick === 'eldenguee');
         const [open, setOpen] = useState(false);
@@ -198,7 +198,7 @@ function App() {
 
                 <Route path='/panel' element={<RutaPrivada><CrearSorteo isMobile={isMobile} sorteos={sorteos} setSorteos={setSorteos} /></RutaPrivada>} />
 
-                <Route path="/sorteos" element={<RutaPrivada><ListadoSorteos sorteos={sorteos} /> </RutaPrivada>} />
+                <Route path="/listado" element={<RutaPrivada><ListadoSorteos sorteos={sorteos} /> </RutaPrivada>} />
 
                 <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} /> </RutaPrivada>} />
                 <Route path="/callback" element={<Callback />} />
