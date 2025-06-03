@@ -19,7 +19,7 @@ export default function Callback() {
     const code_verifier = localStorage.getItem('kick_code_verifier');
     console.log('state', state)
 
-    const isSorteoPath = state.includes("/sorteo");
+    const isSorteoPath = state.includes("sorteo");
 
 
     if (code && code_verifier) {
