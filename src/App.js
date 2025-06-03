@@ -58,11 +58,13 @@ function App() {
         const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
         const usuarioKick = localStorage.getItem('kick_user')
         const isSorteoRoute = location.pathname.startsWith('/sorteo/');
+
+        const isLoggedIn = usuario || usuarioKick;
         // Verificar si el usuario es válido (incluye tanto fbUser como kick_user)
         const isValidUser =
-        isSorteoRoute || // Si es sorteo, todos pueden acceder
+        (isSorteoRoute && isLoggedIn) || // Si es sorteo, todos pueden acceder
         (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
-        (usuarioKick === 'lucaslunacl' || usuarioKick === 'eldenguee');
+        ( usuarioKick === 'eldenguee');
         const [open, setOpen] = useState(false);
 
         const handleOpen = () => setOpen(true);

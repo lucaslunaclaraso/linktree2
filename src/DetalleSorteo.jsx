@@ -69,7 +69,7 @@ export default function DetalleSorteo({ sorteos, setSorteos }) {
         setGanadores(ganadores)
 
         const nombreGan = ganadores?.map((p) => p?.nombre)
-        
+
         guardarGanadores(url, nombreGan)
     };
 
@@ -84,35 +84,43 @@ export default function DetalleSorteo({ sorteos, setSorteos }) {
 
     return (
         <Nlayout>
-            <Box p={4}>
-                <Typography variant="h4" style={{ color: 'white' }}>{sorteo?.titulo}</Typography>
-                <Typography variant="subtitle1" style={{ color: 'white' }}>Premios: {sorteo?.premios}</Typography>
-                {
-                    !sorteo?.ganadores?.length &&
-                    <Button onClick={unirse} variant="contained" sx={{ mt: 2, backgroundColor: unirseSorteo && 'red', color: unirseSorteo && 'white' }}> {unirseSorteo ? 'YA ESTAS PARTICIPANDO' : 'Unirse'}</Button>
-                }
+            {
+                sorteo?.estado === 'oculto' ?
+                    <Box p={4}>
+                        <Typography variant="h4" style={{ color: 'white', textAlign:'center' }}>EL SORTEO NO EXISTE</Typography>
+
+                    </Box>
+                    :
+
+                    <Box p={4}>
+                        <Typography variant="h4" style={{ color: 'white' }}>{sorteo?.titulo}</Typography>
+                        <Typography variant="subtitle1" style={{ color: 'white' }}>Premios: {sorteo?.premios}</Typography>
+                        {
+                            !sorteo?.ganadores?.length &&
+                            <Button onClick={unirse} variant="contained" sx={{ mt: 2, backgroundColor: unirseSorteo && 'red', color: unirseSorteo && 'white' }}> {unirseSorteo ? 'YA ESTAS PARTICIPANDO' : 'Unirse'}</Button>
+                        }
 
 
-                {
-                    usuarioKick === 'eldenguee' &&
-                    < Button onClick={sortear} variant="outlined" sx={{ mt: 2, ml: 2 }}>Sortear</Button>
-                }
+                        {
+                            usuarioKick === 'eldenguee' &&
+                            < Button onClick={sortear} variant="outlined" sx={{ mt: 2, ml: 2 }}>Sortear</Button>
+                        }
 
-                <Card sx={{ mt: 4 }}>
-                    <CardContent sx={{ maxHeight: 300, overflowY: 'auto' }}>
-                        <Typography variant="h6">Participantes: {participantes?.length} </Typography>
-                        <List>
-                            {participantes?.map((u, i) => (
-                                <ListItem key={i}>
-                                    <ListItemText primary={u?.nombre} />
-                                </ListItem>
-                            ))}
-                        </List>
-                    </CardContent>
-                </Card>
+                        <Card sx={{ mt: 4 }}>
+                            <CardContent sx={{ maxHeight: 300, overflowY: 'auto' }}>
+                                <Typography variant="h6">Participantes: {participantes?.length} </Typography>
+                                <List>
+                                    {participantes?.map((u, i) => (
+                                        <ListItem key={i}>
+                                            <ListItemText primary={u?.nombre} />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </CardContent>
+                        </Card>
 
 
-                {/* {ganadores?.length > 0 && (
+                        {/* {ganadores?.length > 0 && (
                     <Card sx={{ mt: 4, bgcolor: '#e0f7fa' }}>
                         <CardContent>
                             <Typography variant="h6">🎉 Ganadores 🎉</Typography>
@@ -125,20 +133,21 @@ export default function DetalleSorteo({ sorteos, setSorteos }) {
                     </Card>
                 )} */}
 
-                {sorteo?.ganadores?.length > 0 && (
-                    <Card sx={{ mt: 4, bgcolor: '#e0f7fa' }}>
-                        <CardContent>
-                            <Typography variant="h6">🎉 Ganadores 🎉</Typography>
-                            <List>
-                                {sorteo?.ganadores?.replaceAll('"', "")}
-                            </List>
-                        </CardContent>
-                    </Card>
-                )}
+                        {sorteo?.ganadores?.length > 0 && (
+                            <Card sx={{ mt: 4, bgcolor: '#e0f7fa' }}>
+                                <CardContent>
+                                    <Typography variant="h6">🎉 Ganadores 🎉</Typography>
+                                    <List>
+                                        {sorteo?.ganadores?.replaceAll('"', "")}
+                                    </List>
+                                </CardContent>
+                            </Card>
+                        )}
 
 
-                
-            </Box>
+
+                    </Box>
+            }
         </Nlayout >
     );
 }
