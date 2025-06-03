@@ -181,7 +181,7 @@ function Nlayout(props) {
 
             const userData = await response.json();
             
-            localStorage.setItem('kick_user', JSON.stringify(userData?.name)); // Guarda los datos del usuario
+            localStorage.setItem('kick_user', userData?.data[0]?.name); // Guarda los datos del usuario
             
             setUser({ name: userData?.data[0]?.name });
 
