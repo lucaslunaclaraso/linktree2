@@ -112,7 +112,7 @@ export default function DetalleSorteo({ sorteos, setSorteos }) {
                 </Card>
 
 
-                {ganadores?.length > 0 && (
+                {/* {ganadores?.length > 0 && (
                     <Card sx={{ mt: 4, bgcolor: '#e0f7fa' }}>
                         <CardContent>
                             <Typography variant="h6">🎉 Ganadores 🎉</Typography>
@@ -123,7 +123,7 @@ export default function DetalleSorteo({ sorteos, setSorteos }) {
                             </List>
                         </CardContent>
                     </Card>
-                )}
+                )} */}
 
                 {sorteo?.ganadores?.length > 0 && (
                     <Card sx={{ mt: 4, bgcolor: '#e0f7fa' }}>
