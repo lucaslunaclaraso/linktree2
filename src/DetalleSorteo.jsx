@@ -35,9 +35,9 @@ export default function DetalleSorteo({ sorteos, setSorteos }) {
 
 
     const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
-
+    const usuarioKick = localStorage.getItem('kick_user')
     const unirse = () => {
-        const nombre = usuario;
+        const nombre = usuario || usuarioKick;
 
         if (!nombre) return;
         UnirseAlSorteo(nombre)
