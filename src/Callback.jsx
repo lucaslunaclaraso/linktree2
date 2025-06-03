@@ -15,8 +15,12 @@ export default function Callback() {
     const searchParams = new URLSearchParams(location.search);
     const code = searchParams.get('code');
     const state = searchParams.get('state'); // URL original (por ejemplo, "/sorteo/123")
+    
     const code_verifier = localStorage.getItem('kick_code_verifier');
     console.log('state', state)
+
+    const isSorteoPath = state.includes("/sorteo");
+
 
     if (code && code_verifier) {
       try {
@@ -57,8 +61,8 @@ export default function Callback() {
           localStorage.removeItem('kick_code_verifier');
 
           // Forzar recarga completa a la URL original
-          const redirectTo = state ? decodeURIComponent(state) : '/';
-          window.location.href = redirectTo;
+          //const redirectTo = state ? decodeURIComponent(state) : '/';
+          //window.location.href = redirectTo;
         } else {
           throw new Error('No se recibió un access_token válido');
         }
