@@ -52,7 +52,7 @@ export default function Callback() {
           const userData = await response.json();
           console.log('User data:', userData);
           // Guardar el nombre de usuario (ajusta según la estructura de userData)
-          const username = userData?.username || userData?.login ; // Fallback
+          const username = userData?.data[0]?.name || userData?.login ; // Fallback
           localStorage.setItem('kick_user', username);
           localStorage.removeItem('kick_code_verifier');
 
