@@ -13,7 +13,20 @@ export default function ListadoSorteos({ sorteos }) {
     }
 
     useEffect(() => { obtenerSorteos() }, [])
-    
+
+    const cambiarEstado = async (estado, id) => {
+
+        const nuevoEstado = estado === 'activo' ? 'oculto' : 'activo';
+        try {
+            await axios.put(`https://backmu.vercel.app/sorteo/${id}/eliminar`, {
+                estado: nuevoEstado,
+            });
+            obtenerSorteos(); // Actualizar datos después de cambiar el estado
+        } catch (error) {
+            console.error('Error al cambiar el estado:', error);
+        }
+    };
+
     return (
         <Nlayout>
             <Box p={4}>
@@ -25,17 +38,23 @@ export default function ListadoSorteos({ sorteos }) {
                     fontSize: 60,
                     fontFamily: 'PoetsenOne'
                 }} >Listado de Sorteos</Typography>
-                {listadoSorteos?.map((sorteo) => (
+                {listadoSorteos?.filter((sorteo) => sorteo.estado === 'activo')?.map((sorteo) => (
                     <Card key={sorteo.id} sx={{ mb: 2 }}>
                         <CardContent>
-                            <Grid style={{display:'flex', alignItems:'center',justifyContent:'space-between'}}>
+                            <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                 <Typography variant="h6">{sorteo?.titulo}</Typography>
-                                <Typography variant="h6" style={{color:'green'}} >{sorteo?.ganadores ? sorteo?.ganadores?.replaceAll('"', "")  :'No hay ganador'}</Typography>
+                                <Typography variant="h6" style={{ color: 'green' }} >{sorteo?.ganadores ? sorteo?.ganadores?.replaceAll('"', "") : 'No hay ganador'}</Typography>
 
                             </Grid>
-                            <Button variant="outlined" component={Link} to={`/sorteo/${sorteo.id}`}>
-                                Ver sorteo
-                            </Button>
+                            <Grid style={{display:'flex', alignItems:'center', gap: 10}}>
+
+                                <Button variant="outlined" component={Link} to={`/sorteo/${sorteo.id}`}>
+                                    Ver sorteo
+                                </Button>
+                                <Button variant="outlined" style={{backgroundColor:'red', color:'white'}} onClick={() => cambiarEstado(sorteo?.estado, sorteo?.id)} >
+                                    Eliminar sorteo
+                                </Button>
+                            </Grid>
                         </CardContent>
                     </Card>
                 ))}
