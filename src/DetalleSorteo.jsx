@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Button, List, ListItem, ListItemText, Card, CardContent } from '@mui/material';
+import { Box, Typography, Button, List, ListItem, ListItemText, Card, CardContent, Grid } from '@mui/material';
 import Nlayout from './Nlayout';
 import axios from 'axios';
+import backgroundImg from './main_intro.png'
 
-export default function DetalleSorteo({ sorteos, setSorteos }) {
+export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
     const { url } = useParams();
     const [sorteo, setSorteo] = useState()
     const [participantes, setParticipantes] = useState()
@@ -86,10 +87,43 @@ export default function DetalleSorteo({ sorteos, setSorteos }) {
         <Nlayout>
             {
                 sorteo?.estado === 'oculto' ?
-                    <Box p={4}>
-                        <Typography variant="h4" style={{ color: 'white', textAlign:'center' }}>EL SORTEO NO EXISTE</Typography>
+                    <Grid style={{ background: '#11111d', marginTop:isMobile ? '-30%' : '-10%', width: '100%' }}>
+                        <Grid style={{
+                            backgroundImage: `
+            linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
+            url(${backgroundImg})
+          `,
+                            backgroundSize: 'cover',
+                            backgroundRepeat: 'no-repeat',
+                            height: '980px',
+                            backgroundColor: '#3f3d45',
+                            margin: '0 auto',
+                            position: 'relative',
+                            backgroundPosition: '50%'
+                        }}>
+                            <Grid className='container' style={{
+                                padding: 50,
+                                gap: '10px',
+                                justifyContent: 'center',
 
-                    </Box>
+                            }}>
+                                <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
+                                    <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif' }} >
+                                        eldenguee.com
+                                    </Typography>
+                                    <Typography sx={{
+                                        background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                        fontWeight: 'bold',
+                                        fontSize: isMobile ? 32 : 65,
+                                        fontFamily: 'Belerofonte'
+                                    }} >El sorteo no existe</Typography>
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </Grid>
                     :
 
                     <Box p={4}>
