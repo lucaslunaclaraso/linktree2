@@ -61,8 +61,8 @@ export default function Callback() {
           localStorage.removeItem('kick_code_verifier');
 
           // Forzar recarga completa a la URL original
-          //const redirectTo = state ? decodeURIComponent(state) : '/';
-          //window.location.href = redirectTo;
+          const redirectTo = isSorteoPath ? decodeURIComponent(state) : '/';
+          window.location.href = redirectTo;
         } else {
           throw new Error('No se recibió un access_token válido');
         }
