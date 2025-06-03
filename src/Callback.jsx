@@ -14,6 +14,7 @@ export default function Callback() {
 
     const searchParams = new URLSearchParams(location.search);
     const code = searchParams.get('code');
+    const state = searchParams.get('state'); // URL original (por ejemplo, "/sorteo/123")
     const code_verifier = localStorage.getItem('kick_code_verifier');
 
 
@@ -39,7 +40,8 @@ export default function Callback() {
 
         if (data.access_token) {
           localStorage.setItem('kick_token', JSON.stringify(data));
-          const redirectTo = location.state?.from || '/';
+
+          const redirectTo = state ? decodeURIComponent(state) : '/';
           navigate(redirectTo);
         } else {
           throw new Error('No se recibió un access_token válido');

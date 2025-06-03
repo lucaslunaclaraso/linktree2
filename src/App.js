@@ -72,8 +72,8 @@ function App() {
             localStorage.setItem('kick_code_verifier', code_verifier);
     
             const criptoRandom = crypto.randomUUID()
-            console.log('criptoRandom', criptoRandom)
-            console.log('code_challenge', code_challenge)
+            
+            const state = encodeURIComponent(location.pathname);
             const params = new URLSearchParams({
                 response_type: 'code',
                 client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
@@ -81,7 +81,7 @@ function App() {
                 scope: 'user:read',
                 code_challenge: code_challenge,
                 code_challenge_method: 'S256',
-                state: criptoRandom,
+                state: state,
             });
     
             window.location.href = `https://id.kick.com/oauth/authorize?${params.toString()}`;
