@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import { AppBar, Box, Button, Menu, MenuItem, Modal, Stack, Toolbar, Typography } from '@mui/material';
 import './Nlayout.css'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { FaFacebook, FaKickstarterK } from 'react-icons/fa6';
 import logo from './logo_intro2.png'
 import logoDengue from './logoDengue.webp'
+
+import { generatePKCE } from './api/pkce';
+
 const style = {
     position: 'absolute',
     top: '50%',
@@ -110,8 +113,39 @@ function Nlayout(props) {
         }
     };
 
+   
+    const redirectUri = "/callback";
+    const clientId = "01JW6K1RY4R70K7B6KSJ8GK5CV";
+    const scope = "user"; // según lo que pediste
+
+    // const loginWithKick = () => {
+    //   const url = `https://id.kick.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}`;
+    //   window.location.href = url;
+    // };
+
+    const loginWithKick = async () => {
+
+        const { code_verifier, code_challenge } = await generatePKCE();
+        localStorage.setItem('kick_code_verifier', code_verifier);
+
+        const criptoRandom = crypto.randomUUID()
+        console.log('criptoRandom', criptoRandom)
+        console.log('code_challenge', code_challenge)
+        const params = new URLSearchParams({
+            response_type: 'code',
+            client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
+            redirect_uri: 'https://eldenguee.com/callback',
+            scope: 'user:read',
+            code_challenge: code_challenge,
+            code_challenge_method: 'S256',
+            state: criptoRandom,
+        });
+
+        window.location.href = `https://id.kick.com/oauth/authorize?${params.toString()}`;
+    };
+
     const fetchUserData = (accessToken) => {
-        window.FB.api('/me',{ fields: 'name,email' }, (fbResponse) => {
+        window.FB.api('/me', { fields: 'name,email' }, (fbResponse) => {
             console.log('fbResponse', fbResponse)
             if (fbResponse && !fbResponse.error) {
                 // Store user data and access token
@@ -125,6 +159,43 @@ function Nlayout(props) {
             }
         });
     };
+    const tokenKick = localStorage.getItem('kick_token');
+
+    const parsedToken = JSON.parse(tokenKick);
+
+    const fetchUserDataKick = async (accessToken) => {
+        
+        try {
+            const response = await fetch('https://api.kick.com/public/v1/users', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const userData = await response.json();
+            
+            localStorage.setItem('kick_user', JSON.stringify(userData?.name)); // Guarda los datos del usuario
+            
+            setUser({ name: userData?.data[0]?.name });
+
+            return userData;
+        } catch (err) {
+            console.error('Error al obtener los datos del usuario:', err);
+            throw err;
+        }
+    };
+
+    useEffect(() => {
+        if (!tokenKick) return; // No ejecutar si tokenKick es null o undefined
+        fetchUserDataKick(parsedToken?.access_token)
+    }, [tokenKick])
+
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = Boolean(anchorEl);
 
@@ -144,6 +215,9 @@ function Nlayout(props) {
         setUser(null);
         localStorage.removeItem('fbUser');
         localStorage.removeItem('fbAccessToken');
+        localStorage.removeItem('kick_code_verifier');
+        localStorage.removeItem('kick_token');
+        localStorage.removeItem('kick_user');
         console.log('User logged out');
 
         window.location.href = "/"
@@ -151,7 +225,7 @@ function Nlayout(props) {
     };
 
     const toPanel = () => {
-         window.location.href = "/panel"
+        window.location.href = "/panel"
     }
     const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
     const [width, setWidth] = useState(window.innerWidth);
@@ -163,6 +237,9 @@ function Nlayout(props) {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    
+    
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 
@@ -170,7 +247,7 @@ function Nlayout(props) {
                 <Toolbar style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Typography style={{ width: '50%' }}>
                         <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                        <img src={logoDengue} style={{borderRadius:'50%', width: isMobile  ? '50%' :'10%'}}/>
+                            <img src={logoDengue} style={{ borderRadius: '50%', width: isMobile ? '50%' : '10%' }} />
                             {/* <Typography sx={{
                                 background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
                                 WebkitBackgroundClip: 'text',
@@ -186,10 +263,10 @@ function Nlayout(props) {
                     <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '15px' }}>
 
                         {
-                            (user || usuario) &&
+                            ((user || usuario)  === ('Lucas Luna' || 'Luis San Cristobal') || (user?.name) === ("lucaslunacl" || "eldenguee"))&&
 
                             <Button
-                                
+
                                 sx={{
                                     color: '#fff',
                                     fontWeight: 'bold',
@@ -208,13 +285,13 @@ function Nlayout(props) {
                                         transform: 'scale(1.05)',
                                     },
                                 }}
-                                href='/sorteos' 
+                                href='/sorteos'
                             >
                                 Sorteos
                             </Button>
                         }
                         {
-                            (user?.name || usuario) === ('Lucas Luna' || 'Luis San Cristobal') &&
+                           ( (user?.name || usuario) === ('Lucas Luna' || 'Luis San Cristobal') || (user?.name) === ("lucaslunacl" || "eldenguee")) &&
 
                             <Button
                                 onClick={toPanel}
@@ -305,7 +382,7 @@ function Nlayout(props) {
 
                     <Stack spacing={2}>
                         {/* Facebook Login */}
-                        <Button
+                        {/* <Button
                             sx={{
                                 ...buttonBase,
                                 color: '#1877F2',
@@ -319,10 +396,10 @@ function Nlayout(props) {
                             onClick={handleFacebookLogin}
                         >
                             Iniciar Sesión con Facebook
-                        </Button>
+                        </Button> */}
 
                         {/* Kick Login */}
-                        {/* <Button
+                        <Button
                             sx={{
                                 ...buttonBase,
                                 color: '#00ff73',
@@ -333,9 +410,10 @@ function Nlayout(props) {
                                 },
                             }}
                             startIcon={<FaKickstarterK size={20} />}
+                            onClick={loginWithKick}
                         >
                             Iniciar Sesión con Kick
-                        </Button> */}
+                        </Button>
                     </Stack>
                 </Box>
             </Modal>

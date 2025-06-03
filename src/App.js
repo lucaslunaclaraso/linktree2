@@ -7,6 +7,7 @@ import PanelSorteo from './CrearSorteo';
 import CrearSorteo from './CrearSorteo';
 import ListadoSorteos from './ListadoSorteos';
 import DetalleSorteo from './DetalleSorteo';
+import Callback from './Callback';
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/sorteos" element={<RutaPrivada><ListadoSorteos sorteos={sorteos} /> </RutaPrivada>} />
                 
                 <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} /> </RutaPrivada>} />
+                <Route path="/callback" element={<Callback />} />
             </Routes>
         </div>
     );
