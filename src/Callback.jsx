@@ -39,7 +39,8 @@ export default function Callback() {
 
         if (data.access_token) {
           localStorage.setItem('kick_token', JSON.stringify(data));
-          navigate('/');
+          const redirectTo = location.state?.from || '/';
+          navigate(redirectTo);
         } else {
           throw new Error('No se recibió un access_token válido');
         }

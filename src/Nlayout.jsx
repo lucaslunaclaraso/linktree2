@@ -240,7 +240,9 @@ function Nlayout(props) {
     }, []);
 
     
-    
+    const isValidUser =
+            (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
+            (user?.name === 'lucaslunacl' || user?.name === 'eldenguee');
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 
@@ -264,7 +266,7 @@ function Nlayout(props) {
                     <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '15px' }}>
 
                         {
-                             ( user?.name || usuario === ('Lucas Luna' || 'Luis San Cristobal' || "lucaslunacl" || "eldenguee") )&&
+                             ( isValidUser)&&
 
                             <Button
 
@@ -292,7 +294,7 @@ function Nlayout(props) {
                             </Button>
                         }
                         {
-                           ( user?.name || usuario === ('Lucas Luna' || 'Luis San Cristobal' || "lucaslunacl" || "eldenguee") )  &&
+                           ( isValidUser)  &&
 
                             <Button
                                 onClick={toPanel}
