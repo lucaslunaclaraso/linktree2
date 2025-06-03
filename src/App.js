@@ -57,15 +57,19 @@ function App() {
     const RutaPrivada = ({ children }) => {
         const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
         const usuarioKick = localStorage.getItem('kick_user')
-
+        const isSorteoRoute = location.pathname.startsWith('/sorteo/');
         // Verificar si el usuario es válido (incluye tanto fbUser como kick_user)
         const isValidUser =
-            (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
-            (usuarioKick === 'lucaslunacl' || usuarioKick === 'eldenguee');
+        !isSorteoRoute || // Si no es una ruta /sorteo/, no requiere autenticación
+        (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
+        (usuarioKick === 'lucaslunacl' || usuarioKick === 'eldenguee');
         const [open, setOpen] = useState(false);
 
         const handleOpen = () => setOpen(true);
         const handleClose = () => setOpen(false);
+
+
+        
         const loginWithKick = async () => {
 
             const { code_verifier, code_challenge } = await generatePKCE();
