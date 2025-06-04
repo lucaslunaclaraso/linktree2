@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography, Button, List, ListItem, ListItemText, Card, CardContent, Grid } from '@mui/material';
 import Nlayout from './Nlayout';
 import axios from 'axios';
-import backgroundImg from './main_intro.png'
+import backgroundImg from './main_intro.jpg'
 
 export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
     const { url } = useParams();

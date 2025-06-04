@@ -11,7 +11,7 @@ import Callback from './Callback';
 import { Box, Button, Grid, Modal, Stack, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import backgroundImg from './main_intro.png'
+import backgroundImg from './main_intro.jpg'
 import { Link } from 'react-router-dom';
 import { FaKickstarterK } from 'react-icons/fa6';
 import { generatePKCE } from './api/pkce';

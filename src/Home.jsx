@@ -14,7 +14,7 @@ import { Box, Button, Grid, Link, Typography } from '@mui/material';
 import './Nlayout.css'
 import { FaCopy, FaDiscord, FaGift, FaPlay, FaYoutube } from "react-icons/fa6";
 import logo from './logo_intro2.png'
-import backgroundImg from './main_intro.png'
+import backgroundImg from './main_intro.jpg'
 import logoStake from './stake-logo.png'
 import youtube from './youtube.png'
 import { SiKick } from "react-icons/si";

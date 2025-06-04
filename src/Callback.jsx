@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import backgroundImg from './main_intro.png'
+import backgroundImg from './main_intro.jpg'
 
 // Variable global para evitar doble ejecución
 let hasProcessedGlobally = false;
