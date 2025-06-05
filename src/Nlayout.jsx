@@ -180,7 +180,7 @@ function Nlayout(props) {
             }
 
             const userData = await response.json();
-            
+            console.log('userData', userData)
             localStorage.setItem('kick_user', userData?.data[0]?.name); // Guarda los datos del usuario
             
             setUser({ name: userData?.data[0]?.name });
