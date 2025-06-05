@@ -69,9 +69,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
         const ganadores = shuffled.slice(0, sorteo?.premios);
         setGanadores(ganadores)
 
-        const nombreGan = ganadores?.map((p) => p?.nombre)
-
-        guardarGanadores(url, nombreGan)
+        const nombreGan = ganadores?.map((p) => p)
+        console.log('nombreGan', nombreGan)
+        // guardarGanadores(url, nombreGan)
     };
 
     // Polling para actualizaciones en tiempo real
@@ -136,7 +136,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
 
 
                         {
-                            usuarioKick === 'eldenguee' &&
+                            usuarioKick === ('eldenguee' || 'lucaslunacl') &&
                             < Button onClick={sortear} variant="outlined" sx={{ mt: 2, ml: 2 }}>Sortear</Button>
                         }
 

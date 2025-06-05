@@ -83,7 +83,7 @@ function App() {
             const params = new URLSearchParams({
                 response_type: 'code',
                 client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
-                redirect_uri: 'https://eldenguee.com/callback',
+                redirect_uri: 'http://localhost:3000/callback',
                 scope: 'user:read',
                 code_challenge: code_challenge,
                 code_challenge_method: 'S256',

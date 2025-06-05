@@ -134,7 +134,7 @@ function Nlayout(props) {
         const params = new URLSearchParams({
             response_type: 'code',
             client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
-            redirect_uri: 'https://eldenguee.com/callback',
+            redirect_uri: 'http://localhost:3000/callback',
             scope: 'user:read',
             code_challenge: code_challenge,
             code_challenge_method: 'S256',
@@ -183,7 +183,7 @@ function Nlayout(props) {
             console.log('userData', userData)
             localStorage.setItem('kick_user', userData?.data[0]?.name); // Guarda los datos del usuario
             
-            setUser({ name: userData?.data[0]?.name });
+            setUser({ name: userData?.data[0]?.name, email: userData?.data[0]?.email });
 
             return userData;
         } catch (err) {
