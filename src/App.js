@@ -15,6 +15,10 @@ import backgroundImg from './main_intro.jpg'
 import { Link } from 'react-router-dom';
 import { FaKickstarterK } from 'react-icons/fa6';
 import { generatePKCE } from './api/pkce';
+import Tipeo from './Tipeo';
+import AdminPanel from './AdminPanel';
+import Paneltipeo from './Paneltipeo';
+import TipeoCustom from './TipeoCustom';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -53,43 +57,44 @@ function App() {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+    const nombre = localStorage.getItem('kick_user')
 
     const RutaPrivada = ({ children }) => {
         const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
         const usuarioKick = localStorage.getItem('kick_user')
         const isSorteoRoute = location.pathname.startsWith('/sorteo/');
-
+        console.log('usuarioKick', usuarioKick)
         const isLoggedIn = usuario || usuarioKick;
         // Verificar si el usuario es válido (incluye tanto fbUser como kick_user)
         const isValidUser =
-        (isSorteoRoute && isLoggedIn) || // Si es sorteo, todos pueden acceder
-        (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
-        ( usuarioKick === 'eldenguee');
+            (isSorteoRoute && isLoggedIn) || // Si es sorteo, todos pueden acceder
+            (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
+            (usuarioKick === 'eldenguee' || usuarioKick === 'lucaslunacl');
         const [open, setOpen] = useState(false);
 
         const handleOpen = () => setOpen(true);
         const handleClose = () => setOpen(false);
 
 
-        
+
         const loginWithKick = async () => {
 
             const { code_verifier, code_challenge } = await generatePKCE();
             localStorage.setItem('kick_code_verifier', code_verifier);
-    
+
             const criptoRandom = crypto.randomUUID()
-            
+
             const state = isSorteoRoute ? encodeURIComponent(location.pathname) : encodeURIComponent('/');
             const params = new URLSearchParams({
                 response_type: 'code',
                 client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
-                redirect_uri: 'http://localhost:3000/callback',
+                redirect_uri: 'https://eldenguee.com/callback',
                 scope: 'user:read',
                 code_challenge: code_challenge,
                 code_challenge_method: 'S256',
                 state: state,
             });
-    
+
             window.location.href = `https://id.kick.com/oauth/authorize?${params.toString()}`;
         };
         if (!isValidUser) {
@@ -150,7 +155,7 @@ function App() {
 
 
                             <Stack spacing={2}>
-                              
+
 
                                 {/* Kick Login */}
                                 <Button
@@ -195,15 +200,21 @@ function App() {
     return (
         <div className="App">
             <Routes>
-                <Route exact path='/' element={<Home isMobile={isMobile} />} />
+
+                <Route exact path='/' element={<Home isMobile={isMobile} />}/>
                 <Route path='/stats' element={<Stats />} />
 
                 <Route path='/panel' element={<RutaPrivada><CrearSorteo isMobile={isMobile} sorteos={sorteos} setSorteos={setSorteos} /></RutaPrivada>} />
+                <Route path='/crearlink' element={<RutaPrivada><Paneltipeo isMobile={isMobile}   /></RutaPrivada>} />
+                <Route path="/tipeos/:url" element={<RutaPrivada><TipeoCustom isMobile={isMobile} /> </RutaPrivada>} />
 
                 <Route path="/listado" element={<RutaPrivada><ListadoSorteos sorteos={sorteos} /> </RutaPrivada>} />
 
-                <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} isMobile={isMobile}/> </RutaPrivada>} />
+                <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} isMobile={isMobile} /> </RutaPrivada>} />
+                <Route path="/solicitudes" element={<RutaPrivada><AdminPanel  isMobile={isMobile} /> </RutaPrivada>} />
+                
                 <Route path="/callback" element={<Callback />} />
+                <Route path="/tipeo" element={<Tipeo nombre={nombre}/>} />
             </Routes>
         </div>
     );

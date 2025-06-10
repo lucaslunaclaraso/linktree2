@@ -113,7 +113,7 @@ function Nlayout(props) {
     //     }
     // };
 
-   
+
     const redirectUri = "/callback";
     const clientId = "01JW6K1RY4R70K7B6KSJ8GK5CV";
     const scope = "user"; // según lo que pediste
@@ -134,7 +134,7 @@ function Nlayout(props) {
         const params = new URLSearchParams({
             response_type: 'code',
             client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
-            redirect_uri: 'http://localhost:3000/callback',
+            redirect_uri: 'https://eldenguee.com/callback',
             scope: 'user:read',
             code_challenge: code_challenge,
             code_challenge_method: 'S256',
@@ -165,7 +165,7 @@ function Nlayout(props) {
     const parsedToken = JSON.parse(tokenKick);
 
     const fetchUserDataKick = async (accessToken) => {
-        
+
         try {
             const response = await fetch('https://api.kick.com/public/v1/users', {
                 method: 'GET',
@@ -180,9 +180,10 @@ function Nlayout(props) {
             }
 
             const userData = await response.json();
-            console.log('userData', userData)
+
             localStorage.setItem('kick_user', userData?.data[0]?.name); // Guarda los datos del usuario
-            
+            localStorage.setItem('kick_mail', userData?.data[0]?.email); // Guarda los datos del usuario
+
             setUser({ name: userData?.data[0]?.name, email: userData?.data[0]?.email });
 
             return userData;
@@ -239,18 +240,31 @@ function Nlayout(props) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    
+
     const isValidUser =
-            (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
-            (user?.name === 'lucaslunacl' || user?.name === 'eldenguee');
+        (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
+        (user?.name === 'eldenguee') || (user?.name === 'lucaslunacl');
+
+    const usuarioKick = localStorage.getItem('kick_user')
+    const isLoggedIn = usuarioKick;
+    const redirectTipeo = () => {
+        window.location.href = "/tipeo"
+
+    }
+    const redirectSolicitudes = () => {
+        window.location.href = "/solicitudes"
+    }
+    const redirectCrearSolicitudes = () => {
+        window.location.href = "/crearlink"
+    }
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 
             <Grid classname='header' style={{ background: 'transparent', zIndex: 9999, padding: 10 }}>
                 <Toolbar style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Typography style={{ width: '50%' }}>
+                    <Typography style={{ width: '30%' }}>
                         <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                            <img src={logoDengue} style={{ borderRadius: '50%', width: isMobile ? '50%' : '10%' }} />
+                            <img src={logoDengue} style={{ borderRadius: '50%', width: isMobile ? '50%' : '20%' }} />
                             {/* <Typography sx={{
                                 background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
                                 WebkitBackgroundClip: 'text',
@@ -263,10 +277,93 @@ function Nlayout(props) {
                         </Link>
                     </Typography>
 
-                    <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '15px' }}>
-
+                    <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '15px', width: '80%' }}>
                         {
-                             ( isValidUser)&&
+
+
+                            <Button
+
+                                sx={{
+                                    color: 'black',
+                                    fontWeight: 'bold',
+                                    padding: '0.75rem 2rem',
+                                    fontSize: '.8rem',
+
+                                    backgroundImage: `linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)`,
+                                    border: '2px solid #e0c060',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
+                                    textTransform: 'uppercase',
+                                    transition: 'all 0.3s ease-in-out',
+                                    '&:hover': {
+                                        boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
+                                        transform: 'scale(1.05)',
+                                    },
+                                }}
+                                onClick={isLoggedIn ? redirectTipeo : handleOpen}
+
+                            >
+                                Solicitar Tipeo
+                            </Button>
+                        }
+                        {
+
+                            (isValidUser) &&
+                            <Button
+
+                                sx={{
+                                    color: 'black',
+                                    fontWeight: 'bold',
+                                    padding: '0.75rem 2rem',
+                                    fontSize: '.8rem',
+
+                                    backgroundImage: `linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)`,
+                                    border: '2px solid #e0c060',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
+                                    textTransform: 'uppercase',
+                                    transition: 'all 0.3s ease-in-out',
+                                    '&:hover': {
+                                        boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
+                                        transform: 'scale(1.05)',
+                                    },
+                                }}
+                                onClick={isLoggedIn ? redirectCrearSolicitudes : handleOpen}
+
+                            >
+                                Crear link de tipeo
+                            </Button>
+                        }
+                        {
+
+                            (isValidUser) &&
+                            <Button
+
+                                sx={{
+                                    color: 'black',
+                                    fontWeight: 'bold',
+                                    padding: '0.75rem 2rem',
+                                    fontSize: '.8rem',
+
+                                    backgroundImage: `linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)`,
+                                    border: '2px solid #e0c060',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
+                                    textTransform: 'uppercase',
+                                    transition: 'all 0.3s ease-in-out',
+                                    '&:hover': {
+                                        boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
+                                        transform: 'scale(1.05)',
+                                    },
+                                }}
+                                onClick={isLoggedIn ? redirectSolicitudes : handleOpen}
+
+                            >
+                                Solicitudes de tipeo
+                            </Button>
+                        }
+                        {
+                            (isValidUser) &&
 
                             <Button
 
@@ -294,7 +391,7 @@ function Nlayout(props) {
                             </Button>
                         }
                         {
-                           ( isValidUser)  &&
+                            (isValidUser) &&
 
                             <Button
                                 onClick={toPanel}
@@ -340,7 +437,7 @@ function Nlayout(props) {
                                     fontWeight: 'bold',
                                     padding: '0.75rem 2rem',
                                     fontSize: '.8rem',
-                                    width: '100%',
+
                                     backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
                       linear-gradient(94deg, rgb(118, 118, 245) 29.94%, rgb(90, 34, 161) 83.55%)`,
                                     border: '2px solid rgba(118, 118, 245, 0.5)',
@@ -372,6 +469,7 @@ function Nlayout(props) {
                             horizontal: 'right',
                         }}
                     >
+                        <MenuItem >Solicitudes de tipeo</MenuItem>
                         <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
                     </Menu>
 

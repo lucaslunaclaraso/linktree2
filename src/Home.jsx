@@ -61,6 +61,8 @@ const LinkItem = ({ parrafo, title, url, imagen, isImage, gif }) => {
     </div>
   );
 };
+const usuarioKick = localStorage.getItem('kick_user')
+const isLoggedIn =  usuarioKick;
 
 // Componente principal para representar la estructura de Linktree
 const LinkTree = ({ links }) => {
@@ -92,7 +94,7 @@ const Home = (props) => {
 
   return (
     <Nlayout>
-      <Grid style={{ background: '#11111d', marginTop: props.isMobile  ? '-30%' : '-10%', width: '100%' }}>
+      <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '-30%' : '-10%', width: '100%' }}>
         <Grid style={{
           backgroundImage: `
     linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
@@ -140,6 +142,30 @@ const Home = (props) => {
                 <FaDiscord style={{ color: 'white' }} />
                 <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif' }}>Unirse al Discord</Typography>
               </Button>
+
+              {/* <Button
+
+                sx={{
+                  color: 'black',
+                  fontWeight: 'bold',
+                  padding: '0.75rem 2rem',
+                  fontSize: '.8rem',
+                  fontFamily: 'Outfit,sans-serif',
+                  backgroundImage: `linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)`,
+                  border: '2px solid #e0c060',
+                  borderRadius: '100px',
+                  boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
+                  textTransform: 'uppercase',
+                  transition: 'all 0.3s ease-in-out',
+                  '&:hover': {
+                    boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
+                    transform: 'scale(1.05)',
+                  },
+                }}
+                href='/listado'
+              >
+                Solicitar Tipeo
+              </Button> */}
             </Grid>
           </Grid>
         </Grid>
@@ -260,7 +286,7 @@ const Home = (props) => {
 
 
 
-          <Grid style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' , flexWrap: props.isMobile  && 'wrap'}}>
+          <Grid style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', flexWrap: props.isMobile && 'wrap' }}>
 
 
             {videos.map((video, index) => (
@@ -310,7 +336,7 @@ const Home = (props) => {
 
 
 
-        <Grid className='container' style={{ padding:props.isMobile  ? 25 : 50, gap: '35px' }}>
+        <Grid className='container' style={{ padding: props.isMobile ? 25 : 50, gap: '35px' }}>
 
           <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
 
@@ -325,7 +351,7 @@ const Home = (props) => {
             }}>Unite a la comunidad!</Typography>
           </Grid>
 
-          <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', width: '100%' , flexWrap: props.isMobile  && 'wrap'}} >
+          <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', width: '100%', flexWrap: props.isMobile && 'wrap' }} >
 
             <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #00ff73', width: '30%', borderRadius: 10, boxShadow: '0 0 5px #00ff73', }}>
               <SiKick style={{ color: '#00ff73', fontSize: 35 }} />

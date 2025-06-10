@@ -66,7 +66,9 @@ export default function Callback() {
           console.log('User data:', userData);
           // Guardar el nombre de usuario (ajusta según la estructura de userData)
           const username = userData?.data[0]?.name; // Fallback
+          const emailKick = userData?.data[0]?.email; // Fallback
           localStorage.setItem('kick_user', username);
+          localStorage.setItem('kick_mail', emailKick); // Guarda los datos del usuario
           localStorage.removeItem('kick_code_verifier');
 
           // Forzar recarga completa a la URL original

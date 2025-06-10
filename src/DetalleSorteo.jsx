@@ -14,16 +14,16 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
 
     const obtenerSorteos = async () => {
         const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}`)
-
         setSorteo(peticion?.data?.sorteo)
         setParticipantes(peticion?.data?.participantes)
     }
 
-    const UnirseAlSorteo = async (nombre) => {
+    const UnirseAlSorteo = async (nombre, mail) => {
 
         try {
-            const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre })
-
+            const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre , mail})
+            const peticionUser = await axios.post(`https://backmu.vercel.app/sorteo/crearUser`, { nombre , mail})
+            
             if (peticion?.data?.success) {
                 obtenerSorteos()
             } else {
@@ -43,11 +43,12 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
 
     const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
     const usuarioKick = localStorage.getItem('kick_user')
+    const mailKick = localStorage.getItem('kick_mail')
     const unirse = () => {
         const nombre = usuario || usuarioKick;
-
+        const mail = mailKick
         if (!nombre) return;
-        UnirseAlSorteo(nombre)
+        UnirseAlSorteo(nombre, mail)
     };
 
 
@@ -69,9 +70,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
         const ganadores = shuffled.slice(0, sorteo?.premios);
         setGanadores(ganadores)
 
-        const nombreGan = ganadores?.map((p) => p)
-        console.log('nombreGan', nombreGan)
-        // guardarGanadores(url, nombreGan)
+        const nombreGan = ganadores?.map((p) => p?.nombre)
+        
+         guardarGanadores(url, nombreGan)
     };
 
     // Polling para actualizaciones en tiempo real
@@ -136,7 +137,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
 
 
                         {
-                            usuarioKick === ('eldenguee' || 'lucaslunacl') &&
+                           ( usuarioKick === 'eldenguee' ||  usuarioKick === 'lucaslunacl') &&
                             < Button onClick={sortear} variant="outlined" sx={{ mt: 2, ml: 2 }}>Sortear</Button>
                         }
 

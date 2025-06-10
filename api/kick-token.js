@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     body: JSON.stringify({
       grant_type: 'authorization_code',
       client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
-      redirect_uri: 'http://localhost:3000/callback',
+      redirect_uri: 'https://eldenguee.com/callback',
       code,
       code_verifier,
     }),
