@@ -33,6 +33,7 @@ const[solicitudes, setSolicitudes] = useState()
         setUserEmail(mailKick)
     }
 
+    console.log('solicitudes', solicitudes)
     useEffect(() => { checkWinner() }, [])
 
     const [activeStep, setActiveStep] = useState(0);
@@ -266,7 +267,7 @@ const[solicitudes, setSolicitudes] = useState()
             <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '-30%' : '-10%', width: '100%' }}>
 
                 {
-                    !isWinner?.isWinner && solicitudes == 0  ?
+                    !isWinner?.isWinner && solicitudes < 1  ?
 
                         <Grid style={{
                             backgroundImage: `
