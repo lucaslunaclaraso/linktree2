@@ -28,7 +28,7 @@ const[solicitudes, setSolicitudes] = useState()
     const checkWinner = async () => {
         const peticion = await axios.post(`https://backmu.vercel.app/sorteo/check-ganador`, { nombre })
         const peticionTipeo = await axios.post(`https://backmu.vercel.app/solicitudes/tipeo`,{nombre})
-        setSolicitudes(peticionTipeo?.data?.solicitudes)
+        setSolicitudes(peticionTipeo?.data)
         setIsWinner(peticion?.data)
         setUserEmail(mailKick)
     }
