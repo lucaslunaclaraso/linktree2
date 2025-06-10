@@ -25,7 +25,7 @@ function TipeoCustom(props) {
     const usuariosValidos = Array.isArray(solicitud?.usuarios)
         ? solicitud.usuarios.filter(u => typeof u === 'string' && u.trim() !== '')
         : [];
-    const isValid = usuariosValidos <= solicitud?.tipeo?.premios;
+    const isValid = usuariosValidos < solicitud?.tipeo?.premios;
     console.log('usuariosLength', usuariosValidos.length)
     console.log('isValid', isValid)
     const solicitarTipeo = async () => {
@@ -66,7 +66,7 @@ function TipeoCustom(props) {
                             transform: 'scale(1.05)',
                         },
                     }}
-                    onClick={isLoggedIn && !isValid ? solicitarTipeo : ''}
+                    onClick={isLoggedIn && isValid ? solicitarTipeo : ''}
                     disabled={!isValid}
                 >
                     {!isValid ? 'LIMITE ALCANZADO' : 'Reclamar solicitud de tipeo'}
