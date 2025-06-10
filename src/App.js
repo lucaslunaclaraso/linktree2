@@ -63,7 +63,7 @@ function App() {
         const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
         const usuarioKick = localStorage.getItem('kick_user')
         const isSorteoRoute = location.pathname.startsWith('/sorteo/');
-        const isTipeoRoute = location.pathname.startsWith('/tipeo/');
+        const isTipeoRoute = location.pathname.startsWith('/tipeos/');
         console.log('usuarioKick', usuarioKick)
         const isLoggedIn = usuario || usuarioKick;
         // Verificar si el usuario es válido (incluye tanto fbUser como kick_user)
