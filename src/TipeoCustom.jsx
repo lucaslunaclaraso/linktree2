@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import Nlayout from './Nlayout'
 import { Button, Grid } from '@mui/material'
 import axios from 'axios'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function TipeoCustom(props) {
     const { url } = useParams();
+    const navigate = useNavigate();
 
     const tipeo = true
     const nombre = localStorage.getItem('kick_user')
@@ -23,7 +24,8 @@ function TipeoCustom(props) {
             setRegistrado('Ya reclamaste el tipeo')
             setDeshabilitar(true)
         }
-        
+        navigate(`/tipeos/${url}`); // o usar url si lo devuelves completo
+
     }
     return (
         <Nlayout>

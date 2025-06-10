@@ -36,7 +36,7 @@ const[solicitudes, setSolicitudes] = useState()
 
     
     useEffect(() => { checkWinner() }, [])
-console.log(solicitudes)
+console.log(solicitudes < 1)
     const [activeStep, setActiveStep] = useState(0);
     const [offerScreenshot, setOfferScreenshot] = useState(null);
     const [bnbScreenshot, setBnbScreenshot] = useState(null);
