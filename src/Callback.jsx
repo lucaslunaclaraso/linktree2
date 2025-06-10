@@ -29,6 +29,7 @@ export default function Callback() {
     console.log('state', state)
 
     const isSorteoPath = state.includes("sorteo");
+    const isTipeoPath = state.includes("tipeos");
 
 
     if (code && code_verifier) {
@@ -72,7 +73,7 @@ export default function Callback() {
           localStorage.removeItem('kick_code_verifier');
 
           // Forzar recarga completa a la URL original
-          const redirectTo = isSorteoPath ? decodeURIComponent(state) : '/';
+          const redirectTo = isSorteoPath || isTipeoPath ? decodeURIComponent(state) : '/';
           window.location.href = redirectTo;
         } else {
           throw new Error('No se recibió un access_token válido');

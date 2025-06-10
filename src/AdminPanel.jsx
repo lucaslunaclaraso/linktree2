@@ -116,7 +116,7 @@ const AdminPanel = (props) => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {solicitudes?.filter((sorteo) => sorteo.estado === 'pending' || sorteo.estado === 'accepted')?.map((solicitud) => (
+                                    {solicitudes?.filter((sorteo) => sorteo.status === 'pending' || sorteo.status === 'accepted')?.map((solicitud) => (
                                         <TableRow key={solicitud.id}>
                                             <TableCell>{solicitud.nombre}</TableCell>
                                             <TableCell>{solicitud.email}</TableCell>
