@@ -21,13 +21,9 @@ function TipeoCustom(props) {
     }
     useEffect(() => { obtenerSorteos() }, [])
 
-    console.log('solicitud', solicitud?.tipeo?.premios)
-    const usuariosValidos = Array.isArray(solicitud?.usuarios)
-        ? solicitud.usuarios.filter(u => typeof u === 'string' && u.trim() !== '')
-        : [];
+    const usuariosValidos = solicitud?.tipeo?.usuarios?.split(",")
     const isValid = usuariosValidos < solicitud?.tipeo?.premios;
-    console.log('usuariosLength', usuariosValidos.length)
-    console.log('isValid', isValid)
+    
     const solicitarTipeo = async () => {
         const peticion = await axios.post(`https://backmu.vercel.app/solicitudes/${url}/unirse`, { nombre })
         console.log(peticion)

@@ -20,23 +20,26 @@ const VisuallyHiddenInput = styled('input')({
 
 
 function Tipeo(props) {
-    const [userEmail, setUserEmail] = useState(''); 
+    const [userEmail, setUserEmail] = useState('');
     const mailKick = localStorage.getItem('kick_mail')
-const[solicitudes, setSolicitudes] = useState()
+    const [solicitudes, setSolicitudes] = useState()
+    const [cargar, setCargar] = useState()
     const nombre = props.nombre
     const [isWinner, setIsWinner] = useState()
     const checkWinner = async () => {
+        setCargar(true)
         const peticion = await axios.post(`https://backmu.vercel.app/sorteo/check-ganador`, { nombre })
-        const peticionTipeo = await axios.post(`https://backmu.vercel.app/solicitudes/tipeo`,{nombre})
+        const peticionTipeo = await axios.post(`https://backmu.vercel.app/solicitudes/tipeo`, { nombre })
         const soli = peticionTipeo?.data?.map((p) => p.solicitudes)
         setSolicitudes(soli)
         setIsWinner(peticion?.data)
         setUserEmail(mailKick)
+        setCargar(false)
     }
 
-    
+
     useEffect(() => { checkWinner() }, [])
-console.log(solicitudes < 1)
+console.log('soli', solicitudes < 1)
     const [activeStep, setActiveStep] = useState(0);
     const [offerScreenshot, setOfferScreenshot] = useState(null);
     const [bnbScreenshot, setBnbScreenshot] = useState(null);
@@ -46,7 +49,7 @@ console.log(solicitudes < 1)
     const [success, setSuccess] = useState(false);
     const [offerScreenshotUrl, setOfferScreenshotUrl] = useState('');
     const [bnbScreenshotUrl, setBnbScreenshotUrl] = useState('');
-    const [url, setUrl]= useState('')
+    const [url, setUrl] = useState('')
     const steps = ['Registrarse', 'Subir captura de Ajustes', 'Subir captura de BNB'];
 
 
@@ -268,13 +271,12 @@ console.log(solicitudes < 1)
             <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '-30%' : '-10%', width: '100%' }}>
 
                 {
-                     solicitudes < 1  ?
-
+                    cargar ?
                         <Grid style={{
                             backgroundImage: `
-    linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
-    url(${backgroundImg})
-  `,
+                  linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
+                  url(${backgroundImg})
+                  `,
                             backgroundSize: 'cover',
                             backgroundRepeat: 'no-repeat',
                             height: '980px',
@@ -290,143 +292,186 @@ console.log(solicitudes < 1)
 
                             }}>
                                 <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
-                                    <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif', textAlign: 'center' }} >
-                                        No estás habilitado para solicitar tipeo, lo tienes que ganar en algún sorteo realizado por el dengue!
-
+                                    <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif' }} >
+                                        eldenguee.com
                                     </Typography>
                                     <Typography sx={{
                                         background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
                                         WebkitBackgroundClip: 'text',
                                         WebkitTextFillColor: 'transparent',
                                         fontWeight: 'bold',
-                                        fontSize: props.isMobile ? 32 : 50,
+                                        fontSize: props.isMobile ? 32 : 65,
                                         fontFamily: 'Belerofonte'
-                                    }} >Eldenguee.com</Typography>
+                                    }} >Verificando..</Typography>
                                 </Grid>
 
                                 <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px' }} >
 
-
-                                    <Button
-
-                                        sx={{
-                                            color: 'black',
-                                            fontWeight: 'bold',
-                                            padding: '0.75rem 2rem',
-                                            fontSize: '.8rem',
-                                            fontFamily: 'Outfit,sans-serif',
-                                            backgroundImage: `linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)`,
-                                            border: '2px solid #e0c060',
-                                            borderRadius: '100px',
-                                            boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
-                                            textTransform: 'uppercase',
-                                            transition: 'all 0.3s ease-in-out',
-                                            '&:hover': {
-                                                boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
-                                                transform: 'scale(1.05)',
-                                            },
-                                        }}
-                                        href='/'
-                                    >
-                                        Volver al inicio
-                                    </Button>
                                 </Grid>
                             </Grid>
                         </Grid>
+
                         :
 
-                        <Grid style={{
-                            backgroundImage: `
+                        solicitudes < 1 ?
+
+                            <Grid style={{
+                                backgroundImage: `
     linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
     url(${backgroundImg})
   `,
-                            backgroundSize: 'cover',
-                            backgroundRepeat: 'no-repeat',
-                            height: '980px',
-                            backgroundColor: '#3f3d45',
-                            margin: '0 auto',
-                            position: 'relative',
-                            backgroundPosition: '50%',
-                            marginTop: '2%'
-                        }}>
-                            <Grid className='container' style={{
-                                padding: 50,
-                                gap: '10px',
-                                justifyContent: 'center',
-
+                                backgroundSize: 'cover',
+                                backgroundRepeat: 'no-repeat',
+                                height: '980px',
+                                backgroundColor: '#3f3d45',
+                                margin: '0 auto',
+                                position: 'relative',
+                                backgroundPosition: '50%'
                             }}>
-                                <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
-                                    <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif', textAlign: 'center' }} >
-                                        Felicitaciones estás habilitado para solicitar un tipeo!. Te dejo las instrucciones para hacerlo
+                                <Grid className='container' style={{
+                                    padding: 50,
+                                    gap: '10px',
+                                    justifyContent: 'center',
 
-                                    </Typography>
-                                    <Typography sx={{
-                                        background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                        fontWeight: 'bold',
-                                        fontSize: props.isMobile ? 32 : 50,
-                                        fontFamily: 'Belerofonte'
-                                    }} >Eldenguee.com</Typography>
-                                </Grid>
+                                }}>
+                                    <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
+                                        <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif', textAlign: 'center' }} >
+                                            No estás habilitado para solicitar tipeo, lo tienes que ganar en algún sorteo realizado por el dengue!
 
-                                <Box sx={{ maxWidth: 600, mx: 'auto', my: 1 }}>
-                                    <Paper elevation={3} sx={{ p: 3 }}>
-                                        <Typography variant="h4" align="center" gutterBottom>
-                                            Solicitud para Eldenguee
                                         </Typography>
-                                        <Stepper activeStep={activeStep} sx={{ mb: 3 }}>
-                                            {steps.map((label) => (
-                                                <Step key={label}>
-                                                    <StepLabel>{label}</StepLabel>
-                                                </Step>
-                                            ))}
-                                        </Stepper>
-                                        {success ? (
-                                            <Box sx={{ textAlign: 'center' }}>
-                                                <Typography variant="h6" gutterBottom>
-                                                    Gracias, tu solicitud fue recibida.
-                                                </Typography>
-                                                <Typography>
-                                                    Cuando tu tipeo esté listo, recibirás un correo en: <strong>{userEmail}</strong>
-                                                </Typography>
-                                            </Box>
-                                        ) : (
-                                            <>
-                                                {error && (
-                                                    <Alert severity="error" sx={{ mb: 2 }}>
-                                                        {error}
-                                                    </Alert>
-                                                )}
-                                                {getStepContent(activeStep)}
-                                                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-                                                    <Button
-                                                        disabled={activeStep === 0 || loading}
-                                                        onClick={handleBack}
-                                                        variant="outlined"
-                                                    >
-                                                        Atrás
-                                                    </Button>
-                                                    <Button
-                                                        onClick={activeStep === steps.length - 1 ? handleRequestTipeo : handleNext}
-                                                        variant="contained"
-                                                        disabled={loading}
-                                                    >
-                                                        {loading ? (
-                                                            <CircularProgress size={24} />
-                                                        ) : activeStep === steps.length - 1 ? (
-                                                            'Terminar solicitud'
-                                                        ) : (
-                                                            'Siguiente'
-                                                        )}
-                                                    </Button>
-                                                </Box>
-                                            </>
-                                        )}
-                                    </Paper>
-                                </Box>
+                                        <Typography sx={{
+                                            background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
+                                            WebkitBackgroundClip: 'text',
+                                            WebkitTextFillColor: 'transparent',
+                                            fontWeight: 'bold',
+                                            fontSize: props.isMobile ? 32 : 50,
+                                            fontFamily: 'Belerofonte'
+                                        }} >Eldenguee.com</Typography>
+                                    </Grid>
+
+                                    <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px' }} >
+
+
+                                        <Button
+
+                                            sx={{
+                                                color: 'black',
+                                                fontWeight: 'bold',
+                                                padding: '0.75rem 2rem',
+                                                fontSize: '.8rem',
+                                                fontFamily: 'Outfit,sans-serif',
+                                                backgroundImage: `linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)`,
+                                                border: '2px solid #e0c060',
+                                                borderRadius: '100px',
+                                                boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
+                                                textTransform: 'uppercase',
+                                                transition: 'all 0.3s ease-in-out',
+                                                '&:hover': {
+                                                    boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
+                                                    transform: 'scale(1.05)',
+                                                },
+                                            }}
+                                            href='/'
+                                        >
+                                            Volver al inicio
+                                        </Button>
+                                    </Grid>
+                                </Grid>
                             </Grid>
-                        </Grid>
+                            :
+
+                            <Grid style={{
+                                backgroundImage: `
+    linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
+    url(${backgroundImg})
+  `,
+                                backgroundSize: 'cover',
+                                backgroundRepeat: 'no-repeat',
+                                height: '980px',
+                                backgroundColor: '#3f3d45',
+                                margin: '0 auto',
+                                position: 'relative',
+                                backgroundPosition: '50%',
+                                marginTop: '2%'
+                            }}>
+                                <Grid className='container' style={{
+                                    padding: 50,
+                                    gap: '10px',
+                                    justifyContent: 'center',
+
+                                }}>
+                                    <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
+                                        <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif', textAlign: 'center' }} >
+                                            Felicitaciones estás habilitado para solicitar un tipeo!. Te dejo las instrucciones para hacerlo
+
+                                        </Typography>
+                                        <Typography sx={{
+                                            background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
+                                            WebkitBackgroundClip: 'text',
+                                            WebkitTextFillColor: 'transparent',
+                                            fontWeight: 'bold',
+                                            fontSize: props.isMobile ? 32 : 50,
+                                            fontFamily: 'Belerofonte'
+                                        }} >Eldenguee.com</Typography>
+                                    </Grid>
+
+                                    <Box sx={{ maxWidth: 600, mx: 'auto', my: 1 }}>
+                                        <Paper elevation={3} sx={{ p: 3 }}>
+                                            <Typography variant="h4" align="center" gutterBottom>
+                                                Solicitud para Eldenguee
+                                            </Typography>
+                                            <Stepper activeStep={activeStep} sx={{ mb: 3 }}>
+                                                {steps.map((label) => (
+                                                    <Step key={label}>
+                                                        <StepLabel>{label}</StepLabel>
+                                                    </Step>
+                                                ))}
+                                            </Stepper>
+                                            {success ? (
+                                                <Box sx={{ textAlign: 'center' }}>
+                                                    <Typography variant="h6" gutterBottom>
+                                                        Gracias, tu solicitud fue recibida.
+                                                    </Typography>
+                                                    <Typography>
+                                                        Cuando tu tipeo esté listo, recibirás un correo en: <strong>{userEmail}</strong>
+                                                    </Typography>
+                                                </Box>
+                                            ) : (
+                                                <>
+                                                    {error && (
+                                                        <Alert severity="error" sx={{ mb: 2 }}>
+                                                            {error}
+                                                        </Alert>
+                                                    )}
+                                                    {getStepContent(activeStep)}
+                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+                                                        <Button
+                                                            disabled={activeStep === 0 || loading}
+                                                            onClick={handleBack}
+                                                            variant="outlined"
+                                                        >
+                                                            Atrás
+                                                        </Button>
+                                                        <Button
+                                                            onClick={activeStep === steps.length - 1 ? handleRequestTipeo : handleNext}
+                                                            variant="contained"
+                                                            disabled={loading}
+                                                        >
+                                                            {loading ? (
+                                                                <CircularProgress size={24} />
+                                                            ) : activeStep === steps.length - 1 ? (
+                                                                'Terminar solicitud'
+                                                            ) : (
+                                                                'Siguiente'
+                                                            )}
+                                                        </Button>
+                                                    </Box>
+                                                </>
+                                            )}
+                                        </Paper>
+                                    </Box>
+                                </Grid>
+                            </Grid>
                 }
             </Grid>
         </Nlayout>
