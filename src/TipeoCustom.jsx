@@ -21,8 +21,10 @@ function TipeoCustom(props) {
     }
     useEffect(() => { obtenerSorteos() }, [])
 
-    console.log('solicitud', solicitud)
+    console.log('solicitud', solicitud?.tipeo?.premios)
 
+    const isValid = solicitud?.usuarios?.length <= solicitud?.tipeo?.premios
+    
     const solicitarTipeo = async () => {
         const peticion = await axios.post(`https://backmu.vercel.app/solicitudes/${url}/unirse`, { nombre })
         console.log(peticion)
@@ -33,7 +35,7 @@ function TipeoCustom(props) {
         } else {
             setRegistrado('Ya reclamaste el tipeo')
             setDeshabilitar(true)
-            
+
         }
 
     }
@@ -61,10 +63,10 @@ function TipeoCustom(props) {
                             transform: 'scale(1.05)',
                         },
                     }}
-                    onClick={isLoggedIn && !deshabilitar ? solicitarTipeo : alert("Tenes que estar logueado")}
-                    disabled={deshabilitar}
+                    onClick={isLoggedIn && !isValid ? solicitarTipeo : alert("Limite de reclamos superado")}
+                    disabled={isValid}
                 >
-                    {deshabilitar ? registrado : 'Reclamar solicitud de tipeo'}
+                    {isValid ? 'LIMITE ALCANZADO' : 'Reclamar solicitud de tipeo'}
                 </Button>
             </Grid>
 
