@@ -34,7 +34,10 @@ function Tipeo(props) {
         setSolicitudes(soli)
         setIsWinner(peticion?.data)
         setUserEmail(mailKick)
-        setCargar(false)
+        setTimeout(() => {
+            setCargar(false)
+            
+        }, 3000);
     }
 
 
