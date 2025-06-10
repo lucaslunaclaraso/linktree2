@@ -28,14 +28,15 @@ const[solicitudes, setSolicitudes] = useState()
     const checkWinner = async () => {
         const peticion = await axios.post(`https://backmu.vercel.app/sorteo/check-ganador`, { nombre })
         const peticionTipeo = await axios.post(`https://backmu.vercel.app/solicitudes/tipeo`,{nombre})
-        setSolicitudes(peticionTipeo?.data)
+        const soli = peticionTipeo?.data?.map((p) => p.solicitudes)
+        setSolicitudes(soli)
         setIsWinner(peticion?.data)
         setUserEmail(mailKick)
     }
 
-    console.log('solicitudes', solicitudes)
+    
     useEffect(() => { checkWinner() }, [])
-
+console.log(solicitudes)
     const [activeStep, setActiveStep] = useState(0);
     const [offerScreenshot, setOfferScreenshot] = useState(null);
     const [bnbScreenshot, setBnbScreenshot] = useState(null);
@@ -267,7 +268,7 @@ const[solicitudes, setSolicitudes] = useState()
             <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '-30%' : '-10%', width: '100%' }}>
 
                 {
-                    !isWinner?.isWinner && solicitudes < 1  ?
+                     solicitudes < 1  ?
 
                         <Grid style={{
                             backgroundImage: `
