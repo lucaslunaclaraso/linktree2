@@ -20,12 +20,12 @@ function TipeoCustom(props) {
         console.log(peticion)
         if (!peticion?.data?.registrado) {
             const peticionUser = await axios.post(`https://backmu.vercel.app/sorteo/crearUser`, { nombre, mail, tipeo })
-            navigate(`/tipeos/${url}`); // o usar url si lo devuelves completo
+            navigate(`/tipeo`); // o usar url si lo devuelves completo
 
         } else {
             setRegistrado('Ya reclamaste el tipeo')
             setDeshabilitar(true)
-            navigate(`/tipeos/${url}`); // o usar url si lo devuelves completo
+            navigate(`/tipeo`); // o usar url si lo devuelves completo
         }
 
     }
