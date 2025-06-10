@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Nlayout from './Nlayout'
 import { Button, Grid } from '@mui/material'
 import axios from 'axios'
@@ -14,6 +14,14 @@ function TipeoCustom(props) {
     const [registrado, setRegistrado] = useState('')
     const [deshabilitar, setDeshabilitar] = useState(false)
     const isLoggedIn = nombre;
+    const [solicitud, setSolicitud] = useState()
+    const obtenerSorteos = async () => {
+        const peticion = await axios.get(`https://backmu.vercel.app/solicitudes/${url}`)
+        setSolicitud(peticion?.data)
+    }
+    useEffect(() => { obtenerSorteos() }, [])
+
+    console.log('solicitud', solicitud)
 
     const solicitarTipeo = async () => {
         const peticion = await axios.post(`https://backmu.vercel.app/solicitudes/${url}/unirse`, { nombre })
