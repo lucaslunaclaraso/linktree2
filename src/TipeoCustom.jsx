@@ -33,7 +33,7 @@ function TipeoCustom(props) {
         } else {
             setRegistrado('Ya reclamaste el tipeo')
             setDeshabilitar(true)
-            navigate(`/tipeo`); // o usar url si lo devuelves completo
+            
         }
 
     }
