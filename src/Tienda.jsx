@@ -80,7 +80,7 @@ function Tienda(props) {
                                 </Typography>
                             </CardContent>
                             <CardActions sx={{ padding: '0 16px 16px 16px', justifyContent: 'flex-end' }}>
-                                <StyledButton size="small" onClick={() => canjearPremio(nombre,1)}>Canjear</StyledButton>
+                                <StyledButton size="small" onClick={() => canjearPremio(nombre,1)}> $DCoins 500 - Canjear</StyledButton>
                             </CardActions>
                         </StyledCard>
                         <StyledCard>
@@ -94,7 +94,7 @@ function Tienda(props) {
                                         marginBottom: 1,
                                     }}
                                 >
-                                    1 Solicitud de tipeo
+                                    3 Solicitudes de tipeo
                                 </Typography>
                                 <Typography
                                     variant="body2"
@@ -107,7 +107,7 @@ function Tienda(props) {
                                 </Typography>
                             </CardContent>
                             <CardActions sx={{ padding: '0 16px 16px 16px', justifyContent: 'flex-end' }}>
-                                <StyledButton size="small" onClick={() => canjearPremio(nombre,2)}>Canjear</StyledButton>
+                                <StyledButton size="small" onClick={() => canjearPremio(nombre,2)}>$DCoins 1000 - Canjear</StyledButton>
                             </CardActions>
                         </StyledCard>
                         <StyledCard>
@@ -121,7 +121,7 @@ function Tienda(props) {
                                         marginBottom: 1,
                                     }}
                                 >
-                                    1 Solicitud de tipeo
+                                    5 Solicitudes de tipeo
                                 </Typography>
                                 <Typography
                                     variant="body2"
@@ -134,7 +134,7 @@ function Tienda(props) {
                                 </Typography>
                             </CardContent>
                             <CardActions sx={{ padding: '0 16px 16px 16px', justifyContent: 'flex-end' }}>
-                                <StyledButton size="small" onClick={() => canjearPremio(nombre,3)}>Canjear</StyledButton>
+                                <StyledButton size="small" onClick={() => canjearPremio(nombre,3)}>$DCoins 1500 - Canjear</StyledButton>
                             </CardActions>
                         </StyledCard>
 
