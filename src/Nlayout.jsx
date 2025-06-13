@@ -16,6 +16,7 @@ import { FaFacebookSquare } from 'react-icons/fa';
 import { FaCrown } from 'react-icons/fa';
 import { TbRating18Plus } from "react-icons/tb";
 import coin from './toast-coin.svg'
+import axios from 'axios';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -177,6 +178,7 @@ function Nlayout(props) {
 
     const parsedToken = JSON.parse(tokenKick);
 
+
     const fetchUserDataKick = async (accessToken) => {
 
         try {
@@ -215,7 +217,7 @@ function Nlayout(props) {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = Boolean(anchorEl);
-
+    const [Dcoins, setDcoins] = useState(0)
     // Maneja el clic para abrir el menú
     const handleClick = (event) => {
         setAnchorEl(event);
@@ -240,6 +242,20 @@ function Nlayout(props) {
         window.location.href = "/"
         handleClose(); // Cierra el menú
     };
+    const nombre = user?.name
+    const obtenerCoins = async () => {
+        const response = await axios.post('https://backmu.vercel.app/solicitudes/usuario', { nombre });
+        setDcoins(response?.data[0]?.Dcoins)
+    }
+
+    useEffect(() => {
+        setTimeout(() => {
+            obtenerCoins()
+         }, [
+            1000
+        ])
+
+    }, [])
 
     const toPanel = () => {
         window.location.href = "/panel"
@@ -277,6 +293,7 @@ function Nlayout(props) {
         window.location.href = "/crearlink"
     }
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+    
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 
@@ -292,7 +309,7 @@ function Nlayout(props) {
 
 
                             <Link to="/" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
-                                <IoMdHome style={{ color: 'white' }} className='itemMenu'/>
+                                <IoMdHome style={{ color: 'white' }} className='itemMenu' />
 
                                 <Typography sx={{
                                     background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
@@ -307,7 +324,7 @@ function Nlayout(props) {
 
 
                             <Link to="/" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
-                                <PiRankingFill style={{ color: 'white' }}  className='itemMenu'/>
+                                <PiRankingFill style={{ color: 'white' }} className='itemMenu' />
 
                                 <Typography sx={{
                                     background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
@@ -489,7 +506,7 @@ function Nlayout(props) {
                             <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                 <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: 8, borderRadius: '8px', background: '#10111c' }}>
                                     <img src={coin} />
-                                    <Typography style={{ fontSize: 16, fontFamily: 'Outfit,sans-serif', color: 'hsla(0,0%,100%,.75)' }}>0</Typography>
+                                    <Typography style={{ fontSize: 16, fontFamily: 'Outfit,sans-serif', color: 'hsla(0,0%,100%,.75)' }}>{Dcoins}</Typography>
                                 </Grid>
                                 <Typography sx={{
                                     background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',

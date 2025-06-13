@@ -26,6 +26,9 @@ const StyledButton = styled(Button)(({ theme }) => ({
     borderRadius: 8, // Bordes redondeados en el botón
 }));
 function Tienda(props) {
+
+
+    
     return (
         <Nlayout>
             <Grid style={{ background: '#11111d' }}>
