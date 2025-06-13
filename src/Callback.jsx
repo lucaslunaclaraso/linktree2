@@ -2,6 +2,7 @@ import { Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import backgroundImg from './main_intro.jpg'
+import Loader from './Loader';
 
 // Variable global para evitar doble ejecución
 let hasProcessedGlobally = false;
@@ -94,43 +95,6 @@ export default function Callback() {
   }, []); // Sin dependencias, solo se ejecuta al montar
 
   return (
-    <Grid style={{
-      backgroundImage: `
-linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
-url(${backgroundImg})
-`,
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      height: '980px',
-      backgroundColor: '#3f3d45',
-      margin: '0 auto',
-      position: 'relative',
-      backgroundPosition: '50%'
-    }}>
-      <Grid className='container' style={{
-        padding: 50,
-        gap: '10px',
-        justifyContent: 'center',
-
-      }}>
-        <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
-          <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif' }} >
-            eldenguee.com
-          </Typography>
-          <Typography sx={{
-            background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            fontWeight: 'bold',
-            fontSize: isMobile ? 32 : 65,
-            fontFamily: 'Belerofonte'
-          }} >Verificando..</Typography>
-        </Grid>
-
-        <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px' }} >
-          
-        </Grid>
-      </Grid>
-    </Grid>
+     <Loader/>
   )
 }

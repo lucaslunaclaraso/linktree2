@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import { AppBar, Box, Button, Checkbox, Menu, MenuItem, Modal, Stack, Toolbar, Typography } from '@mui/material';
 import './Nlayout.css'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { FaBagShopping, FaDiscord, FaFacebook, FaInstagram, FaKickstarterK, FaYoutube } from 'react-icons/fa6';
 import logo from './logo_intro2.png'
 import logoDengue from './logoDengue.webp'
@@ -17,6 +17,7 @@ import { FaCrown } from 'react-icons/fa';
 import { TbRating18Plus } from "react-icons/tb";
 import coin from './toast-coin.svg'
 import axios from 'axios';
+import Loader from './Loader';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -295,7 +296,15 @@ function Nlayout(props) {
         window.location.href = "/crearlink"
     }
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+    const location = useLocation();
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        // Mostrar loader en carga inicial
+        setLoading(true);
+        const timer = setTimeout(() => setLoading(false), 1000); // duración del loader
+        return () => clearTimeout(timer);
+    }, [location.pathname]);
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 
@@ -378,7 +387,7 @@ function Nlayout(props) {
                                     boxShadow: '0 0 0 2px white',
                                 }}
                                 >
-                                    {solicitudes }
+                                    {solicitudes}
                                 </Box>
                             }
                             <Button
@@ -674,7 +683,8 @@ function Nlayout(props) {
                     </Stack>
                 </Box>
             </Modal>
-            {props.children}
+            {loading && <Loader />}
+            {!loading && props.children}
 
 
             <footer class="footer">
