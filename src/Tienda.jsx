@@ -34,7 +34,7 @@ function Tienda(props) {
 
     const canjearPremio = async ( nombre, canje) => {
         const response = await axios.post('https://backmu.vercel.app/solicitudes/canjear', { nombre, canje })
-        console.log('resp', response)
+        
     }
 
 

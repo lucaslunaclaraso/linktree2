@@ -242,10 +242,12 @@ function Nlayout(props) {
         window.location.href = "/"
         handleClose(); // Cierra el menú
     };
+    const [solicitudes, setSolicitudes] = useState()
     const nombre = localStorage.getItem('kick_user')
     const obtenerCoins = async () => {
         const response = await axios.post('https://backmu.vercel.app/solicitudes/usuario', { nombre });
         setDcoins(response?.data[0]?.Dcoins)
+        setSolicitudes(response?.data[0]?.solicitudes)
     }
 
     useEffect(() => {
@@ -255,7 +257,7 @@ function Nlayout(props) {
             1000
         ])
 
-    }, [])
+    }, [10000])
 
     const toPanel = () => {
         window.location.href = "/panel"
@@ -358,9 +360,27 @@ function Nlayout(props) {
 
 
                     <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '15px', width: '80%' }}>
-                        {
-                            (!isValidUser) &&
+                        <Box sx={{ position: 'relative', display: 'inline-block' }}>
+                            {
+                                isLoggedIn &&
 
+                                <Box sx={{
+                                    position: 'absolute',
+                                    top: '-8px',
+                                    right: '-8px',
+                                    backgroundColor: '#ff1744',
+                                    color: 'white',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 'bold',
+                                    padding: '2px 6px',
+                                    borderRadius: '50%',
+                                    zIndex: 1,
+                                    boxShadow: '0 0 0 2px white',
+                                }}
+                                >
+                                    {solicitudes }
+                                </Box>
+                            }
                             <Button
 
                                 sx={{
@@ -388,8 +408,7 @@ function Nlayout(props) {
                             >
                                 Solicitar Tipeo
                             </Button>
-                        }
-
+                        </Box>
                         {/* 
                         {
 
@@ -594,7 +613,7 @@ function Nlayout(props) {
                     </Menu>
 
                 </Toolbar>
-            </Grid>
+            </Grid >
 
 
             <Modal open={open} onClose={handleClose}>
@@ -736,7 +755,7 @@ function Nlayout(props) {
                 </Grid>
             </footer>
 
-        </Grid>
+        </Grid >
     )
 }
 
