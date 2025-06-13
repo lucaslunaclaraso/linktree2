@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SlSocialInstagram } from "react-icons/sl";
 import { TiSocialYoutube } from "react-icons/ti";
 import { BsTwitch } from "react-icons/bs";
@@ -12,7 +12,7 @@ import './home.css'
 import Nlayout from './Nlayout';
 import { Box, Button, Grid, Link, Typography } from '@mui/material';
 import './Nlayout.css'
-import { FaCopy, FaDiscord, FaGift, FaPlay, FaYoutube } from "react-icons/fa6";
+import { FaCopy, FaDiscord, FaGift, FaInstagram, FaPlay, FaYoutube } from "react-icons/fa6";
 import logo from './logo_intro2.png'
 import backgroundImg from './main_intro.jpg'
 import logoStake from './stake-logo.png'
@@ -25,10 +25,12 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { FreeMode, Pagination, Navigation } from 'swiper/modules';
 import { FaFacebookSquare } from "react-icons/fa";
-
+import scroll from './scroll.svg'
 import nube1 from './nube1.png'
 import nube2 from './nube2.png'
 import nube3 from './nube3.png'
+import { PiMouseScrollThin } from 'react-icons/pi';
+import back from './leaderboard_card_bg.svg'
 const LinkItem = ({ parrafo, title, url, imagen, isImage, gif }) => {
 
   const copyToClipboard = () => {
@@ -62,7 +64,7 @@ const LinkItem = ({ parrafo, title, url, imagen, isImage, gif }) => {
   );
 };
 const usuarioKick = localStorage.getItem('kick_user')
-const isLoggedIn =  usuarioKick;
+const isLoggedIn = usuarioKick;
 
 // Componente principal para representar la estructura de Linktree
 const LinkTree = ({ links }) => {
@@ -91,7 +93,41 @@ const Home = (props) => {
     { id: 'https://www.youtube.com/watch?v=VNDGtOG2XbE&ab_channel=dengueetimba', title: 'PAGOS INSANOS EN DOG HOUSE, BIG BASS Y HOT FIESTA😎🍀', img: 'VNDGtOG2XbE' },
 
   ];
+  const handleScroll = () => {
+    const target = document.querySelector("#menu2");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
+  const backgroundRef = useRef(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (backgroundRef.current) {
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+
+        // Ajusta la posición del pseudo-elemento para el efecto de iluminación
+        backgroundRef.current.style.setProperty('--mouse-x', `${mouseX}px`);
+        backgroundRef.current.style.setProperty('--mouse-y', `${mouseY}px`);
+      }
+    };
+
+   
+    const container = document.querySelector('.container');
+    if (container) {
+      container.addEventListener('mousemove', handleMouseMove);
+      
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('mousemove', handleMouseMove);
+        
+      }
+    };
+  }, []);
   return (
     <Nlayout>
       <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '-30%' : '-10%', width: '100%' }}>
@@ -102,7 +138,7 @@ const Home = (props) => {
   `,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
-          height: '980px',
+          height: '750px',
           backgroundColor: '#3f3d45',
           margin: '0 auto',
           position: 'relative',
@@ -112,7 +148,7 @@ const Home = (props) => {
             padding: 50,
             gap: '10px',
             justifyContent: 'center',
-
+            marginTop: '50px'
           }}>
             <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
               <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif' }} >
@@ -128,7 +164,7 @@ const Home = (props) => {
               }} >Eldenguee.com</Typography>
             </Grid>
 
-            <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px' }} >
+            <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '80px 0 65px' }} >
               <Button
                 style={{
                   background: 'linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),linear-gradient(94deg,#7676f5 29.94%,#5a22a1 83.55%)',
@@ -167,91 +203,99 @@ const Home = (props) => {
                 Solicitar Tipeo
               </Button> */}
             </Grid>
-          </Grid>
-        </Grid>
+
+            <div class="intro-scroll-wrapper tablet-max-hide" >
+              <PiMouseScrollThin style={{ zIndex: 1, cursor: 'pointer', position: 'relative', height: '65px', color: 'white', fontSize: 45 }} onClick={handleScroll} />
 
 
-
-        <Grid style={{ position: 'relative', width: '100%' }}>
-          <div
-            className="intro-clouds-wide-wrapper tablet-max-hide"
-            style={{
-              position: 'absolute',
-              top: '50px',
-              left: 0,
-              width: '100%',
-              height: '100%',
-              zIndex: 9999,
-              pointerEvents: 'none',  // para que las nubes no bloqueen clicks
-            }}
-          >
-            <div className="intro-clouds-wide" style={{ width: '100%' }}>
-              <img src={nube1} style={{ width: '100%' }} alt="background" className="intro-clouds-wide-parts-1" />
-              <img src={nube2} style={{ width: '100%' }} alt="background" className="intro-clouds-wide-parts-2" />
-              <img src={nube3} style={{ width: '100%' }} alt="background" className="intro-clouds-wide-parts-3" />
             </div>
-          </div>
-          <Grid className='container' style={{ padding: 50, gap: '10px', position: 'relative' }}>
-
-            <Box style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              fontSize: props.isMobile ? 24 : 36,
-              position: 'relative',  // paso 3 (opcional pero recomendable)
-
-            }} className='join-plate-inner'>
-
-              <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <Typography style={{ display: 'flex', alignItems: 'center', gap: '5px' }} >Usa el código <span style={{ color: 'white', display: 'flex', alignItems: 'center', gap: '5px', background: 'hsla(0,0%,85%,.05)', padding: 10, borderRadius: 5, fontWeight: 900 }}>
-                  ELDENGUEE</span> en </Typography>
-                <img src={logoStake} style={{ width: '10%' }} />
-                <Typography> para unirte a la comunidad!</Typography>
-              </Grid>
-
-              <Button style={{ background: 'linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),linear-gradient(94deg,#7676f5 29.94%,#5a22a1 83.55%)', color: 'white', padding: 15, borderRadius: '100px', width: '30%' }} className='botonCod'>USAR CODIGO</Button>
-            </Box>
           </Grid>
         </Grid>
 
-        <Grid className='container' style={{ padding: 50, gap: '10px' }}>
-          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36, width: '100%', flexDirection: 'column', gap: 10 }} >
 
-            <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
-              <FaGift style={{ color: 'ffe77c' }} />
-              <Typography sx={{
-                background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 'bold',
-                fontSize: props.isMobile ? 24 : 45,
-                fontFamily: 'PoetsenOne'
-              }} >Total de premios</Typography>
+        <Grid style={{ display: 'flex', flexDirection: 'column' }} className="background" ref={backgroundRef}>
+
+          <Grid style={{ position: 'relative', width: '100%' }} >
+            <div
+              className="intro-clouds-wide-wrapper tablet-max-hide"
+              style={{
+                position: 'absolute',
+                top: '50px',
+                left: 0,
+                width: '100%',
+                height: '100%',
+                zIndex: 9999,
+                pointerEvents: 'none',  // para que las nubes no bloqueen clicks
+              }}
+            >
+              <div className="intro-clouds-wide" style={{ width: '100%' }}>
+                <img src={nube1} style={{ width: '100%' }} alt="background" className="intro-clouds-wide-parts-1" />
+                <img src={nube2} style={{ width: '100%' }} alt="background" className="intro-clouds-wide-parts-2" />
+                <img src={nube3} style={{ width: '100%' }} alt="background" className="intro-clouds-wide-parts-3" />
+              </div>
+            </div>
+            <Grid className='container' style={{ padding: 50, gap: '10px', position: 'relative' }} id='menu2'>
+
+              <Box style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: props.isMobile ? 24 : 36,
+                position: 'relative',  // paso 3 (opcional pero recomendable)
+
+              }} className='join-plate-inner'>
+
+                <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <Typography style={{ display: 'flex', alignItems: 'center', gap: '5px' }} >Usa el código <span style={{ color: 'white', display: 'flex', alignItems: 'center', gap: '5px', background: 'hsla(0,0%,85%,.05)', padding: 10, borderRadius: 5, fontWeight: 900 }}>
+                    ELDENGUEE</span> en </Typography>
+                  <img src={logoStake} style={{ width: '10%' }} />
+                  <Typography> para unirte a la comunidad!</Typography>
+                </Grid>
+
+                <Button style={{ background: 'linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),linear-gradient(94deg,#7676f5 29.94%,#5a22a1 83.55%)', color: 'white', padding: 15, borderRadius: '100px', width: '30%' }} className='botonCod'>USAR CODIGO</Button>
+              </Box>
             </Grid>
+          </Grid>
 
-            <Box style={{ border: '1px solid #ffca41', borderRadius: '200px', padding: '8px', width: 'fit-content' }}>
+          <Grid style={{ padding: 50, gap: '10px' }} >
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36, width: '100%', flexDirection: 'column', gap: 10 }} >
 
-              <Grid style={{ border: '1px solid #34375f', borderRadius: '200px', background: 'linear-gradient(96deg,transparent 34.16%,rgba(105,105,230,.2) 115.52%),linear-gradient(58deg,rgba(19,21,31,.75) -41.21%,rgba(39,43,65,.75) 161.22%)', padding: '40px  72px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-
+              <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
+                <FaGift style={{ color: 'ffe77c' }} />
                 <Typography sx={{
                   background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   fontWeight: 'bold',
-                  fontSize: props.isMobile ? 24 : 60
-                }}>$</Typography>
-                <Typography sx={{
-                  fontWeight: 'bold',
-                  fontSize: props.isMobile ? 24 : 72,
-                  color: 'white',
+                  fontSize: props.isMobile ? 24 : 45,
                   fontFamily: 'PoetsenOne'
-                }}>1,269,533</Typography>
-
+                }} >Total de premios</Typography>
               </Grid>
 
-            </Box>
+              <Box style={{ border: '1px solid #ffca41', borderRadius: '200px', padding: '8px', width: 'fit-content' }}>
 
-          </Box>
+                <Grid style={{ border: '1px solid #34375f', borderRadius: '200px', background: 'linear-gradient(96deg,transparent 34.16%,rgba(105,105,230,.2) 115.52%),linear-gradient(58deg,rgba(19,21,31,.75) -41.21%,rgba(39,43,65,.75) 161.22%)', padding: '40px  72px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+                  <Typography sx={{
+                    background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    fontWeight: 'bold',
+                    fontSize: props.isMobile ? 24 : 60
+                  }}>$</Typography>
+                  <Typography sx={{
+                    fontWeight: 'bold',
+                    fontSize: props.isMobile ? 24 : 72,
+                    color: 'white',
+                    fontFamily: 'PoetsenOne'
+                  }}>1,269,533</Typography>
+
+                </Grid>
+
+              </Box>
+
+            </Box>
+          </Grid>
         </Grid>
 
         <Grid className='container' style={{ padding: 50, gap: '10px' }}>
@@ -292,11 +336,12 @@ const Home = (props) => {
             {videos.map((video, index) => (
 
               <Grid>
-                <a href={video.id} target="_blank" rel="noopener noreferrer">
+                <a href={video.id} target="_blank" rel="noopener noreferrer" >
                   <img
                     src={`https://img.youtube.com/vi/${video.img}/maxresdefault.jpg`}
                     alt={video.title}
                     style={{ width: '100%', borderRadius: '10px' }}
+                    className="hover-scale shiny-hover"
                   />
                 </a>
                 <p style={{ color: 'white' }}>{video.title}</p>
@@ -311,9 +356,9 @@ const Home = (props) => {
 
 
 
-          <Box style={{ border: '1px solid #830000', borderRadius: '200px', padding: '8px', width: 'fit-content', marginTop: '3%' }}>
+          <Box style={{ border: '1px solid #830000', borderRadius: '200px', padding: '8px', width: 'fit-content', marginTop: '3%' }} className="pulse">
             <Link to="https://youtube.com/@dengueetimba?si=GzrKmlCiEecUFH54" style={{ textDecoration: 'none' }}>
-              <Grid style={{ border: '1px solid #34375f', borderRadius: '200px', background: 'linear-gradient(0deg,rgba(0,0,0,.2),rgba(0,0,0,.2)),linear-gradient(122deg,#670000 -24.73%,red 53.1%,#830000 121.81%)', padding: '5px 25px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', gap: '10px' }}>
+              <Grid style={{ border: '1px solid #34375f', borderRadius: '200px', background: 'linear-gradient(0deg,rgba(0,0,0,.2),rgba(0,0,0,.2)),linear-gradient(122deg,#670000 -24.73%,red 53.1%,#830000 121.81%)', padding: '5px 25px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', gap: '10px' }}  >
 
 
                 <FaPlay style={{ color: 'white', }} />
@@ -340,7 +385,14 @@ const Home = (props) => {
 
           <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
 
-
+            <Typography sx={{
+              background: 'linear-gradient(96deg,#7676f5 61.81%,#5a22a1 99.52%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              fontWeight: 'bold',
+              fontSize: props.isMobile ? 24 : 60,
+              fontFamily: 'PoetsenOne'
+            }}>Unite</Typography>
             <Typography sx={{
               background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
               WebkitBackgroundClip: 'text',
@@ -348,23 +400,24 @@ const Home = (props) => {
               fontWeight: 'bold',
               fontSize: props.isMobile ? 24 : 60,
               fontFamily: 'PoetsenOne'
-            }}>Unite a la comunidad!</Typography>
+            }}> a la comunidad!</Typography>
           </Grid>
 
-          <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', width: '100%', flexWrap: props.isMobile && 'wrap' }} >
+          <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', flexWrap: 'wrap', gap: '2%', rowGap: '30px' }} >
 
             <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #00ff73', width: '30%', borderRadius: 10, boxShadow: '0 0 5px #00ff73', }}>
               <SiKick style={{ color: '#00ff73', fontSize: 35 }} />
               <Typography style={{ color: 'white', fontWeight: 800, fontFamily: 'PoetsenOne' }}>Kick</Typography>
 
 
-              <Button sx={{
-                background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 'bold',
+              <Button
+                sx={{
+                  background: 'linear-gradient(180deg,#00ff73 -31.86%,#00ff13 132.28%)',
+                  color: 'black',
+                  transformStyle: 'preserve-3d',
+                  padding: '0 15px'
 
-              }} href="https://kick.com/eldenguee" target='_blank'>Seguir</Button>
+                }} href="https://kick.com/eldenguee" target='_blank'>Seguir</Button>
 
             </Box>
 
@@ -373,10 +426,11 @@ const Home = (props) => {
               <Typography style={{ color: 'white', fontWeight: 800, fontFamily: 'PoetsenOne' }}>Youtube</Typography>
 
               <Button sx={{
-                background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 'bold',
+                background: 'linear-gradient(0deg,rgba(0,0,0,.2),rgba(0,0,0,.2)),linear-gradient(122deg,#670000 -24.73%,red 53.1%,#830000 121.81%)',
+                color: 'white',
+
+                transformStyle: 'preserve-3d',
+                padding: '0 15px'
 
               }} href="https://youtube.com/@dengueetimba?si=GzrKmlCiEecUFH54" target='_blank'>Seguir</Button>
 
@@ -386,13 +440,15 @@ const Home = (props) => {
               <FaDiscord style={{ color: '#1877F2', fontSize: 35 }} />
               <Typography style={{ color: 'white', fontWeight: 800, fontFamily: 'PoetsenOne' }}>Discord</Typography>
 
-              <Button sx={{
-                background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 'bold',
+              <Button
+                sx={{
+                  background: 'linear-gradient(180deg,#1877F2 -31.86%,#1877F4 132.28%)',
+                  color: 'white',
+                  transformStyle: 'preserve-3d',
+                  padding: '0 15px'
 
-              }}>Unirse</Button>
+                }}
+              >Unirse</Button>
             </Box>
             <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #1877F2', width: '30%', borderRadius: 10, boxShadow: '0 0 5px #1877F2' }}>
               <FaFacebookSquare style={{ color: '#1877F2', fontSize: 35 }} />
@@ -400,28 +456,47 @@ const Home = (props) => {
 
 
 
-              <Button sx={{
-                background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 'bold',
+              <Button
+                sx={{
+                  background: 'linear-gradient(180deg,#1877F2 -31.86%,#1877F2 132.28%)',
+                  color: 'white',
+                  transformStyle: 'preserve-3d',
+                  padding: '0 15px'
 
-              }} href="https://www.facebook.com/share/g/16GuSgTj4T/?mibextid=wwXIfr" target='_blank'>
+                }}
+                href="https://www.facebook.com/share/g/16GuSgTj4T/?mibextid=wwXIfr" target='_blank'>
                 Unirse
               </Button>
 
             </Box>
 
             <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #a8a6af', width: '30%', borderRadius: 10, boxShadow: '0 0 5px #a8a6af' }}>
-              <img src={logoStake} style={{ width: '25%' }} />
+              <img src={logoStake} style={{ width: '18%' }} />
               <Typography style={{ color: 'white', fontWeight: 800, fontFamily: 'PoetsenOne' }}>Stake</Typography>
-              <Button sx={{
-                background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 'bold',
+              <Button
+                sx={{
+                  background: 'linear-gradient(180deg,#a8a6af -31.86%,#a8a6af 132.28%)',
+                  color: 'black',
+                  transformStyle: 'preserve-3d',
+                  padding: '0 15px'
 
-              }}>Usar Código</Button>
+                }}
+
+              >Jugar</Button>
+            </Box>
+
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #a8a6af', width: '30%', borderRadius: 10, boxShadow: '0 0 5px #a8a6af' }}>
+              <FaInstagram style={{ fontSize: 35, color: 'white' }} />
+
+
+              <Typography style={{ color: 'white', fontWeight: 800, fontFamily: 'PoetsenOne' }}>Instagram</Typography>
+              <Button sx={{
+                background: 'linear-gradient(180deg,#a8a6af -31.86%,#a8a6af 132.28%)',
+                color: 'black',
+                transformStyle: 'preserve-3d',
+                padding: '0 15px'
+
+              }}>Seguir</Button>
             </Box>
           </Grid>
 

@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
-import { AppBar, Box, Button, Menu, MenuItem, Modal, Stack, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Checkbox, Menu, MenuItem, Modal, Stack, Toolbar, Typography } from '@mui/material';
 import './Nlayout.css'
 import { Link } from 'react-router-dom'
-import { FaFacebook, FaKickstarterK } from 'react-icons/fa6';
+import { FaBagShopping, FaDiscord, FaFacebook, FaInstagram, FaKickstarterK, FaYoutube } from 'react-icons/fa6';
 import logo from './logo_intro2.png'
 import logoDengue from './logoDengue.webp'
-
+import backg from './main_intro.jpg'
 import { generatePKCE } from './api/pkce';
-
+import { IoCloseCircleOutline } from "react-icons/io5";
+import { PiRankingFill } from "react-icons/pi";
+import { IoMdArrowDropdown, IoMdHome } from "react-icons/io";
+import gamble from './gambleAware.svg'
+import { FaFacebookSquare } from 'react-icons/fa';
+import { FaCrown } from 'react-icons/fa';
+import { TbRating18Plus } from "react-icons/tb";
+import coin from './toast-coin.svg'
 const style = {
     position: 'absolute',
     top: '50%',
@@ -18,8 +25,14 @@ const style = {
     borderRadius: 4,
     boxShadow: 24,
     backdropFilter: 'blur(8px)',
-    p: 4,
+
     textAlign: 'center',
+    backgroundImage: `
+    linear-gradient(to bottom,  rgba(63, 61, 69, 0),rgb(73 22 227)),
+    url(${backg})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    padding: '150px 56px 56px'
 };
 
 const buttonBase = {
@@ -184,7 +197,9 @@ function Nlayout(props) {
             localStorage.setItem('kick_user', userData?.data[0]?.name); // Guarda los datos del usuario
             localStorage.setItem('kick_mail', userData?.data[0]?.email); // Guarda los datos del usuario
 
-            setUser({ name: userData?.data[0]?.name, email: userData?.data[0]?.email });
+            setUser({
+                name: userData?.data[0]?.name, email: userData?.data[0]?.email, profile: userData?.data[0]?.profile_picture
+            });
 
             return userData;
         } catch (err) {
@@ -251,61 +266,114 @@ function Nlayout(props) {
         window.location.href = "/tipeo"
 
     }
+    const redirectShop = () => {
+        window.location.href = "/shop"
+
+    }
     const redirectSolicitudes = () => {
         window.location.href = "/solicitudes"
     }
     const redirectCrearSolicitudes = () => {
         window.location.href = "/crearlink"
     }
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 
-            <Grid classname='header' style={{ background: 'transparent', zIndex: 9999, padding: 10 }}>
-                <Toolbar style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Typography style={{ width: '30%' }}>
-                        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                            <img src={logoDengue} style={{ borderRadius: '50%', width: isMobile ? '50%' : '20%' }} />
-                            {/* <Typography sx={{
-                                background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                fontWeight: 'bold',
-                                fontSize: 25,
-                                fontFamily: 'Belerofonte'
-                            }} >Eldenguee.com</Typography> */}
+            <Grid classname='header' style={{ zIndex: 9999, padding: 10, background: '#00000045' }}>
+                <Toolbar style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '85%', margin: '0 auto' }}>
+                    <Grid style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
 
-                        </Link>
-                    </Typography>
+
+                        <img src={logoDengue} style={{ borderRadius: '50%', width: isMobile ? '50%' : '15%' }} />
+
+
+                        <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+
+
+                            <Link to="/" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                                <IoMdHome style={{ color: 'white' }} className='itemMenu'/>
+
+                                <Typography sx={{
+                                    background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    fontWeight: 'bold',
+                                    fontSize: 16,
+                                    fontFamily: 'Outfit,sans-serif'
+                                }} className='itemMenu' >Home</Typography>
+
+                            </Link>
+
+
+                            <Link to="/" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                                <PiRankingFill style={{ color: 'white' }}  className='itemMenu'/>
+
+                                <Typography sx={{
+                                    background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    fontWeight: 'bold',
+                                    fontSize: 16,
+                                    fontFamily: 'Outfit,sans-serif'
+                                }} >Rankings</Typography>
+
+                            </Link>
+
+
+
+                            <Link to="/shop" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                                <FaBagShopping style={{ color: 'white' }} className='itemMenu' />
+
+                                <Typography sx={{
+                                    background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    fontWeight: 'bold',
+                                    fontSize: 16,
+                                    fontFamily: 'Outfit,sans-serif'
+                                }} >Shop</Typography>
+
+                            </Link>
+
+                        </Grid>
+                    </Grid>
+
 
                     <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '15px', width: '80%' }}>
                         {
-
+                            (!isValidUser) &&
 
                             <Button
 
                                 sx={{
-                                    color: 'black',
+                                    color: 'white',
                                     fontWeight: 'bold',
-                                    padding: '0.75rem 2rem',
-                                    fontSize: '.8rem',
-
-                                    backgroundImage: `linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)`,
-                                    border: '2px solid #e0c060',
+                                    padding: '0.75rem 2.5rem',
+                                    fontSize: '0.85rem',
+                                    background: 'linear-gradient(90deg, #9f6a00 0%, #ffc651 100%)',
+                                    border: '1px solid rgba(255, 255, 255, 0.2)',
                                     borderRadius: '12px',
-                                    boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
                                     textTransform: 'uppercase',
                                     transition: 'all 0.3s ease-in-out',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.5rem',
                                     '&:hover': {
-                                        boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
                                         transform: 'scale(1.05)',
+                                        boxShadow: '0 0 12px rgba(255, 198, 81, 0.6)',
                                     },
                                 }}
+
                                 onClick={isLoggedIn ? redirectTipeo : handleOpen}
 
                             >
                                 Solicitar Tipeo
                             </Button>
                         }
+
+                        {/* 
                         {
 
                             (isValidUser) &&
@@ -328,7 +396,7 @@ function Nlayout(props) {
                                         transform: 'scale(1.05)',
                                     },
                                 }}
-                                onClick={isLoggedIn ? redirectCrearSolicitudes : handleOpen}
+                                onClick={isLoggedIn && isValidUser ? redirectCrearSolicitudes : handleOpen}
 
                             >
                                 Crear link de tipeo
@@ -394,7 +462,6 @@ function Nlayout(props) {
                             (isValidUser) &&
 
                             <Button
-                                onClick={toPanel}
                                 sx={{
                                     color: '#fff',
                                     fontWeight: 'bold',
@@ -416,19 +483,34 @@ function Nlayout(props) {
                             >
                                 Crear Sorteo
                             </Button>
-                        }
+                        } */}
 
                         {user ?
+                            <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: 8, borderRadius: '8px', background: '#10111c' }}>
+                                    <img src={coin} />
+                                    <Typography style={{ fontSize: 16, fontFamily: 'Outfit,sans-serif', color: 'hsla(0,0%,100%,.75)' }}>0</Typography>
+                                </Grid>
+                                <Typography sx={{
+                                    background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    fontWeight: 700,
+                                    fontSize: 16,
+                                    textAlign: 'end',
+                                    textTransform: 'uppercase',
+                                    fontFamily: 'Outfit,sans-serif'
 
-                            <Typography sx={{
-                                background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                fontWeight: 'bold',
-                                fontSize: 18,
-                                textAlign: 'end'
-                            }} onClick={handleClick}>Hola {user?.name || usuario}!
-                            </Typography>
+                                }} > {user?.name || usuario || 'lucas luna claraso'}
+                                </Typography>
+                                <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                    <Grid style={{ width: '45px', height: '45px', padding: '4px', borderRadius: '75px', border: '1px solid #807ffb' }}>
+                                        <img src={user?.profile} style={{ width: '100%', height: '100%', borderRadius: '36px' }} />
+                                    </Grid>
+                                    <IoMdArrowDropdown onClick={handleClick} style={{ color: '#e9f4ff', width: '16px', cursor: 'pointer' }} />
+
+                                </Grid>
+                            </Grid>
                             :
                             <Button
                                 onClick={handleOpen}
@@ -461,15 +543,36 @@ function Nlayout(props) {
                         open={openMenu}
                         onClose={handleCloseMenu}
                         anchorOrigin={{
-                            vertical: 'bottom',
+                            vertical: 'top',
                             horizontal: 'right',
                         }}
                         transformOrigin={{
                             vertical: 'top',
                             horizontal: 'right',
                         }}
+                        style={{ top: '10%', zIndex: 9999 }}
+                        PaperProps={{
+                            sx: {
+                                mt: 1,
+                                backgroundColor: 'rgba(28,30,48,.8)', // Fondo oscuro
+                                color: '#ffffff',           // Texto claro
+                                borderRadius: 2,
+                                minWidth: 180,
+                                boxShadow: '0 1px 2px 0 rgba(0,0,0,.25)',
+                                border: '1px solid #333'
+                            }
+                        }}
                     >
-                        <MenuItem >Solicitudes de tipeo</MenuItem>
+                        {
+                            (isValidUser) &&
+                            <>
+                                <MenuItem onClick={isLoggedIn && isValidUser ? redirectSolicitudes : handleOpen}>Solicitudes de tipeo</MenuItem>
+                                <MenuItem onClick={isLoggedIn && isValidUser ? redirectCrearSolicitudes : handleOpen}>Crear Link de tipeo</MenuItem>
+                                <MenuItem onClick={isLoggedIn && isValidUser ? toPanel : ''}>Lista de Sorteos</MenuItem>
+                                <MenuItem onClick={isLoggedIn && isValidUser ? toPanel : ''}>Crear Sorteo</MenuItem>
+                            </>
+                        }
+
                         <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
                     </Menu>
 
@@ -479,37 +582,54 @@ function Nlayout(props) {
 
             <Modal open={open} onClose={handleClose}>
                 <Box sx={style}>
+                    <IoCloseCircleOutline onClick={() => handleClose()} style={{ color: 'white', position: 'absolute', backdropFilter: 'blur(16.2px)', top: '15px', right: '10px', fontSize: '32px', cursor: 'pointer' }} />
 
 
                     <Stack spacing={2}>
-                        {/* Facebook Login */}
-                        {/* <Button
-                            sx={{
-                                ...buttonBase,
-                                color: '#1877F2',
-                                borderColor: '#1877F2',
-                                '&:hover': {
-                                    backgroundColor: 'rgba(24, 119, 242, 0.1)',
-                                    boxShadow: '0 0 10px #1877F2',
-                                },
-                            }}
-                            startIcon={<FaFacebook size={20} />}
-                            onClick={handleFacebookLogin}
-                        >
-                            Iniciar Sesión con Facebook
-                        </Button> */}
+                        <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '24px', fontFamily: 'Outfit,sans-serif' }} >
+                            Bienvenidos a
+                        </Typography>
+                        <Typography sx={{
+                            background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            fontWeight: 'bold',
+                            fontSize: props.isMobile ? 28 : 45,
+                            fontFamily: 'Belerofonte'
+                        }} >Eldenguee.com</Typography>
 
+                        <Grid style={{ display: 'flex', alignItems: 'center' }}>
+                            <Checkbox {...label} sx={{
+                                color: 'white',
+                                '&.Mui-checked': {
+                                    color: 'white',
+                                },
+                            }} />
+                            <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif' }}>Confirmo que soy mayor de 18 años y leí los términos y condiciones de la página</Typography>
+                        </Grid>
                         {/* Kick Login */}
                         <Button
                             sx={{
-                                ...buttonBase,
-                                color: '#00ff73',
-                                borderColor: '#00ff73',
+                                color: 'black',
+                                fontWeight: 'bold',
+                                padding: '0.75rem 2rem',
+                                fontSize: '.8rem',
+                                width: '50%',
+
+                                backgroundImage: `linear-gradient(0deg, #00ff73, #00ff73),
+                  linear-gradient(94deg, #00ff73 29.94%, #00ff73 83.55%)`,
+                                border: '2px solid rgba(118, 118, 245, 0.5)',
+                                borderRadius: '12px',
+                                boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
+                                textTransform: 'uppercase',
+                                transition: 'all 0.3s ease-in-out',
+                                margin: '0 auto',
                                 '&:hover': {
-                                    backgroundColor: 'rgba(0, 255, 115, 0.1)',
-                                    boxShadow: '0 0 10px #00ff73',
+                                    boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
+                                    transform: 'scale(1.05)',
                                 },
                             }}
+                            style={{ margin: '0 auto' }}
                             startIcon={<FaKickstarterK size={20} />}
                             onClick={loginWithKick}
                         >
@@ -519,6 +639,86 @@ function Nlayout(props) {
                 </Box>
             </Modal>
             {props.children}
+
+
+            <footer class="footer">
+                <div class="footer-wrapper" >
+
+
+                    <div class="footer-column">
+                        <img src={logoDengue} style={{ borderRadius: '50%', width: isMobile ? '50%' : '15%' }} />
+
+                        <div class="footer-copyrights">© Copyrights 2025 eldenguee.com</div>
+                        <img src={gamble} alt="GambleAware logo" width="172" height="24" />
+                    </div>
+
+
+                    <div class="footer-column">
+                        <p class="footer-column-title">Main</p>
+                        <Link to={'/'} style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>Home</Link>
+                        <Link to={'/'} style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>Home</Link>
+                        <Link to={'/'} style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>Home</Link>
+
+                    </div>
+
+
+                    <div class="footer-column">
+                        <p class="footer-column-title">Info</p>
+                        <Link to={'/'} style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>Home</Link>
+                        <Link to={'/'} style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>Home</Link>
+                    </div>
+
+
+                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', width: '10%', flexFlow: 'row wrap', gap: '10px' }}>
+                        <a href="https://discord.gg/toastergambling" class="footer-column-icon" aria-label="Discord">
+                            <FaDiscord style={{ color: '#1877F2', fontSize: 25 }} />
+
+                        </a>
+                        <a href="https://youtube.com/c/toasters" class="footer-column-icon" aria-label="YouTube">
+                            <FaYoutube style={{ color: '#ff4e4e', fontSize: 25 }} />
+
+                        </a>
+                        <a href="https://twitter.com/Toaster_gg" class="footer-column-icon" aria-label="Twitter">
+                            <FaFacebookSquare style={{ color: '#1877F2', fontSize: 25 }} />
+
+                        </a>
+                        <a href="https://instagram.com/toaster" class="footer-column-icon" aria-label="Instagram">
+                            <FaInstagram style={{ fontSize: 25, color: 'white' }} />
+
+                        </a>
+                    </div>
+
+                </div>
+                <hr style={{ width: '85%' }}></hr>
+                <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: '85%', margin: '0 auto', padding: '20px', gap: '5%' }} >
+                    <Grid style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>How do I join the Leaderboard?
+                        </Typography>
+                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>To participate in our monthly wager leaderboard all you have to do is signup for an account on stake under the promo code "fork". To do that you can either click here or head over to stake yourself and use the code upon signup. Once you have an account all your wagers will automatically be counted towards the monthly leaderboard!</Typography>
+                    </Grid>
+                    <Grid style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>How do I join the Leaderboard?
+                        </Typography>
+                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>To participate in our monthly wager leaderboard all you have to do is signup for an account on stake under the promo code "fork". To do that you can either click here or head over to stake yourself and use the code upon signup. Once you have an account all your wagers will automatically be counted towards the monthly leaderboard!</Typography>
+                    </Grid>
+                    <Grid style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>How do I join the Leaderboard?
+                        </Typography>
+                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>To participate in our monthly wager leaderboard all you have to do is signup for an account on stake under the promo code "fork". To do that you can either click here or head over to stake yourself and use the code upon signup. Once you have an account all your wagers will automatically be counted towards the monthly leaderboard!</Typography>
+                    </Grid>
+                </Grid>
+
+                <hr style={{ width: '85%' }}></hr>
+                <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: '85%', margin: '0 auto', padding: '10px', gap: '5%' }} >
+
+                    <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', borderRadius: '82px', background: 'hsla(0,0%,100%,.03)', padding: '16px 16px' }}>
+                        <TbRating18Plus style={{ fontSize: 45 }} />
+                        <Typography style={{ color: 'hsla(0,0%,100%,.5)', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>We do not take responsibility for any losses from gambling in casinos and betting sites which are linked or promoted on our website(s). As a player, you are responsible for your bets.</Typography>
+                    </Grid>
+
+                </Grid>
+            </footer>
+
         </Grid>
     )
 }

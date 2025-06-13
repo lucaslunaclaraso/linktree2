@@ -174,3 +174,7 @@
     
 }
     
+.itemMenu:hover{
+  color: #807ffb !important;
+  transition: all .5s;
+}

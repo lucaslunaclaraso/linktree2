@@ -19,6 +19,8 @@ import Tipeo from './Tipeo';
 import AdminPanel from './AdminPanel';
 import Paneltipeo from './Paneltipeo';
 import TipeoCustom from './TipeoCustom';
+import Roller from './Roller';
+import Tienda from './Tienda';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -216,6 +218,8 @@ function App() {
                 
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/tipeo" element={<Tipeo nombre={nombre}/>} />
+                <Route path="/ruleta" element={<Roller nombre={nombre}/>} />
+                <Route path="/shop" element={<Tienda nombre={nombre}/>} />
             </Routes>
         </div>
     );
