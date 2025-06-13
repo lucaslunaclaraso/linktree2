@@ -242,7 +242,7 @@ function Nlayout(props) {
         window.location.href = "/"
         handleClose(); // Cierra el menú
     };
-    const nombre = user?.name
+    const nombre = localStorage.getItem('kick_user')
     const obtenerCoins = async () => {
         const response = await axios.post('https://backmu.vercel.app/solicitudes/usuario', { nombre });
         setDcoins(response?.data[0]?.Dcoins)
@@ -251,7 +251,7 @@ function Nlayout(props) {
     useEffect(() => {
         setTimeout(() => {
             obtenerCoins()
-         }, [
+        }, [
             1000
         ])
 
@@ -293,7 +293,7 @@ function Nlayout(props) {
         window.location.href = "/crearlink"
     }
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-    
+
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 

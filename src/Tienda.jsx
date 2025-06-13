@@ -2,6 +2,7 @@ import React from 'react'
 import Nlayout from './Nlayout'
 import { Box, Button, Card, CardActions, CardContent, Grid, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles';
+import axios from 'axios';
 
 const StyledCard = styled(Card)(({ theme }) => ({
     maxWidth: 345,
@@ -25,10 +26,18 @@ const StyledButton = styled(Button)(({ theme }) => ({
     padding: '6px 16px',
     borderRadius: 8, // Bordes redondeados en el botón
 }));
+
+
 function Tienda(props) {
+    const nombre = localStorage.getItem('kick_user')
 
 
-    
+    const canjearPremio = async ( nombre, canje) => {
+        const response = await axios.post('https://backmu.vercel.app/solicitudes/canjear', { nombre, canje })
+        console.log('resp', response)
+    }
+
+
     return (
         <Nlayout>
             <Grid style={{ background: '#11111d' }}>
@@ -71,7 +80,7 @@ function Tienda(props) {
                                 </Typography>
                             </CardContent>
                             <CardActions sx={{ padding: '0 16px 16px 16px', justifyContent: 'flex-end' }}>
-                                <StyledButton size="small">Canjear</StyledButton>
+                                <StyledButton size="small" onClick={() => canjearPremio(nombre,1)}>Canjear</StyledButton>
                             </CardActions>
                         </StyledCard>
                         <StyledCard>
@@ -98,7 +107,7 @@ function Tienda(props) {
                                 </Typography>
                             </CardContent>
                             <CardActions sx={{ padding: '0 16px 16px 16px', justifyContent: 'flex-end' }}>
-                                <StyledButton size="small">Canjear</StyledButton>
+                                <StyledButton size="small" onClick={() => canjearPremio(nombre,2)}>Canjear</StyledButton>
                             </CardActions>
                         </StyledCard>
                         <StyledCard>
@@ -125,7 +134,7 @@ function Tienda(props) {
                                 </Typography>
                             </CardContent>
                             <CardActions sx={{ padding: '0 16px 16px 16px', justifyContent: 'flex-end' }}>
-                                <StyledButton size="small">Canjear</StyledButton>
+                                <StyledButton size="small" onClick={() => canjearPremio(nombre,3)}>Canjear</StyledButton>
                             </CardActions>
                         </StyledCard>
 
