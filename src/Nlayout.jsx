@@ -263,6 +263,9 @@ function Nlayout(props) {
     const toPanel = () => {
         window.location.href = "/panel"
     }
+    const toPanelSorteo = () => {
+        window.location.href = "/listado"
+    }
     const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
     const [width, setWidth] = useState(window.innerWidth);
 
@@ -613,7 +616,7 @@ function Nlayout(props) {
                             <>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? redirectSolicitudes : handleOpen}>Solicitudes de tipeo</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? redirectCrearSolicitudes : handleOpen}>Crear Link de tipeo</MenuItem>
-                                <MenuItem onClick={isLoggedIn && isValidUser ? toPanel : ''}>Lista de Sorteos</MenuItem>
+                                <MenuItem onClick={isLoggedIn && isValidUser ? toPanelSorteo : ''}>Lista de Sorteos</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? toPanel : ''}>Crear Sorteo</MenuItem>
                             </>
                         }
