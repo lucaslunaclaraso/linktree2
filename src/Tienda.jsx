@@ -33,33 +33,41 @@ const StyledButton = styled(Button)(({ theme }) => ({
 function Tienda(props) {
     const nombre = localStorage.getItem('kick_user')
 
-    const[monto, setMonto] =useState()
+    const [monto, setMonto] = useState()
     const [open, setOpen] = useState()
+    const [error, setError] = useState()
     const canjearPremio = async (nombre, canje) => {
         const response = await axios.post('https://backmu.vercel.app/solicitudes/canjear', { nombre, canje })
-        console.log('re', response.data?.length)
+        console.log('re', response.data.valido)
         if (response.data?.length >= 1) {
             setOpen(true)
-            if(canje == 1){
+            if (canje == 1) {
                 setMonto(500)
-            }else if(canje == 2){
+            } else if (canje == 2) {
                 setMonto(1000)
-            }else if( canje == 3){
+            } else if (canje == 3) {
                 setMonto(1500)
             }
+        }
 
+        if (!response.data.valido) {
+            setError(true)
         }
     }
     const [progress, setProgress] = useState(100);
     const duration = 5000; // 5 segundos
 
     useEffect(() => {
-        if (open) {
+        if (open || error) {
             let interval = setInterval(() => {
                 setProgress((prev) => {
                     if (prev <= 0) {
                         clearInterval(interval);
-                        setOpen(false);
+                        if(open){
+                            setOpen(false);
+                        }else{
+                            setError(false)
+                        }
                         return 0;
                     }
                     return prev - 2;
@@ -68,7 +76,7 @@ function Tienda(props) {
 
             return () => clearInterval(interval);
         }
-    }, [open]);
+    }, [open, error]);
     return (
         <Nlayout>
             <Grid style={{ background: '#11111d' }}>
@@ -177,9 +185,9 @@ function Tienda(props) {
             </Grid>
 
 
-            <Modal open={open} onClose={() => setOpen(false)} disableAutoFocus>
+            <Modal open={open || error} onClose={() => setOpen(false)} disableAutoFocus>
                 <AnimatePresence>
-                    {open && (
+                    {(open || error) && (
                         <motion.div
                             initial={{ x: -300, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
@@ -190,12 +198,18 @@ function Tienda(props) {
                             <div className="toast-content">
                                 <div className="icon">💰</div>
                                 <div className="text">
-                                    <strong>Canje exitoso</strong>
-                                    <p>Tu canje de <strong>- ${monto} DCoins</strong> ha sido procesado.</p>
+                                    <strong>{open ? 'Canje exitoso' : 'Error'}</strong>
+                                    {
+                                        open ?
+                                            <p>Tu canje de <strong>- ${monto} DCoins</strong> ha sido procesado.</p>
+                                            :
+                                            <p>No tenes suficientes <strong>DCoins</strong> para canjear.</p>
+
+                                    }
                                 </div>
                                 <button className="close-btn" onClick={() => setOpen(false)}>×</button>
                             </div>
-                            <div className="progress-bar" style={{ width: `${progress}%` }} />
+                            <div className={open ? "progress-bar" : "progress-bar-error"} style={{ width: `${progress}%` }} />
                         </motion.div>
                     )}
                 </AnimatePresence>
