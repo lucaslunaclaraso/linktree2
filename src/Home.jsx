@@ -31,6 +31,12 @@ import nube2 from './nube2.png'
 import nube3 from './nube3.png'
 import { PiMouseScrollThin } from 'react-icons/pi';
 import back from './leaderboard_card_bg.svg'
+
+import globet from './goblet.png'
+import dice from './dice.svg'
+import bomb from './bomb.png'
+import roulette from './roulette.svg'
+import reward from './rewards.png'
 const LinkItem = ({ parrafo, title, url, imagen, isImage, gif }) => {
 
   const copyToClipboard = () => {
@@ -100,57 +106,43 @@ const Home = (props) => {
     }
   };
 
-  const backgroundRef = useRef(null);
+  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (backgroundRef.current) {
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
 
-        // Ajusta la posición del pseudo-elemento para el efecto de iluminación
-        backgroundRef.current.style.setProperty('--mouse-x', `${mouseX}px`);
-        backgroundRef.current.style.setProperty('--mouse-y', `${mouseY}px`);
-      }
-    };
+  const handleMouseLeave = () => {
+    // Oculta el foco cuando el mouse sale del área
+    setMousePos({ x: -100, y: -100 });
+  };
 
-   
-    const container = document.querySelector('.container');
-    if (container) {
-      container.addEventListener('mousemove', handleMouseMove);
-      
-    }
 
-    return () => {
-      if (container) {
-        container.removeEventListener('mousemove', handleMouseMove);
-        
-      }
-    };
-  }, []);
   return (
     <Nlayout>
       <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '-30%' : '-10%', width: '100%' }}>
         <Grid style={{
-          backgroundImage: `
-    linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
-    url(${backgroundImg})
-  `,
-          backgroundSize: 'cover',
+
           backgroundRepeat: 'no-repeat',
           height: '750px',
           backgroundColor: '#3f3d45',
           margin: '0 auto',
           position: 'relative',
-          backgroundPosition: '50%'
-        }}>
+
+        }} className='fondo'>
           <Grid className='container' style={{
             padding: 50,
             gap: '10px',
             justifyContent: 'center',
             marginTop: '50px'
           }}>
-            <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
+
+
+            <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15, marginTop: '10%' }}>
               <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif' }} >
                 Bienvenidos a
               </Typography>
@@ -162,9 +154,16 @@ const Home = (props) => {
                 fontSize: props.isMobile ? 32 : 65,
                 fontFamily: 'Belerofonte'
               }} >Eldenguee.com</Typography>
+              <Grid style={{ zIndex: 1, width: '100%' }}>
+                <img src={globet} className='vip-rewards-rewards-imgs-goblet' />
+                <img src={dice} className='vip-rewards-rewards-imgs-dice' />
+                <img src={bomb} className='vip-rewards-rewards-imgs-bomb' />
+                <img src={roulette} className='vip-rewards-rewards-imgs-roulette' />
+              </Grid>
             </Grid>
 
-            <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '80px 0 65px' }} >
+
+            <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', }} >
               <Button
                 style={{
                   background: 'linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),linear-gradient(94deg,#7676f5 29.94%,#5a22a1 83.55%)',
@@ -175,8 +174,8 @@ const Home = (props) => {
                 }}
                 className='botonCod'
               >
-                <FaDiscord style={{ color: 'white' }} />
-                <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif' }}>Unirse al Discord</Typography>
+                <SiKick style={{ color: 'white' }} />
+                <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif' }}>Seguir en Kick</Typography>
               </Button>
 
               {/* <Button
@@ -213,27 +212,19 @@ const Home = (props) => {
         </Grid>
 
 
-        <Grid style={{ display: 'flex', flexDirection: 'column' }} className="background" ref={backgroundRef}>
+        <Grid style={{ display: 'flex', flexDirection: 'column' }} className="backgroundAnimado" onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave} >
+          <div
+            className="glow-effect"
+            style={{
+              left: mousePos.x,
+              top: mousePos.y,
+            }}
+          />
+          <Grid style={{ width: '100%', position: 'relative' }} >
 
-          <Grid style={{ position: 'relative', width: '100%' }} >
-            <div
-              className="intro-clouds-wide-wrapper tablet-max-hide"
-              style={{
-                position: 'absolute',
-                top: '50px',
-                left: 0,
-                width: '100%',
-                height: '100%',
-                zIndex: 9999,
-                pointerEvents: 'none',  // para que las nubes no bloqueen clicks
-              }}
-            >
-              <div className="intro-clouds-wide" style={{ width: '100%' }}>
-                <img src={nube1} style={{ width: '100%' }} alt="background" className="intro-clouds-wide-parts-1" />
-                <img src={nube2} style={{ width: '100%' }} alt="background" className="intro-clouds-wide-parts-2" />
-                <img src={nube3} style={{ width: '100%' }} alt="background" className="intro-clouds-wide-parts-3" />
-              </div>
-            </div>
+
+
             <Grid className='container' style={{ padding: 50, gap: '10px', position: 'relative' }} id='menu2'>
 
               <Box style={{
@@ -258,6 +249,7 @@ const Home = (props) => {
           </Grid>
 
           <Grid style={{ padding: 50, gap: '10px' }} >
+
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36, width: '100%', flexDirection: 'column', gap: 10 }} >
 
               <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
@@ -288,7 +280,7 @@ const Home = (props) => {
                     fontSize: props.isMobile ? 24 : 72,
                     color: 'white',
                     fontFamily: 'PoetsenOne'
-                  }}>1,269,533</Typography>
+                  }}>0</Typography>
 
                 </Grid>
 

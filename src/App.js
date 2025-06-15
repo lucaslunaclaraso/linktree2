@@ -213,7 +213,7 @@ function App() {
 
                 <Route path="/listado" element={<RutaPrivada><ListadoSorteos sorteos={sorteos} /> </RutaPrivada>} />
 
-                <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} isMobile={isMobile} /> </RutaPrivada>} />
+                <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} isMobile={isMobile} /></RutaPrivada>} />
                 <Route path="/solicitudes" element={<RutaPrivada><AdminPanel  isMobile={isMobile} /> </RutaPrivada>} />
                 
                 <Route path="/callback" element={<Callback />} />

@@ -5,7 +5,7 @@ import Nlayout from './Nlayout';
 import axios from 'axios';
 import backgroundImg from './main_intro.jpg'
 
-export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
+export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const { url } = useParams();
     const [sorteo, setSorteo] = useState()
     const [participantes, setParticipantes] = useState()
@@ -21,9 +21,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
     const UnirseAlSorteo = async (nombre, mail) => {
 
         try {
-            const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre , mail})
-            const peticionUser = await axios.post(`https://backmu.vercel.app/sorteo/crearUser`, { nombre , mail})
-            
+            const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre, mail })
+            const peticionUser = await axios.post(`https://backmu.vercel.app/sorteo/crearUser`, { nombre, mail })
+
             if (peticion?.data?.success) {
                 obtenerSorteos()
             } else {
@@ -71,8 +71,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
         setGanadores(ganadores)
 
         const nombreGan = ganadores?.map((p) => p?.nombre)
-        
-         guardarGanadores(url, nombreGan)
+
+        guardarGanadores(url, nombreGan)
     };
 
     // Polling para actualizaciones en tiempo real
@@ -88,7 +88,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
         <Nlayout>
             {
                 sorteo?.estado === 'oculto' ?
-                    <Grid style={{ background: '#11111d', marginTop:isMobile ? '-30%' : '-10%', width: '100%' }}>
+                    <Grid style={{ background: '#11111d', marginTop: isMobile ? '-30%' : '-10%', width: '100%' }}>
                         <Grid style={{
                             backgroundImage: `
             linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
@@ -127,7 +127,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
                     </Grid>
                     :
 
-                    <Box p={4}>
+                    <Box p={4} style={{ width: '85%', margin:'0 auto' }} >
                         <Typography variant="h4" style={{ color: 'white' }}>{sorteo?.titulo}</Typography>
                         <Typography variant="subtitle1" style={{ color: 'white' }}>Premios: {sorteo?.premios}</Typography>
                         {
@@ -137,47 +137,51 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile    }) {
 
 
                         {
-                           ( usuarioKick === 'eldenguee' ||  usuarioKick === 'lucaslunacl') &&
+                            (usuarioKick === 'eldenguee' || usuarioKick === 'lucaslunacl') &&
                             < Button onClick={sortear} variant="outlined" sx={{ mt: 2, ml: 2 }}>Sortear</Button>
                         }
 
-                        <Card sx={{ mt: 4 }}>
-                            <CardContent sx={{ maxHeight: 300, overflowY: 'auto' }}>
-                                <Typography variant="h6">Participantes: {participantes?.length} </Typography>
-                                <List>
-                                    {participantes?.map((u, i) => (
-                                        <ListItem key={i}>
-                                            <ListItemText primary={u?.nombre} />
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            </CardContent>
-                        </Card>
+                        <Grid style={{ display: 'flex', alignItems: 'start', gap: '10px', marginBottom:'5%' }}>
 
-
-                        {/* {ganadores?.length > 0 && (
-                    <Card sx={{ mt: 4, bgcolor: '#e0f7fa' }}>
-                        <CardContent>
-                            <Typography variant="h6">🎉 Ganadores 🎉</Typography>
-                            <List>
-                                {ganadores?.map((g, i) => (
-                                    <ListItem key={i}><ListItemText primary={g?.nombre} /></ListItem>
-                                ))}
-                            </List>
-                        </CardContent>
-                    </Card>
-                )} */}
-
-                        {sorteo?.ganadores?.length > 0 && (
-                            <Card sx={{ mt: 4, bgcolor: '#e0f7fa' }}>
-                                <CardContent>
-                                    <Typography variant="h6">🎉 Ganadores 🎉</Typography>
+                            <Card sx={{ mt: 4, width: '30%' }}>
+                                <CardContent sx={{ maxHeight: 300, overflowY: 'auto' }}>
+                                    <Typography variant="h6">Participantes: {participantes?.length} </Typography>
                                     <List>
-                                        {sorteo?.ganadores?.replaceAll('"', "")}
+                                        {participantes?.map((u, i) => (
+                                            <ListItem key={i}>
+                                                <ListItemText primary={u?.nombre} />
+                                            </ListItem>
+                                        ))}
                                     </List>
                                 </CardContent>
                             </Card>
-                        )}
+
+
+                            {sorteo?.ganadores?.length > 0 && (
+                                <Card sx={{ mt: 4, bgcolor: '#e0f7fa', width: '30%' }}>
+                                    <CardContent>
+                                        <Typography variant="h6">🎉 Ganadores 🎉</Typography>
+                                        <List>
+                                            {JSON.parse(sorteo.ganadores).map((ganador, index) => (
+                                                <ListItem key={index}>
+                                                    <Grid style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                                        <Typography style={{ fontWeight: 'bold' }}>
+                                                            Puesto {index + 1}:
+                                                        </Typography>
+                                                        <Typography >
+                                                            {ganador}
+                                                        </Typography>
+
+
+                                                    </Grid>
+
+                                                </ListItem>
+                                            ))}
+                                        </List>
+                                    </CardContent>
+                                </Card>
+                            )}
+                        </Grid>
 
 
 

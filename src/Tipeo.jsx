@@ -4,8 +4,10 @@ import { Alert, Box, Button, CircularProgress, Grid, Link, Paper, Step, StepLabe
 import backgroundImg from './main_intro.jpg'
 import axios from 'axios'
 import { FaCloudUploadAlt } from 'react-icons/fa'
-
-
+import paso1 from './Paso1-gif.gif'
+import paso2 from './Paso2-gif.gif'
+import paso3 from './Paso3-gif.gif'
+import vault from './vault.jpg'
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -36,13 +38,15 @@ function Tipeo(props) {
         setUserEmail(mailKick)
         setTimeout(() => {
             setCargar(false)
-            
+
         }, 3000);
+        setCargar(false)
+
     }
 
 
     useEffect(() => { checkWinner() }, [])
-console.log('soli', solicitudes < 1)
+    console.log('soli', solicitudes < 1)
     const [activeStep, setActiveStep] = useState(0);
     const [offerScreenshot, setOfferScreenshot] = useState(null);
     const [bnbScreenshot, setBnbScreenshot] = useState(null);
@@ -53,7 +57,7 @@ console.log('soli', solicitudes < 1)
     const [offerScreenshotUrl, setOfferScreenshotUrl] = useState('');
     const [bnbScreenshotUrl, setBnbScreenshotUrl] = useState('');
     const [url, setUrl] = useState('')
-    const steps = ['Registrarse', 'Subir captura de Ajustes', 'Subir captura de BNB'];
+    const steps = ['Paso 1', 'Paso 2', 'Paso 3'];
 
 
     const handleNext = () => {
@@ -69,14 +73,14 @@ console.log('soli', solicitudes < 1)
     };
 
     const validateStep = () => {
-        if (activeStep === 1 && !offerScreenshot) {
-            setError('Debes subir una captura de Ajustes - Ofertas');
-            return false;
-        }
-        if (activeStep === 2 && (!bnbScreenshot || !bnbAddress)) {
-            setError('Debes subir una captura del QR y la dirección BNB, y proporcionar la dirección');
-            return false;
-        }
+        // if (activeStep === 1 && !offerScreenshot) {
+        //     setError('Debes subir una captura de Ajustes - Ofertas');
+        //     return false;
+        // }
+        // if (activeStep === 2 && (!bnbScreenshot || !bnbAddress)) {
+        //     setError('Debes subir una captura del QR y la dirección BNB, y proporcionar la dirección');
+        //     return false;
+        // }
         return true;
     };
 
@@ -182,88 +186,270 @@ console.log('soli', solicitudes < 1)
         switch (step) {
             case 0:
                 return (
-                    <Box sx={{ p: 3 }}>
-                        <Typography variant="h6">
-                            Es obligatorio estar registrado con el siguiente enlace:
-                        </Typography>
-                        <Link
-                            href="https://stake1021.com/?offer=eldenguee&c=1590cd3460"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            sx={{ display: 'block', my: 2 }}
+                    <Box>
+                        <Box style={{ backgroundColor: '#1a2c38', display: 'flex', flexDirection: 'column' }}>
+                            <Typography sx={{ mt: 2 }}>
+                                Felicitaciones estás habilitado para solicitar un tipeo
+                            </Typography>
+                            <Typography sx={{ fontWeight: 'bold', mb: 1, display: 'inline-block' }}>
+                                Instrucciones:
+                            </Typography>
+
+                            <img src={paso1} style={{ width: '100%', borderRadius: '5px' }} />
+
+                            <Box sx={{ backgroundColor: '#1e293b', p: 2, borderRadius: 1, mt: 2 }}>
+                                <Typography>
+                                    Es obligatorio estar registrado con el siguiente enlace:
+                                </Typography>
+
+                                <Link
+                                    href="https://stake1021.com/?offer=eldenguee&c=1590cd3460"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{
+                                        display: 'block',
+                                        mt: 1,
+                                        mb: 2,
+                                        color: '#4ade80',
+                                        wordBreak: 'break-all',
+                                    }}
+                                >
+                                    https://stake1021.com/?offer=eldenguee&c=1590cd3460
+                                </Link>
+                            </Box>
+                        </Box>
+
+                        <Button
+                            variant="contained"
+                            onClick={handleNext}
+                            sx={{
+                                mt: 3,
+                                backgroundColor: '#3b82f6',
+                                '&:hover': {
+                                    backgroundColor: '#2563eb',
+                                },
+                                width: '100%',
+                            }}
                         >
-                            https://stake1021.com/?offer=eldenguee&c=1590cd3460
-                        </Link>
-                        <Typography>
-                            Necesitas estar registrado con este enlace porque luego se pedirá una captura de Ajustes - Ofertas para verificar que estás vinculado a este código.
+                            SIGUIENTE
+                        </Button>
+
+                        <Typography sx={{ mt: 2, backgroundImage: '#0f212f' }}>
+                            Necesitas estar registrado con este enlace porque luego se pedirá una captura de <strong>Ajustes - Ofertas</strong> para verificar que estás vinculado a este código.
                         </Typography>
+
+
                     </Box>
                 );
             case 1:
                 return (
-                    <Box sx={{ p: 3 }}>
-                        <Typography variant="h6">
+                    <Box sx={{ p: 2 }}>
+                        <Typography sx={{ color: '#fff', fontWeight: 'bold', mb: 1 }}>
                             Sube la captura de pantalla de Ajustes - Ofertas
                         </Typography>
-                        <Typography sx={{ mb: 2 }}>
-                            Deberías ver una pantalla como esta:
-                        </Typography>
+                        <img src={paso2} style={{ width: '100%', borderRadius: '5px' }} />
 
-                        <Button
-                            component="label"
-                            variant="contained"
-                            startIcon={<FaCloudUploadAlt />}
+                        <Box
+                            sx={{
+                                backgroundColor: '#1e293b',
+                                borderRadius: 2,
+                                p: 2,
+                                color: '#cbd5e1',
+                                mb: 2,
+                            }}
                         >
-                            Subir Captura
-                            <VisuallyHiddenInput
-                                type="file"
-                                accept="image/*"
-                                onChange={handleFileChange(setOfferScreenshot, setOfferScreenshotUrl)}
-                            />
-                        </Button>
-                        {offerScreenshot && (
-                            <Typography sx={{ mt: 2 }}>
-                                Archivo seleccionado: {offerScreenshot.name}
-                            </Typography>
-                        )}
+                            <Box
+                                sx={{
+                                    borderBottom: '1px solid #334155',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    pb: 1,
+                                    mb: 1,
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                <Typography>Tu imagen</Typography>
+                                <Typography>
+                                    {offerScreenshot ? `Archivo seleccionado: ${offerScreenshot.name}` : 'No hay archivo'}
+                                </Typography>
+                            </Box>
+
+                            <Box sx={{ display: 'flex', gap: 2 }}>
+                                <Button
+                                    component="label"
+                                    variant="contained"
+                                    startIcon={<FaCloudUploadAlt />}
+                                    sx={{
+                                        backgroundColor: '#334155',
+                                        color: '#fff',
+                                        flex: 1,
+                                        '&:hover': {
+                                            backgroundColor: '#475569',
+                                        },
+                                    }}
+                                >
+                                    Cargar imagen
+                                    <VisuallyHiddenInput
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                    />
+                                </Button>
+
+                                <Button
+                                    variant="contained"
+                                    onClick={handleNext}
+                                    sx={{
+                                        backgroundColor: '#3b82f6',
+                                        flex: 1,
+                                        '&:hover': {
+                                            backgroundColor: '#2563eb',
+                                        },
+                                    }}
+                                >
+                                    Siguiente
+                                </Button>
+                            </Box>
+                        </Box>
+
+                        <Typography
+                            sx={{
+                                color: '#94a3b8',
+                                textAlign: 'center',
+                                fontSize: '14px',
+                                cursor: 'pointer',
+                                textDecoration: 'underline',
+                            }}
+                        >
+                            Click para ver ejemplo de captura
+                        </Typography>
                     </Box>
                 );
             case 2:
                 return (
-                    <Box sx={{ p: 3 }}>
-                        <Typography variant="h6">
-                            Sube la captura del QR y la dirección BNB
+                    <Box sx={{ p: 2 }}>
+                        <Typography sx={{ color: '#fff', fontWeight: 'bold', mb: 1 }}>
+                            Sube la captura del QR y tu dirección BNB
                         </Typography>
-                        <Typography sx={{ mb: 2 }}>
-                            Haz clic en el botón de depositar junto a tu saldo, selecciona BNB y sube una captura del QR y la dirección que aparece.
+                        <img src={paso3} style={{ width: '100%', borderRadius: '5px' }} />
+
+                        <Box
+                            sx={{
+                                backgroundColor: '#1e293b',
+                                borderRadius: 2,
+                                p: 2,
+                                color: '#cbd5e1',
+                                mb: 2,
+                            }}
+                        >
+                            <Box
+                                sx={{
+                                    borderBottom: '1px solid #334155',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    pb: 1,
+                                    mb: 1,
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                <Typography>Tu imagen</Typography>
+                                <Typography>
+                                    {bnbScreenshot ? `Archivo seleccionado: ${bnbScreenshot.name}` : 'No hay archivo'}
+                                </Typography>
+                            </Box>
+
+                        </Box>
+
+                        <Typography sx={{ color: '#fff', fontWeight: 500, mb: 0 }}>
+                            Pegá la dirección BNB acá abajo: *
                         </Typography>
 
-                        <Button
-                            component="label"
-                            variant="contained"
-                            startIcon={<FaCloudUploadAlt />}
-                        >
-                            Subir Captura
-                            <VisuallyHiddenInput
-                                type="file"
-                                accept="image/*"
-                                onChange={handleFileChange(setBnbScreenshot, setBnbScreenshotUrl)}
-                            />
-                        </Button>
-                        {bnbScreenshot && (
-                            <Typography sx={{ mb: 2 }}>
-                                Archivo seleccionado: {bnbScreenshot.name}
-                            </Typography>
-                        )}
                         <TextField
                             fullWidth
-                            label="Dirección BNB"
                             value={bnbAddress}
                             onChange={(e) => setBnbAddress(e.target.value)}
                             variant="outlined"
-                            sx={{ mt: 2 }}
+                            sx={{
+                                mt: 2,
+                                backgroundColor: '#0c1b26', // fondo oscuro como el de la imagen
+                                borderRadius: '8px',
+                                mb: 3,
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#2c4454', // borde azul/gris
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: '#3e5d6f',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: '#5da6d6', // color más claro al hacer foco
+                                    },
+                                    input: {
+                                        color: 'white',
+                                    },
+                                },
+                            }}
+                            InputProps={{
+                                style: {
+                                    height: '44px',
+                                },
+                            }}
                         />
+                        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                            <Button
+                                component="label"
+                                variant="contained"
+                                startIcon={<FaCloudUploadAlt />}
+                                sx={{
+                                    backgroundColor: '#334155',
+                                    color: '#fff',
+                                    flex: 1,
+                                    '&:hover': {
+                                        backgroundColor: '#475569',
+                                    },
+                                }}
+                            >
+                                Cargar imagen
+                                <VisuallyHiddenInput
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                />
+                            </Button>
+
+                            <Button
+                                variant="contained"
+                                onClick={handleNext}
+                                sx={{
+                                    backgroundColor: '#3b82f6',
+                                    flex: 1,
+                                    '&:hover': {
+                                        backgroundColor: '#2563eb',
+                                    },
+                                }}
+                            >
+                                Terminar
+                            </Button>
+                        </Box>
+
+                        <Box style={{ backgroundColor: '#0c1b26', padding: 10, borderRadius: 5 }}>
+                            <Typography
+                                sx={{
+                                    color: '#94a3b8',
+                                    textAlign: 'center',
+                                    fontSize: '14px',
+                                    cursor: 'pointer',
+                                    textDecoration: 'underline',
+                                }}
+                            >
+                                Click para ver ejemplo de captura
+                            </Typography>
+                        </Box>
+
                     </Box>
+
+
+
                 );
             default:
                 return null;
@@ -277,9 +463,9 @@ console.log('soli', solicitudes < 1)
                     cargar ?
                         <Grid style={{
                             backgroundImage: `
-                  linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
-                  url(${backgroundImg})
-                  `,
+                                      linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
+                                      url(${backgroundImg})
+                                      `,
                             backgroundSize: 'cover',
                             backgroundRepeat: 'no-repeat',
                             height: '980px',
@@ -320,9 +506,9 @@ console.log('soli', solicitudes < 1)
 
                             <Grid style={{
                                 backgroundImage: `
-    linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
-    url(${backgroundImg})
-  `,
+                        linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
+                        url(${backgroundImg})
+                      `,
                                 backgroundSize: 'cover',
                                 backgroundRepeat: 'no-repeat',
                                 height: '980px',
@@ -404,40 +590,130 @@ console.log('soli', solicitudes < 1)
 
                                 }}>
                                     <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
-                                        <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif', textAlign: 'center' }} >
-                                            Felicitaciones estás habilitado para solicitar un tipeo!. Te dejo las instrucciones para hacerlo
 
-                                        </Typography>
-                                        <Typography sx={{
-                                            background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
-                                            WebkitBackgroundClip: 'text',
-                                            WebkitTextFillColor: 'transparent',
-                                            fontWeight: 'bold',
-                                            fontSize: props.isMobile ? 32 : 50,
-                                            fontFamily: 'Belerofonte'
-                                        }} >Eldenguee.com</Typography>
+
                                     </Grid>
 
-                                    <Box sx={{ maxWidth: 600, mx: 'auto', my: 1 }}>
-                                        <Paper elevation={3} sx={{ p: 3 }}>
-                                            <Typography variant="h4" align="center" gutterBottom>
-                                                Solicitud para Eldenguee
+                                    <Box sx={{ maxWidth: 600, mx: 'auto', my: 1, mt: '8%' }}>
+                                        <Paper
+                                            elevation={8}
+                                            sx={{
+                                                maxWidth: 500,
+                                                margin: '0 auto',
+                                                borderRadius: 2,
+                                                overflow: 'hidden',
+                                                backgroundColor: '#1a2c38',
+                                                color: '#fff',
+                                                p: 2,
+                                            }}
+                                        >
+                                            <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                                                📝 Solicitud de tipeo
                                             </Typography>
-                                            <Stepper activeStep={activeStep} sx={{ mb: 3 }}>
-                                                {steps.map((label) => (
-                                                    <Step key={label}>
-                                                        <StepLabel>{label}</StepLabel>
-                                                    </Step>
+
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    backgroundColor: '#1e293b',
+                                                    borderRadius: '999px',
+                                                    p: '6px',
+                                                    mb: 3,
+                                                }}
+                                            >
+                                                {steps.map((label, index) => (
+                                                    <Box
+                                                        key={label}
+                                                        sx={{
+                                                            flex: 1,
+                                                            textAlign: 'center',
+                                                            borderRadius: '999px',
+                                                            backgroundColor: activeStep === index ? '#334155' : 'transparent',
+                                                            color: '#fff',
+                                                            fontWeight: 'bold',
+                                                            py: 1,
+                                                            transition: 'background-color 0.3s',
+                                                        }}
+                                                    >
+                                                        <Typography variant="body1">{label}</Typography>
+                                                    </Box>
                                                 ))}
-                                            </Stepper>
+                                            </Box>
                                             {success ? (
-                                                <Box sx={{ textAlign: 'center' }}>
-                                                    <Typography variant="h6" gutterBottom>
-                                                        Gracias, tu solicitud fue recibida.
+                                                <Box
+                                                    sx={{
+                                                        backgroundColor: '#0c1b26',
+                                                        borderRadius: '12px',
+                                                        padding: 3,
+                                                        width: '100%',
+                                                        maxWidth: 400,
+                                                        margin: '0 auto',
+                                                        textAlign: 'center',
+                                                        color: 'white',
+                                                    }}
+                                                >
+                                                    {/* Título con ícono y botón cerrar */}
+                                                    <Box
+                                                        sx={{
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between',
+                                                            alignItems: 'center',
+                                                            mb: 2,
+                                                        }}
+                                                    >
+                                                        <Typography sx={{ fontWeight: 'bold' }}>Solicitud de tipeo</Typography>
+                                                        <Button sx={{ color: 'white' }} size="small">✕</Button>
+                                                    </Box>
+
+                                                    {/* Imagen */}
+                                                    <Box sx={{ mb: 2 }}>
+                                                        <img
+                                                            src={vault}// Colocá la ruta correcta a tu imagen
+                                                            alt="Caja fuerte"
+                                                            style={{ width: 80, height: 'auto', margin: '0 auto' }}
+                                                        />
+                                                    </Box>
+
+                                                    {/* Mensaje principal */}
+                                                    <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold', mb: 2 }}>
+                                                        ¡Se completó tu solicitud de tipeo!
                                                     </Typography>
-                                                    <Typography>
-                                                        Cuando tu tipeo esté listo, recibirás un correo en: <strong>{userEmail}</strong>
-                                                    </Typography>
+
+                                                    {/* Cuadro con correo */}
+                                                    <Paper
+                                                        elevation={0}
+                                                        sx={{
+                                                            backgroundColor: '#15232f',
+                                                            color: 'white',
+                                                            padding: 2,
+                                                            borderRadius: '8px',
+                                                            mb: 3,
+                                                        }}
+                                                    >
+                                                        <Typography sx={{ fontSize: '0.9rem' }}>
+                                                            Cuando tu tipeo esté listo te llegará un correo a:
+                                                        </Typography>
+                                                        <Typography sx={{ fontWeight: 'bold', mt: 1 }}>
+                                                            {userEmail}
+                                                        </Typography>
+                                                    </Paper>
+
+                                                    {/* Botón */}
+                                                    <Button
+                                                        fullWidth
+                                                        variant="contained"
+                                                        sx={{
+                                                            backgroundColor: '#007bff',
+                                                            borderRadius: '8px',
+                                                            textTransform: 'none',
+                                                            fontWeight: 'bold',
+                                                            '&:hover': {
+                                                                backgroundColor: '#0066d6',
+                                                            },
+                                                        }}
+                                                    >
+                                                        Listo
+                                                    </Button>
                                                 </Box>
                                             ) : (
                                                 <>
@@ -447,28 +723,32 @@ console.log('soli', solicitudes < 1)
                                                         </Alert>
                                                     )}
                                                     {getStepContent(activeStep)}
-                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-                                                        <Button
-                                                            disabled={activeStep === 0 || loading}
-                                                            onClick={handleBack}
-                                                            variant="outlined"
-                                                        >
-                                                            Atrás
-                                                        </Button>
-                                                        <Button
-                                                            onClick={activeStep === steps.length - 1 ? handleRequestTipeo : handleNext}
-                                                            variant="contained"
-                                                            disabled={loading}
-                                                        >
-                                                            {loading ? (
-                                                                <CircularProgress size={24} />
-                                                            ) : activeStep === steps.length - 1 ? (
-                                                                'Terminar solicitud'
-                                                            ) : (
-                                                                'Siguiente'
-                                                            )}
-                                                        </Button>
-                                                    </Box>
+                                                    {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+                                                {
+                                                    activeStep !== 0 &&
+                                                    <Button
+                                                        disabled={activeStep === 0 || loading}
+                                                        onClick={handleBack}
+                                                        variant="outlined"
+                                                    >
+                                                        Atrás
+                                                    </Button>
+                                                }
+
+                                                <Button
+                                                    onClick={activeStep === steps.length - 1 ? handleRequestTipeo : handleNext}
+                                                    variant="contained"
+                                                    disabled={loading}
+                                                >
+                                                    {loading ? (
+                                                        <CircularProgress size={24} />
+                                                    ) : activeStep === steps.length - 1 ? (
+                                                        'Terminar solicitud'
+                                                    ) : (
+                                                        'Siguiente'
+                                                    )}
+                                                </Button> 
+                                            </Box> */}
                                                 </>
                                             )}
                                         </Paper>

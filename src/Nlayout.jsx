@@ -374,7 +374,7 @@ function Nlayout(props) {
                     <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '15px', width: '80%' }}>
                         <Box sx={{ position: 'relative', display: 'inline-block' }}>
                             {
-                                isLoggedIn &&
+                                user?.name &&
 
                                 <Box sx={{
                                     position: 'absolute',
@@ -393,33 +393,38 @@ function Nlayout(props) {
                                     {solicitudes}
                                 </Box>
                             }
-                            <Button
+                            {
+                                isLoggedIn &&
 
-                                sx={{
-                                    color: 'white',
-                                    fontWeight: 'bold',
-                                    padding: '0.75rem 2.5rem',
-                                    fontSize: '0.85rem',
-                                    background: 'linear-gradient(90deg, #9f6a00 0%, #ffc651 100%)',
-                                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                                    borderRadius: '12px',
-                                    textTransform: 'uppercase',
-                                    transition: 'all 0.3s ease-in-out',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '0.5rem',
-                                    '&:hover': {
-                                        transform: 'scale(1.05)',
-                                        boxShadow: '0 0 12px rgba(255, 198, 81, 0.6)',
-                                    },
-                                }}
+                                <Button
 
-                                onClick={isLoggedIn ? redirectTipeo : handleOpen}
+                                    sx={{
+                                        color: 'white',
+                                        fontWeight: 'bold',
+                                        padding: '0.75rem 2.5rem',
+                                        fontSize: '0.85rem',
+                                        background: 'linear-gradient(90deg, #9f6a00 0%, #ffc651 100%)',
+                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                        borderRadius: '12px',
+                                        textTransform: 'uppercase',
+                                        transition: 'all 0.3s ease-in-out',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.5rem',
+                                        '&:hover': {
+                                            transform: 'scale(1.05)',
+                                            boxShadow: '0 0 12px rgba(255, 198, 81, 0.6)',
+                                        },
+                                    }}
 
-                            >
-                                Solicitar Tipeo
-                            </Button>
+                                    onClick={redirectTipeo}
+
+                                >
+                                    Solicitar Tipeo
+                                </Button>
+                            }
+
                         </Box>
                         {/* 
                         {
@@ -687,7 +692,10 @@ function Nlayout(props) {
                 </Box>
             </Modal>
             {loading && <Loader />}
-            {!loading && props.children}
+            
+
+                {!loading && props.children}
+            
 
 
             <footer class="footer">
