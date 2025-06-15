@@ -293,7 +293,7 @@ function Tipeo(props) {
                                     <VisuallyHiddenInput
                                         type="file"
                                         accept="image/*"
-                                        onChange={handleFileChange}
+                                        onChange={handleFileChange(setOfferScreenshot, setOfferScreenshotUrl)}
                                     />
                                 </Button>
 
@@ -414,7 +414,7 @@ function Tipeo(props) {
                                 <VisuallyHiddenInput
                                     type="file"
                                     accept="image/*"
-                                    onChange={handleFileChange}
+                                    onChange={handleFileChange(setBnbScreenshot, setBnbScreenshotUrl)}
                                 />
                             </Button>
 
