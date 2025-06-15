@@ -84,6 +84,8 @@ function Tipeo(props) {
         return true;
     };
 
+    
+
     const handleRequestTipeo = async () => {
         setLoading(true);
         setError('');
@@ -460,6 +462,10 @@ function Tipeo(props) {
                 return null;
         }
     };
+
+    const redirectHome = () => {
+        window.location.href = '/'
+    }
     return (
         <Nlayout>
             <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '-30%' : '-10%', width: '100%' }}>
@@ -721,6 +727,7 @@ function Tipeo(props) {
                                                                 backgroundColor: '#0066d6',
                                                             },
                                                         }}
+                                                        onClick={redirectHome}
                                                     >
                                                         Listo
                                                     </Button>

@@ -316,7 +316,7 @@ function Nlayout(props) {
                     <Grid style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
 
 
-                        <img src={logoDengue} style={{ borderRadius: '50%', width: isMobile ? '50%' : '15%' }} />
+                        {/* <img src={logoDengue} style={{ borderRadius: '50%', width: isMobile ? '50%' : '15%' }} /> */}
 
 
                         <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
