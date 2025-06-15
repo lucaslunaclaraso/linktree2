@@ -603,7 +603,7 @@ function Tipeo(props) {
                                         <Paper
                                             elevation={8}
                                             sx={{
-                                                maxWidth: 500,
+
                                                 margin: '0 auto',
                                                 borderRadius: 2,
                                                 overflow: 'hidden',
@@ -612,39 +612,42 @@ function Tipeo(props) {
                                                 p: 2,
                                             }}
                                         >
-                                            <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                                                📝 Solicitud de tipeo
-                                            </Typography>
                                             {
                                                 !success &&
-                                                <Box
-                                                    sx={{
-                                                        display: 'flex',
-                                                        justifyContent: 'space-between',
-                                                        backgroundColor: '#1e293b',
-                                                        borderRadius: '999px',
-                                                        p: '6px',
-                                                        mb: 3,
-                                                    }}
-                                                >
-                                                    {steps.map((label, index) => (
-                                                        <Box
-                                                            key={label}
-                                                            sx={{
-                                                                flex: 1,
-                                                                textAlign: 'center',
-                                                                borderRadius: '999px',
-                                                                backgroundColor: activeStep === index ? '#334155' : 'transparent',
-                                                                color: '#fff',
-                                                                fontWeight: 'bold',
-                                                                py: 1,
-                                                                transition: 'background-color 0.3s',
-                                                            }}
-                                                        >
-                                                            <Typography variant="body1">{label}</Typography>
-                                                        </Box>
-                                                    ))}
-                                                </Box>
+                                                <>
+                                                    <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                                                        📝 Solicitud de tipeo
+                                                    </Typography>
+
+                                                    <Box
+                                                        sx={{
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between',
+                                                            backgroundColor: '#1e293b',
+                                                            borderRadius: '999px',
+                                                            p: '6px',
+                                                            mb: 3,
+                                                        }}
+                                                    >
+                                                        {steps.map((label, index) => (
+                                                            <Box
+                                                                key={label}
+                                                                sx={{
+                                                                    flex: 1,
+                                                                    textAlign: 'center',
+                                                                    borderRadius: '999px',
+                                                                    backgroundColor: activeStep === index ? '#334155' : 'transparent',
+                                                                    color: '#fff',
+                                                                    fontWeight: 'bold',
+                                                                    py: 1,
+                                                                    transition: 'background-color 0.3s',
+                                                                }}
+                                                            >
+                                                                <Typography variant="body1">{label}</Typography>
+                                                            </Box>
+                                                        ))}
+                                                    </Box>
+                                                </>
                                             }
 
                                             {success ? (
