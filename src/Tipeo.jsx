@@ -609,7 +609,7 @@ function Tipeo(props) {
                                         <Paper
                                             elevation={8}
                                             sx={{
-
+                                                maxWidth: 600,
                                                 margin: '0 auto',
                                                 borderRadius: 2,
                                                 overflow: 'hidden',
