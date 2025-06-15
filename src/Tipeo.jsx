@@ -275,7 +275,7 @@ function Tipeo(props) {
                                     {offerScreenshot ? `Archivo seleccionado: ${offerScreenshot.name}` : 'No hay archivo'}
                                 </Typography>
                             </Box>
-                            <img src={offerScreenshotUrl} style={{ width: '100%', borderRadius: '5px' }} />
+                            <img src={offerScreenshotUrl} style={{ width: '30%', borderRadius: '5px', margin:'0 auto', display:'flex' }} />
 
                             <Box sx={{ display: 'flex', gap: 2 }}>
                                 <Button
@@ -361,7 +361,7 @@ function Tipeo(props) {
                                 </Typography>
 
                             </Box>
-                            <img src={bnbScreenshotUrl} style={{ width: '100%', borderRadius: '5px' }} />
+                            <img src={bnbScreenshotUrl} style={{ width: '30%', borderRadius: '5px', margin:'0 auto', display:'flex' }} />
 
                         </Box>
 
