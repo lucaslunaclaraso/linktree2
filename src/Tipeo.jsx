@@ -73,14 +73,14 @@ function Tipeo(props) {
     };
 
     const validateStep = () => {
-        // if (activeStep === 1 && !offerScreenshot) {
-        //     setError('Debes subir una captura de Ajustes - Ofertas');
-        //     return false;
-        // }
-        // if (activeStep === 2 && (!bnbScreenshot || !bnbAddress)) {
-        //     setError('Debes subir una captura del QR y la dirección BNB, y proporcionar la dirección');
-        //     return false;
-        // }
+        if (activeStep === 1 && !offerScreenshot) {
+            setError('Debes subir una captura de Ajustes - Ofertas');
+            return false;
+        }
+        if (activeStep === 2 && (!bnbScreenshot || !bnbAddress)) {
+            setError('Debes subir una captura del QR y la dirección BNB, y proporcionar la dirección');
+            return false;
+        }
         return true;
     };
 
@@ -171,6 +171,7 @@ function Tipeo(props) {
     // Manejar cambio de archivo y subir a Cloudinary
     const handleFileChange = (setFile, setUrl) => async (event) => {
         const file = event.target.files[0];
+        console.log('file', file)
         if (file) {
             setFile(file);
             try {
@@ -419,7 +420,7 @@ function Tipeo(props) {
 
                             <Button
                                 variant="contained"
-                                onClick={handleNext}
+                                onClick={handleRequestTipeo}
                                 sx={{
                                     backgroundColor: '#3b82f6',
                                     flex: 1,
