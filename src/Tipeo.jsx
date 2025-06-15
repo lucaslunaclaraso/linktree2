@@ -183,6 +183,7 @@ function Tipeo(props) {
             }
         }
     };
+    console.log('url', url)
     const getStepContent = (step) => {
         switch (step) {
             case 0:
@@ -273,6 +274,7 @@ function Tipeo(props) {
                                 <Typography>
                                     {offerScreenshot ? `Archivo seleccionado: ${offerScreenshot.name}` : 'No hay archivo'}
                                 </Typography>
+                                <img src={url} style={{ width: '100%', borderRadius: '5px' }}/>
                             </Box>
 
                             <Box sx={{ display: 'flex', gap: 2 }}>
@@ -357,6 +359,8 @@ function Tipeo(props) {
                                 <Typography>
                                     {bnbScreenshot ? `Archivo seleccionado: ${bnbScreenshot.name}` : 'No hay archivo'}
                                 </Typography>
+                                <img src={url} style={{ width: '100%', borderRadius: '5px' }}/>
+
                             </Box>
 
                         </Box>
