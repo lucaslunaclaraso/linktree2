@@ -406,8 +406,8 @@ function Nlayout(props) {
                                     sx={{
                                         color: 'white',
                                         fontWeight: 'bold',
-                                        padding: '0.75rem 2.5rem',
-                                        fontSize: '0.85rem',
+                                        padding: isMobile ? '.75 rem 1rem':'0.75rem 2.5rem',
+                                        fontSize: isMobile ? 16:  '0.85rem',
                                         background: 'linear-gradient(90deg, #9f6a00 0%, #ffc651 100%)',
                                         border: '1px solid rgba(255, 255, 255, 0.2)',
                                         borderRadius: '12px',
