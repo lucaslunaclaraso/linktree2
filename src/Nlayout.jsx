@@ -317,7 +317,7 @@ function Nlayout(props) {
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 
-            <Grid classname='header' style={{ zIndex: 9999, padding: isMobile ? 5 : 10, background: '#00000045',boxShadow: '3px 2px 15px' }}>
+            <Grid classname='header' style={{ zIndex: 9999, padding: isMobile ? 5 : 10, background: '#00000045', boxShadow: '3px 2px 15px' }}>
                 <Toolbar style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: isMobile ? '100%' : '85%', margin: '0 auto', padding: isMobile && 0 }}>
 
                     {
@@ -545,27 +545,31 @@ function Nlayout(props) {
 
                         {user ?
                             <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: 8, borderRadius: '8px', background: '#10111c' }}>
-                                    <img src={coin} />
+                                <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: 8, borderRadius: '8px', background: '#10111c', justifyContent: 'center' }}>
+                                    <img src={coin} style={{ width: '30%' }} />
                                     <Typography style={{ fontSize: 16, fontFamily: 'Outfit,sans-serif', color: 'hsla(0,0%,100%,.75)' }}>{Dcoins}</Typography>
                                 </Grid>
-                                <Typography sx={{
-                                    background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
-                                    WebkitBackgroundClip: 'text',
-                                    WebkitTextFillColor: 'transparent',
-                                    fontWeight: 700,
-                                    fontSize: 16,
-                                    textAlign: 'end',
-                                    textTransform: 'uppercase',
-                                    fontFamily: 'Outfit,sans-serif'
+                                {
+                                    !isMobile &&
+                                    <Typography sx={{
+                                        background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                        fontWeight: 700,
+                                        fontSize: 16,
+                                        textAlign: 'end',
+                                        textTransform: 'uppercase',
+                                        fontFamily: 'Outfit,sans-serif'
 
-                                }} > {user?.name || usuario}
-                                </Typography>
-                                <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                    }} > {user?.name || usuario}
+                                    </Typography>
+                                }
+
+                                <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}  onClick={handleClick}>
                                     <Grid style={{ width: '45px', height: '45px', padding: '4px', borderRadius: '75px', border: '1px solid #807ffb' }}>
                                         <img src={user?.profile} style={{ width: '100%', height: '100%', borderRadius: '36px' }} />
                                     </Grid>
-                                    <IoMdArrowDropdown onClick={handleClick} style={{ color: '#e9f4ff', width: '16px', cursor: 'pointer' }} />
+                                    <IoMdArrowDropdown style={{ color: '#e9f4ff', width: '16px', cursor: 'pointer' }} />
 
                                 </Grid>
                             </Grid>
@@ -724,7 +728,7 @@ function Nlayout(props) {
 
 
 
-                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: !isMobile && 'wrap', width: isMobile ? '100%' : '10%', flexFlow: !isMobile &&'row wrap', gap: '10px', flexDirection: isMobile && 'row' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: !isMobile && 'wrap', width: isMobile ? '100%' : '10%', flexFlow: !isMobile && 'row wrap', gap: '10px', flexDirection: isMobile && 'row' }}>
                         <a href="https://discord.gg/toastergambling" class="footer-column-icon" aria-label="Discord">
                             <FaDiscord style={{ color: '#1877F2', fontSize: 25 }} />
 
@@ -749,7 +753,7 @@ function Nlayout(props) {
 
 
 
-                <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: isMobile ? '100%': '85%', margin: '0 auto', padding: '10px', gap: '5%' }} >
+                <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: isMobile ? '100%' : '85%', margin: '0 auto', padding: '10px', gap: '5%' }} >
 
                     <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', borderRadius: '82px', background: 'hsla(0,0%,100%,.03)', padding: '16px 16px' }}>
                         <TbRating18Plus style={{ fontSize: isMobile ? 100 : 45 }} />
