@@ -31,7 +31,7 @@ import nube2 from './nube2.png'
 import nube3 from './nube3.png'
 import { PiMouseScrollThin } from 'react-icons/pi';
 import back from './leaderboard_card_bg.svg'
-
+import smoke from './smoke.png'
 import globet from './goblet.png'
 import dice from './dice.svg'
 import bomb from './bomb.png'
@@ -244,16 +244,120 @@ const Home = (props) => {
             </div>
           </Grid>
         </Grid>
-
+        <div
+          style={{
+            position: 'absolute',
+            top: '20%',
+            left: '-10%',
+            width: '40%',
+            height: '15%',
+            backgroundImage: `url(${smoke})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 1, // Ajusta la opacidad del humo
+            zIndex: 9997, // Justo encima del SVG, pero debajo del contenido
+            pointerEvents: 'none', // No interfiere con clics
+          }}
+           className='smoke'
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '20%',
+            left: '10%',
+            width: '40%',
+            height: '15%',
+            backgroundImage: `url(${smoke})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 1, // Ajusta la opacidad del humo
+            zIndex: 9997, // Justo encima del SVG, pero debajo del contenido
+            pointerEvents: 'none', // No interfiere con clics
+          }}
+           className='smoke'
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '20%',
+            left: '20%',
+            width: '40%',
+            height: '15%',
+            backgroundImage: `url(${smoke})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 1, // Ajusta la opacidad del humo
+            zIndex: 9997, // Justo encima del SVG, pero debajo del contenido
+            pointerEvents: 'none', // No interfiere con clics
+          }}
+           className='smoke'
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '20%',
+            left: '40%',
+            width: '40%',
+            height: '15%',
+            backgroundImage: `url(${smoke})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 1, // Ajusta la opacidad del humo
+            zIndex: 9997, // Justo encima del SVG, pero debajo del contenido
+            pointerEvents: 'none', // No interfiere con clics
+          }}
+           className='smoke'
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '20%',
+            left: '60%',
+            width: '40%',
+            height: '15%',
+            backgroundImage: `url(${smoke})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 1, // Ajusta la opacidad del humo
+            zIndex: 9997, // Justo encima del SVG, pero debajo del contenido
+            pointerEvents: 'none', // No interfiere con clics
+          }}
+           className='smoke'
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '20%',
+            left: '80%',
+            width: '40%',
+            height: '15%',
+            backgroundImage: `url(${smoke})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 1, // Ajusta la opacidad del humo
+            zIndex: 9997, // Justo encima del SVG, pero debajo del contenido
+            pointerEvents: 'none', // No interfiere con clics
+          }}
+           className='smoke'
+        />
 
         <Grid style={{ display: 'flex', flexDirection: 'column', height: '100vh' }} className="backgroundAnimado" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+
+          {/* Imagen de humo */}
+
           {/* SVG como fondo */}
           <svg ref={svgRef}
             xmlns="http://www.w3.org/2000/svg"
             width="1920"
             height="1234"
             fill="none"
-            style={{ position: 'absolute', top: 0, left: 0,  width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
             className="highlight-block-bg leaderboard-intro-bg">
             <defs>
               <radialGradient id="leaderboard_intro_bg_svg__a" cx="0" cy="0" r="1" gradientTransform="rotate(90 452.72 546.22) scale(1141.5)" gradientUnits="userSpaceOnUse">
@@ -458,7 +562,7 @@ const Home = (props) => {
             }}> a la comunidad!</Typography>
           </Grid>
 
-          <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', flexWrap: 'wrap', gap: '2%', rowGap: '30px', flexDirection: props.isMobile && 'column' }} >            
+          <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', flexWrap: 'wrap', gap: '2%', rowGap: '30px', flexDirection: props.isMobile && 'column' }} >
 
             <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #1877F2', width: props.isMobile ? '85%' : '30%', borderRadius: 10, boxShadow: '0 0 5px #1877F2' }}>
               <FaDiscord style={{ color: '#1877F2', fontSize: 35 }} />
@@ -494,9 +598,9 @@ const Home = (props) => {
 
             </Box>
 
-           
 
-           
+
+
           </Grid>
 
         </Grid>
