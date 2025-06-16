@@ -217,9 +217,9 @@ function App() {
                 <Route path="/solicitudes" element={<RutaPrivada><AdminPanel  isMobile={isMobile} /> </RutaPrivada>} />
                 
                 <Route path="/callback" element={<Callback />} />
-                <Route path="/tipeo" element={<Tipeo nombre={nombre}/>} />
+                <Route path="/tipeo" element={<Tipeo nombre={nombre} isMobile={isMobile}/>} />
                 <Route path="/ruleta" element={<Roller nombre={nombre}/>} />
-                <Route path="/shop" element={<Tienda nombre={nombre}/>} />
+                <Route path="/shop" element={<Tienda nombre={nombre} isMobile={isMobile}/>} />
             </Routes>
         </div>
     );
