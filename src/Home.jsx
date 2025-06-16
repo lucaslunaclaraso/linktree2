@@ -310,7 +310,7 @@ const Home = (props) => {
                   <Typography> para unirte a la comunidad!</Typography>
                 </Grid>
 
-                <Button style={{ background: 'linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),linear-gradient(94deg,#7676f5 29.94%,#5a22a1 83.55%)', color: 'white', padding: 15, borderRadius: '100px', width: props.isMobile ? '100%' : '30%' }} className='botonCod' href='https://stake1021.com/?offer=eldenguee&c=1590cd3460' target='_blank'>OBTENER BENEFICIOS!</Button>
+                <Button style={{ background: 'linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),linear-gradient(94deg,#7676f5 29.94%,#5a22a1 83.55%)', color: 'white', padding: 15, borderRadius: '100px', width: props.isMobile ? '100%' : '45%' }} className='botonCod' href='https://stake1021.com/?offer=eldenguee&c=1590cd3460' target='_blank'>OBTENER BENEFICIOS!</Button>
               </Box>
             </Grid>
           </Grid>
