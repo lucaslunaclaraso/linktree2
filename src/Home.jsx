@@ -247,7 +247,7 @@ const Home = (props) => {
         <div
           style={{
             position: 'absolute',
-            top: '20%',
+            top: '25%',
             left: '-10%',
             width: '40%',
             height: '15%',
@@ -264,7 +264,7 @@ const Home = (props) => {
         <div
           style={{
             position: 'absolute',
-            top: '20%',
+            top: '25%',
             left: '10%',
             width: '40%',
             height: '15%',
@@ -281,7 +281,7 @@ const Home = (props) => {
         <div
           style={{
             position: 'absolute',
-            top: '20%',
+            top: '25%',
             left: '20%',
             width: '40%',
             height: '15%',
@@ -298,7 +298,7 @@ const Home = (props) => {
         <div
           style={{
             position: 'absolute',
-            top: '20%',
+            top: '25%',
             left: '40%',
             width: '40%',
             height: '15%',
@@ -315,7 +315,7 @@ const Home = (props) => {
         <div
           style={{
             position: 'absolute',
-            top: '20%',
+            top: '25%',
             left: '60%',
             width: '40%',
             height: '15%',
@@ -332,7 +332,7 @@ const Home = (props) => {
         <div
           style={{
             position: 'absolute',
-            top: '20%',
+            top: '25%',
             left: '80%',
             width: '40%',
             height: '15%',
