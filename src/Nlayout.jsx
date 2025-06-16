@@ -17,7 +17,7 @@ import { FaCrown } from 'react-icons/fa';
 import { TbRating18Plus } from "react-icons/tb";
 import { IoIosSunny, IoMdClose, IoMdDownload, IoMdMenu } from 'react-icons/io';
 
-import coin from './toast-coin.svg'
+import coin from './Wild_coin.png'
 import axios from 'axios';
 import Loader from './Loader';
 
@@ -317,7 +317,7 @@ function Nlayout(props) {
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 
-            <Grid classname='header' style={{ zIndex: 9999, padding: isMobile ? 5 : 10, background: '#00000045' }}>
+            <Grid classname='header' style={{ zIndex: 9999, padding: isMobile ? 5 : 10, background: '#00000045',boxShadow: '3px 2px 15px' }}>
                 <Toolbar style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: isMobile ? '100%' : '85%', margin: '0 auto', padding: isMobile && 0 }}>
 
                     {

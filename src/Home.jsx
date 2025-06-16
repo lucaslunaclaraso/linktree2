@@ -142,8 +142,11 @@ const Home = (props) => {
           }}>
 
 
-            <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15, marginTop: '5%' }}>
-              <img src={logo} style={{width: props.isMobile ? '100%' : '45%'}} />
+            <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15, marginTop: '10%' }}>
+            <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '28px', fontFamily: 'Outfit,sans-serif' }} >
+                Bienvenidos a
+              </Typography>
+              <img src={logo} style={{width: props.isMobile ? '100%' : '40%'}} />
               <Grid style={{ zIndex: 1, width: '100%' }}>
                 <img src={globet} className='vip-rewards-rewards-imgs-goblet' />
                 <img src={dice} className='vip-rewards-rewards-imgs-dice' />
@@ -156,7 +159,7 @@ const Home = (props) => {
             <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', }} >
               <Button
                 style={{
-                  background: 'linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),linear-gradient(94deg,#7676f5 29.94%,#5a22a1 83.55%)',
+                  background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), linear-gradient(94deg, #365512 29.94%,#36f705 83.55%)',
                   color: 'white',
                   padding: 15,
                   borderRadius: '100px',
@@ -236,7 +239,7 @@ const Home = (props) => {
                   <Typography> para unirte a la comunidad!</Typography>
                 </Grid>
 
-                <Button style={{ background: 'linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),linear-gradient(94deg,#7676f5 29.94%,#5a22a1 83.55%)', color: 'white', padding: 15, borderRadius: '100px', width: props.isMobile ? '100%' : '30%' }} className='botonCod'>USAR CODIGO</Button>
+                <Button style={{ background: 'linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),linear-gradient(94deg,#7676f5 29.94%,#5a22a1 83.55%)', color: 'white', padding: 15, borderRadius: '100px', width: props.isMobile ? '100%' : '30%' }} className='botonCod'>OBTENER BENEFICIOS!</Button>
               </Box>
             </Grid>
           </Grid>
