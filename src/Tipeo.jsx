@@ -241,8 +241,8 @@ function Tipeo(props) {
                             <Typography sx={{ fontWeight: 'bold', mb: 1, display: 'inline-block' }}>
                                 Instrucciones:
                             </Typography>
-
-                            <img src={paso1} style={{ width: '100%', borderRadius: '5px' }} />
+                            <Button onClick={() => openImage(paso1)} style={{ margin: '0 auto', display: 'flex', background: 'red', color: 'white' }}>Ver tutorial</Button>
+                            
 
 
                         </Box>
@@ -815,7 +815,7 @@ function Tipeo(props) {
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         justifyContent: 'center',
-                                                        zIndex: 1000,
+                                                        zIndex: 99999,
                                                     }}
                                                 >
                                                     {/* Botón X para cerrar */}
@@ -830,7 +830,7 @@ function Tipeo(props) {
                                                             fontSize: '32px',
                                                             color: '#fff',
                                                             cursor: 'pointer',
-                                                            zIndex: 1001,
+                                                            zIndex: 99999,
                                                         }}
                                                         aria-label="Cerrar visor"
                                                     >

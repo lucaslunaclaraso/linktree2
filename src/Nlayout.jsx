@@ -348,7 +348,7 @@ function Nlayout(props) {
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 
-            <Grid classname='header' style={{ zIndex: 9999, padding: isMobile ? 5 : 10, background: '#00000045', boxShadow: '3px 2px 15px' }}>
+            <Grid classname='header' style={{ zIndex: 9998, padding: isMobile ? 5 : 10, background: '#00000045', boxShadow: '3px 2px 15px' }}>
                 <Toolbar style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: isMobile ? '100%' : '85%', margin: '0 auto', padding: isMobile && 0 }}>
 
                     {

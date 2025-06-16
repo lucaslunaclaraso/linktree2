@@ -458,38 +458,7 @@ const Home = (props) => {
             }}> a la comunidad!</Typography>
           </Grid>
 
-          <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', flexWrap: 'wrap', gap: '2%', rowGap: '30px', flexDirection: props.isMobile && 'column' }} >
-
-            <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #00ff73', width: props.isMobile ? '85%' : '30%', borderRadius: 10, boxShadow: '0 0 5px #00ff73', }}>
-              <SiKick style={{ color: '#00ff73', fontSize: 35 }} />
-              <Typography style={{ color: 'white', fontWeight: 800, fontFamily: 'PoetsenOne' }}>Kick</Typography>
-
-
-              <Button
-                sx={{
-                  background: 'linear-gradient(180deg,#00ff73 -31.86%,#00ff13 132.28%)',
-                  color: 'black',
-                  transformStyle: 'preserve-3d',
-                  padding: '0 15px'
-
-                }} href="https://kick.com/eldenguee" target='_blank'>Seguir</Button>
-
-            </Box>
-
-            <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #ff4e4e', width: props.isMobile ? '85%' : '30%', borderRadius: 10, boxShadow: '0 0 5px #ff4e4e' }}>
-              <FaYoutube style={{ color: '#ff4e4e', fontSize: 35 }} />
-              <Typography style={{ color: 'white', fontWeight: 800, fontFamily: 'PoetsenOne' }}>Youtube</Typography>
-
-              <Button sx={{
-                background: 'linear-gradient(0deg,rgba(0,0,0,.2),rgba(0,0,0,.2)),linear-gradient(122deg,#670000 -24.73%,red 53.1%,#830000 121.81%)',
-                color: 'white',
-
-                transformStyle: 'preserve-3d',
-                padding: '0 15px'
-
-              }} href="https://youtube.com/@dengueetimba?si=GzrKmlCiEecUFH54" target='_blank'>Seguir</Button>
-
-            </Box>
+          <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', flexWrap: 'wrap', gap: '2%', rowGap: '30px', flexDirection: props.isMobile && 'column' }} >            
 
             <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #1877F2', width: props.isMobile ? '85%' : '30%', borderRadius: 10, boxShadow: '0 0 5px #1877F2' }}>
               <FaDiscord style={{ color: '#1877F2', fontSize: 35 }} />
@@ -525,34 +494,9 @@ const Home = (props) => {
 
             </Box>
 
-            <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #a8a6af', width: props.isMobile ? '85%' : '30%', borderRadius: 10, boxShadow: '0 0 5px #a8a6af' }}>
-              <img src={logoStake} style={{ width: '18%' }} />
-              <Typography style={{ color: 'white', fontWeight: 800, fontFamily: 'PoetsenOne' }}>Stake</Typography>
-              <Button
-                sx={{
-                  background: 'linear-gradient(180deg,#a8a6af -31.86%,#a8a6af 132.28%)',
-                  color: 'black',
-                  transformStyle: 'preserve-3d',
-                  padding: '0 15px'
+           
 
-                }}
-
-              >Jugar</Button>
-            </Box>
-
-            <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #a8a6af', width: props.isMobile ? '85%' : '30%', borderRadius: 10, boxShadow: '0 0 5px #a8a6af' }}>
-              <FaInstagram style={{ fontSize: 35, color: 'white' }} />
-
-
-              <Typography style={{ color: 'white', fontWeight: 800, fontFamily: 'PoetsenOne' }}>Instagram</Typography>
-              <Button sx={{
-                background: 'linear-gradient(180deg,#a8a6af -31.86%,#a8a6af 132.28%)',
-                color: 'black',
-                transformStyle: 'preserve-3d',
-                padding: '0 15px'
-
-              }}>Seguir</Button>
-            </Box>
+           
           </Grid>
 
         </Grid>
