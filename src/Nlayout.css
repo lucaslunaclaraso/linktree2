@@ -75,26 +75,6 @@
     background: rgba(43, 46, 63, 0.25);
 }
 
-.join-plate-inner{
-    display: flex;
-    width: 100%;
-        margin: 0 auto;
-        max-width: 1025px;
-        min-width: 343px;
-        padding: 18px 24px;
-        align-items: center;
-        -webkit-backdrop-filter: blur(12.5px);
-        backdrop-filter: blur(12.5px);
-        justify-content: space-between;
-        border: 1px solid #34375f;
-        border-radius: 200px;
-        box-shadow: 0 25px 35px 0 rgba(16, 17, 28, .5);
-        background: linear-gradient(88deg, rgba(20, 24, 51, .5) 9.42%, rgba(41, 47, 85, .5) 94.87%);
-        position: relative;
-        z-index: 1;
-        font-size: 18px;
-        color: hsla(0, 0%, 100%, .75);
-}
 
 @keyframes cloudMove1 {
     0% { transform: translateX(0); }

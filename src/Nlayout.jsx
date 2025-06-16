@@ -15,27 +15,12 @@ import gamble from './gambleAware.svg'
 import { FaFacebookSquare } from 'react-icons/fa';
 import { FaCrown } from 'react-icons/fa';
 import { TbRating18Plus } from "react-icons/tb";
+import { IoIosSunny, IoMdClose, IoMdDownload, IoMdMenu } from 'react-icons/io';
+
 import coin from './toast-coin.svg'
 import axios from 'axios';
 import Loader from './Loader';
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    bgcolor: 'rgba(20, 20, 20, 0.95)',
-    borderRadius: 4,
-    boxShadow: 24,
-    backdropFilter: 'blur(8px)',
 
-    textAlign: 'center',
-    backgroundImage: `
-    linear-gradient(to bottom,  rgba(63, 61, 69, 0),rgb(73 22 227)),
-    url(${backg})`,
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    padding: '150px 56px 56px'
-};
 
 const buttonBase = {
     px: 3,
@@ -308,16 +293,35 @@ function Nlayout(props) {
         const timer = setTimeout(() => setLoading(false), 1000); // duración del loader
         return () => clearTimeout(timer);
     }, [location.pathname]);
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const toggleMobileMenu = () => setMenuOpen(!menuOpen);
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        bgcolor: 'rgba(20, 20, 20, 0.95)',
+        borderRadius: 4,
+        boxShadow: 24,
+        backdropFilter: 'blur(8px)',
+        textAlign: 'center',
+        backgroundImage: `
+        linear-gradient(to bottom,  rgba(63, 61, 69, 0),rgb(73 22 227)),
+        url(${backg})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        padding: isMobile ? '35px' : '150px 56px 56px'
+    };
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 
-            <Grid classname='header' style={{ zIndex: 9999, padding: 10, background: '#00000045' }}>
-                <Toolbar style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '85%', margin: '0 auto' }}>
-                    <Grid style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <Grid classname='header' style={{ zIndex: 9999, padding: isMobile ? 5 : 10, background: '#00000045' }}>
+                <Toolbar style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: isMobile ? '100%' : '85%', margin: '0 auto', padding: isMobile && 0 }}>
 
-
-                        {/* <img src={logoDengue} style={{ borderRadius: '50%', width: isMobile ? '50%' : '15%' }} /> */}
-
+                    {
+                        !isMobile &&
 
                         <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
 
@@ -368,10 +372,11 @@ function Nlayout(props) {
                             </Link>
 
                         </Grid>
-                    </Grid>
+                    }
 
 
-                    <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '15px', width: '80%' }}>
+
+                    <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: isMobile ? 'flex-start' : 'flex-end', gap: '15px', width: isMobile ? '100%' : '80%' }}>
                         <Box sx={{ position: 'relative', display: 'inline-block' }}>
                             {
                                 user?.name &&
@@ -394,7 +399,7 @@ function Nlayout(props) {
                                 </Box>
                             }
                             {
-                                isLoggedIn &&
+                                user?.name &&
 
                                 <Button
 
@@ -554,7 +559,7 @@ function Nlayout(props) {
                                     textTransform: 'uppercase',
                                     fontFamily: 'Outfit,sans-serif'
 
-                                }} > {user?.name || usuario || 'lucas luna claraso'}
+                                }} > {user?.name || usuario}
                                 </Typography>
                                 <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                     <Grid style={{ width: '45px', height: '45px', padding: '4px', borderRadius: '75px', border: '1px solid #807ffb' }}>
@@ -565,29 +570,35 @@ function Nlayout(props) {
                                 </Grid>
                             </Grid>
                             :
-                            <Button
-                                onClick={handleOpen}
-                                sx={{
-                                    color: '#fff',
-                                    fontWeight: 'bold',
-                                    padding: '0.75rem 2rem',
-                                    fontSize: '.8rem',
+                            <Grid style={{ display: isMobile && 'flex', alignItems: 'center', justifyContent: isMobile && 'space-between', width: isMobile && '100%' }}>
+                                <Button
+                                    onClick={handleOpen}
+                                    sx={{
+                                        color: '#fff',
+                                        fontWeight: 'bold',
+                                        padding: '0.75rem 2rem',
+                                        fontSize: '.8rem',
 
-                                    backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                                        backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
                       linear-gradient(94deg, rgb(118, 118, 245) 29.94%, rgb(90, 34, 161) 83.55%)`,
-                                    border: '2px solid rgba(118, 118, 245, 0.5)',
-                                    borderRadius: '12px',
-                                    boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
-                                    textTransform: 'uppercase',
-                                    transition: 'all 0.3s ease-in-out',
-                                    '&:hover': {
-                                        boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
-                                        transform: 'scale(1.05)',
-                                    },
-                                }}
-                            >
-                                Iniciar Sesión
-                            </Button>
+                                        border: '2px solid rgba(118, 118, 245, 0.5)',
+                                        borderRadius: '12px',
+                                        boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
+                                        textTransform: 'uppercase',
+                                        transition: 'all 0.3s ease-in-out',
+                                        '&:hover': {
+                                            boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
+                                            transform: 'scale(1.05)',
+                                        },
+                                    }}
+                                >
+                                    Iniciar Sesión
+                                </Button>
+                                {isMobile &&
+                                    <div onClick={toggleMobileMenu} style={{ cursor: 'pointer' }}>
+                                        {menuOpen ? <IoMdClose size={30} style={{ color: 'white' }} /> : <IoMdMenu size={30} style={{ color: 'white' }} />}
+                                    </div>}
+                            </Grid>
                         }
                     </Grid>
 
@@ -638,7 +649,7 @@ function Nlayout(props) {
                     <IoCloseCircleOutline onClick={() => handleClose()} style={{ color: 'white', position: 'absolute', backdropFilter: 'blur(16.2px)', top: '15px', right: '10px', fontSize: '32px', cursor: 'pointer' }} />
 
 
-                    <Stack spacing={2}>
+                    <Stack spacing={2} style={{ display: isMobile && 'flex', gap: isMobile && 10, flexDirection: isMobile && 'column' }}>
                         <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '24px', fontFamily: 'Outfit,sans-serif' }} >
                             Bienvenidos a
                         </Typography>
@@ -647,11 +658,11 @@ function Nlayout(props) {
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                             fontWeight: 'bold',
-                            fontSize: props.isMobile ? 28 : 45,
+                            fontSize: isMobile ? 28 : 45,
                             fontFamily: 'Belerofonte'
                         }} >Eldenguee.com</Typography>
 
-                        <Grid style={{ display: 'flex', alignItems: 'center' }}>
+                        <Grid style={{ display: 'flex', alignItems: 'center', width: isMobile && '100%' }}>
                             <Checkbox {...label} sx={{
                                 color: 'white',
                                 '&.Mui-checked': {
@@ -667,7 +678,7 @@ function Nlayout(props) {
                                 fontWeight: 'bold',
                                 padding: '0.75rem 2rem',
                                 fontSize: '.8rem',
-                                width: '50%',
+                                width: isMobile ? '100%' : '50%',
 
                                 backgroundImage: `linear-gradient(0deg, #00ff73, #00ff73),
                   linear-gradient(94deg, #00ff73 29.94%, #00ff73 83.55%)`,
@@ -692,10 +703,10 @@ function Nlayout(props) {
                 </Box>
             </Modal>
             {loading && <Loader />}
-            
 
-                {!loading && props.children}
-            
+
+            {!loading && props.children}
+
 
 
             <footer class="footer">
@@ -710,23 +721,10 @@ function Nlayout(props) {
                     </div>
 
 
-                    <div class="footer-column">
-                        <p class="footer-column-title">Main</p>
-                        <Link to={'/'} style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>Home</Link>
-                        <Link to={'/'} style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>Home</Link>
-                        <Link to={'/'} style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>Home</Link>
-
-                    </div>
 
 
-                    <div class="footer-column">
-                        <p class="footer-column-title">Info</p>
-                        <Link to={'/'} style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>Home</Link>
-                        <Link to={'/'} style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>Home</Link>
-                    </div>
 
-
-                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', width: '10%', flexFlow: 'row wrap', gap: '10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: !isMobile && 'wrap', width: isMobile ? '100%' : '10%', flexFlow: !isMobile &&'row wrap', gap: '10px', flexDirection: isMobile && 'row' }}>
                         <a href="https://discord.gg/toastergambling" class="footer-column-icon" aria-label="Discord">
                             <FaDiscord style={{ color: '#1877F2', fontSize: 25 }} />
 
@@ -746,30 +744,15 @@ function Nlayout(props) {
                     </div>
 
                 </div>
-                <hr style={{ width: '85%' }}></hr>
-                <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: '85%', margin: '0 auto', padding: '20px', gap: '5%' }} >
-                    <Grid style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>How do I join the Leaderboard?
-                        </Typography>
-                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>To participate in our monthly wager leaderboard all you have to do is signup for an account on stake under the promo code "fork". To do that you can either click here or head over to stake yourself and use the code upon signup. Once you have an account all your wagers will automatically be counted towards the monthly leaderboard!</Typography>
-                    </Grid>
-                    <Grid style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>How do I join the Leaderboard?
-                        </Typography>
-                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>To participate in our monthly wager leaderboard all you have to do is signup for an account on stake under the promo code "fork". To do that you can either click here or head over to stake yourself and use the code upon signup. Once you have an account all your wagers will automatically be counted towards the monthly leaderboard!</Typography>
-                    </Grid>
-                    <Grid style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>How do I join the Leaderboard?
-                        </Typography>
-                        <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>To participate in our monthly wager leaderboard all you have to do is signup for an account on stake under the promo code "fork". To do that you can either click here or head over to stake yourself and use the code upon signup. Once you have an account all your wagers will automatically be counted towards the monthly leaderboard!</Typography>
-                    </Grid>
-                </Grid>
 
                 <hr style={{ width: '85%' }}></hr>
-                <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: '85%', margin: '0 auto', padding: '10px', gap: '5%' }} >
+
+
+
+                <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: isMobile ? '100%': '85%', margin: '0 auto', padding: '10px', gap: '5%' }} >
 
                     <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', borderRadius: '82px', background: 'hsla(0,0%,100%,.03)', padding: '16px 16px' }}>
-                        <TbRating18Plus style={{ fontSize: 45 }} />
+                        <TbRating18Plus style={{ fontSize: isMobile ? 100 : 45 }} />
                         <Typography style={{ color: 'hsla(0,0%,100%,.5)', fontFamily: 'Outfit,sans-serif', textDecoration: 'none' }}>We do not take responsibility for any losses from gambling in casinos and betting sites which are linked or promoted on our website(s). As a player, you are responsible for your bets.</Typography>
                     </Grid>
 

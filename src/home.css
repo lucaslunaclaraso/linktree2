@@ -66,13 +66,17 @@
     -webkit-backdrop-filter: blur(33.5px);
     backdrop-filter: blur(33.5px);
     padding: 20px 0 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .footer-wrapper{
     display: flex;
     align-items: start;
-    width: 100%;
-    justify-content: space-around;
+    width: 85%;
+    justify-content: space-between;
+    margin: 0 auto;
 }
 
 .footer-links {
@@ -216,6 +220,106 @@
     50%  { transform: translate(2%, -2%) scale(1.05); }
     100% { transform: translate(0%, 0%) scale(1); }
   }
+
+
+  .join-plate-inner{
+    display: flex;
+    width: 100%;
+        margin: 0 auto;
+        max-width: 1025px;
+        min-width: 343px;
+        padding: 18px 24px;
+        align-items: center;
+        -webkit-backdrop-filter: blur(12.5px);
+        backdrop-filter: blur(12.5px);
+        justify-content: space-between;
+        border: 1px solid #34375f;
+        border-radius: 200px;
+        box-shadow: 0 25px 35px 0 rgba(16, 17, 28, .5);
+        background: linear-gradient(88deg, rgba(20, 24, 51, .5) 9.42%, rgba(41, 47, 85, .5) 94.87%);
+        position: relative;
+        z-index: 1;
+        font-size: 18px;
+        color: hsla(0, 0%, 100%, .75);
+}
+/* Móviles medianos y grandes */
+@media (max-width: 767px) {
+  /* Teléfonos en general */
+  .vip-rewards-rewards-imgs-roulette {
+    position: absolute;
+    width: 270px;
+    height: 240px;
+    top: 60% !important;
+    left: 60% !important;
+    animation: float 4s ease-in-out 0s infinite normal none running;
+}
+
+.vip-rewards-rewards-imgs-dice {
+  position: absolute;
+  width: 133px;
+  height: 132px;
+  top: 50% !important;
+  left: -10% !important;
+  animation: float-rotate-right 4s ease-in-out 0s infinite normal running;
+}
+
+.vip-rewards-rewards-imgs-goblet {
+  position: absolute;
+  width: 65px !important; 
+  height: 65px !important;
+  top: 25%;
+  left: 0% !important;
+  animation: float 4s ease-in-out 0s infinite normal none running;
+}
+
+.vip-rewards-rewards-imgs-bomb {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: 25% !important;
+  left: 80% !important;
+  animation: float-rotate-left 4s ease-in-out 0s infinite normal none running;
+}
+
+
+.join-plate-inner{
+  display: flex;
+  flex-direction: column;
+      margin: 0 auto;
+      padding: 15px !important;
+      align-items: center;
+      -webkit-backdrop-filter: blur(12.5px);
+      backdrop-filter: blur(12.5px);
+      justify-content: center;
+      border: 1px solid #34375f;
+      border-radius: 5px !important;
+      box-shadow: 0 25px 35px 0 rgba(16, 17, 28, .5);
+      background: linear-gradient(88deg, rgba(20, 24, 51, .5) 9.42%, rgba(41, 47, 85, .5) 94.87%);
+      position: relative;
+      z-index: 1;
+      color: hsla(0, 0%, 100%, .75);
+}
+
+.backgroundAnimado {
+  background: url('./fondo2.svg');
+  background-size: cover;
+  position: relative;
+  width: 100%; /* Ajusta según tus necesidades */
+  height: 100% !important;  /* Ajusta según tus necesidades */
+  overflow: hidden;
+}
+
+.footer-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 85%;
+  justify-content: space-between;
+  margin: 0 auto;
+  gap: 25px;
+}
+}
+
 
   .vip-rewards-rewards-imgs-roulette {
     position: absolute;
