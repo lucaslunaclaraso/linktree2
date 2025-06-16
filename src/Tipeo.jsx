@@ -8,6 +8,9 @@ import paso1 from './Paso1-gif.gif'
 import paso2 from './Paso2-gif.gif'
 import paso3 from './Paso3-gif.gif'
 import vault from './vault.jpg'
+import ej2 from './ejpaso2.jpg'
+import ej3 from './ejpaso3.jpg'
+import successImg from './withdraw.jpg'
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -78,21 +81,27 @@ function Tipeo(props) {
             return false;
         }
         if (activeStep === 2 && (!bnbScreenshot || !bnbAddress)) {
+
             setError('Debes subir una captura del QR y la dirección BNB, y proporcionar la dirección');
             return false;
         }
         return true;
     };
 
-    
+
 
     const handleRequestTipeo = async () => {
         setLoading(true);
         setError('');
 
         try {
+            if (!bnbAddress.startsWith('0x')) {
+
+                throw new Error('UPS! eso no parece una dirección BNB');
+            }
             // Validar datos antes de procesar
             if (!offerScreenshot || !bnbScreenshot || !bnbAddress) {
+
                 throw new Error('Todos los campos son obligatorios');
             }
 
@@ -143,6 +152,7 @@ function Tipeo(props) {
             setLoading(false);
         }
     };
+    const [isUploading, setIsUploading] = useState(false);
 
     // Subir imagen a Cloudinary
     const uploadToCloudinary = async (file) => {
@@ -167,16 +177,17 @@ function Tipeo(props) {
             throw err;
         } finally {
             setLoading(false);
+            setIsUploading(false)
         }
     };
-
     // Manejar cambio de archivo y subir a Cloudinary
     const handleFileChange = (setFile, setUrl) => async (event) => {
         const file = event.target.files[0];
-        console.log('file', file)
+        
         if (file) {
             setFile(file);
             try {
+                setIsUploading(true)
                 const url = await uploadToCloudinary(file);
                 setUrl(url);
                 setError('');
@@ -185,25 +196,31 @@ function Tipeo(props) {
             }
         }
     };
-    console.log('url', url)
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const openImage = (url) => {
+        setSelectedImage(url);
+        setIsOpen(true);
+    };
+
+    const closeImage = () => {
+        setIsOpen(false);
+        setSelectedImage(null);
+    };
+
     const getStepContent = (step) => {
         switch (step) {
             case 0:
                 return (
                     <Box>
-                        <Box style={{ backgroundColor: '#1a2c38', display: 'flex', flexDirection: 'column' }}>
+                        <Box style={{ backgroundColor: '#1a2c38', display: 'flex', flexDirection: 'column', gap: '5px' }}>
                             <Typography sx={{ mt: 2 }}>
                                 Felicitaciones estás habilitado para solicitar un tipeo
                             </Typography>
-                            <Typography sx={{ fontWeight: 'bold', mb: 1, display: 'inline-block' }}>
-                                Instrucciones:
-                            </Typography>
-
-                            <img src={paso1} style={{ width: '100%', borderRadius: '5px' }} />
-
-                            <Box sx={{ backgroundColor: '#1e293b', p: 2, borderRadius: 1, mt: 2 }}>
+                            <Box sx={{ backgroundColor: '#1e293b', p: 2, borderRadius: 1, mt: 2, border: '2px dashed #2a2e38' }}>
                                 <Typography>
-                                    Es obligatorio estar registrado con el siguiente enlace:
+                                    Es obligatorio estar registrado con el siguiente enlace y el código <strong>"eldenguee"</strong> como muestra arriba
                                 </Typography>
 
                                 <Link
@@ -221,6 +238,13 @@ function Tipeo(props) {
                                     https://stake1021.com/?offer=eldenguee&c=1590cd3460
                                 </Link>
                             </Box>
+                            <Typography sx={{ fontWeight: 'bold', mb: 1, display: 'inline-block' }}>
+                                Instrucciones:
+                            </Typography>
+
+                            <img src={paso1} style={{ width: '100%', borderRadius: '5px' }} />
+
+
                         </Box>
 
                         <Button
@@ -251,7 +275,8 @@ function Tipeo(props) {
                         <Typography sx={{ color: '#fff', fontWeight: 'bold', mb: 1 }}>
                             Sube la captura de pantalla de Ajustes - Ofertas
                         </Typography>
-                        <img src={paso2} style={{ width: '100%', borderRadius: '5px' }} />
+                        <Button onClick={() => openImage(paso2)} style={{ margin: '0 auto', display: 'flex', background: 'red', color: 'white' }}>Ver tutorial</Button>
+                        {/* <img src={paso2} style={{ width: '60%', borderRadius: '5px', margin: '0 auto', display: 'flex' }} /> */}
 
                         <Box
                             sx={{
@@ -261,6 +286,7 @@ function Tipeo(props) {
                                 color: '#cbd5e1',
                                 mb: 2,
                             }}
+                            style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px', border: '2px dashed #2a2e38' }}
                         >
                             <Box
                                 sx={{
@@ -277,7 +303,14 @@ function Tipeo(props) {
                                     {offerScreenshot ? `Archivo seleccionado: ${offerScreenshot.name}` : 'No hay archivo'}
                                 </Typography>
                             </Box>
-                            <img src={offerScreenshotUrl} style={{ width: '30%', borderRadius: '5px', margin: '0 auto', display: 'flex' }} />
+                            {
+                                isUploading ?
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' }}>
+                                        <CircularProgress size={30} color="inherit" />
+                                    </Box>
+                                    :
+                                    <img src={offerScreenshotUrl} style={{ width: '20%', borderRadius: '5px', margin: '0 auto', display: 'flex' }} />
+                            }
 
                             <Box sx={{ display: 'flex', gap: 2 }}>
                                 <Button
@@ -304,6 +337,8 @@ function Tipeo(props) {
                                 <Button
                                     variant="contained"
                                     onClick={handleNext}
+                                    disabled={!offerScreenshot}
+
                                     sx={{
                                         backgroundColor: '#3b82f6',
                                         flex: 1,
@@ -317,17 +352,20 @@ function Tipeo(props) {
                             </Box>
                         </Box>
 
-                        <Typography
-                            sx={{
-                                color: '#94a3b8',
-                                textAlign: 'center',
-                                fontSize: '14px',
-                                cursor: 'pointer',
-                                textDecoration: 'underline',
-                            }}
-                        >
-                            Click para ver ejemplo de captura
-                        </Typography>
+                        <Box style={{ backgroundColor: '#0c1b26', padding: 10, borderRadius: 5 }}>
+                            <Typography
+                                sx={{
+                                    color: '#94a3b8',
+                                    textAlign: 'center',
+                                    fontSize: '14px',
+                                    cursor: 'pointer',
+                                    textDecoration: 'underline',
+                                }}
+                                onClick={() => openImage(ej2)}
+                            >
+                                Click para ver ejemplo de captura
+                            </Typography>
+                        </Box>
                     </Box>
                 );
             case 2:
@@ -336,7 +374,8 @@ function Tipeo(props) {
                         <Typography sx={{ color: '#fff', fontWeight: 'bold', mb: 1 }}>
                             Sube la captura del QR y tu dirección BNB
                         </Typography>
-                        <img src={paso3} style={{ width: '100%', borderRadius: '5px' }} />
+                        <Button onClick={() => openImage(paso3)} style={{ margin: '0 auto', display: 'flex', background: 'red', color: 'white' }}>Ver tutorial</Button>
+                        {/* <img src={paso3} style={{ width: '100%', borderRadius: '5px' }} /> */}
 
                         <Box
                             sx={{
@@ -346,6 +385,7 @@ function Tipeo(props) {
                                 color: '#cbd5e1',
                                 mb: 2,
                             }}
+                            style={{ marginTop: '15px', border: '2px dashed #2a2e38' }}
                         >
                             <Box
                                 sx={{
@@ -363,12 +403,20 @@ function Tipeo(props) {
                                 </Typography>
 
                             </Box>
-                            <img src={bnbScreenshotUrl} style={{ width: '30%', borderRadius: '5px', margin: '0 auto', display: 'flex' }} />
+                            {
+                                isUploading ?
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' }}>
+                                        <CircularProgress size={30} color="inherit" />
+                                    </Box>
+                                    :
+                                    <img src={bnbScreenshotUrl} style={{ width: '20%', borderRadius: '5px', margin: '0 auto', display: 'flex' }} />
+
+                            }
 
                         </Box>
 
                         <Typography sx={{ color: '#fff', fontWeight: 500, mb: 0 }}>
-                            Pegá la dirección BNB acá abajo: *
+                            Pegá la direccion BNB que figura en tu cuenta acá abajo - Ejemplo: <span style={{ textDecoration: 'underline', }}> 0x3f1bD53eB8A3F5d60147A5C0c47279a...</span>
                         </Typography>
 
                         <TextField
@@ -427,6 +475,8 @@ function Tipeo(props) {
                             <Button
                                 variant="contained"
                                 onClick={handleRequestTipeo}
+                                disabled={!bnbScreenshot}
+
                                 sx={{
                                     backgroundColor: '#3b82f6',
                                     flex: 1,
@@ -448,6 +498,8 @@ function Tipeo(props) {
                                     cursor: 'pointer',
                                     textDecoration: 'underline',
                                 }}
+                                onClick={() => openImage(ej3)}
+
                             >
                                 Click para ver ejemplo de captura
                             </Typography>
@@ -580,167 +632,226 @@ function Tipeo(props) {
                             </Grid>
                             :
 
-                            <Grid style={{
-                                backgroundImage: `
+                    <Grid style={{
+                        backgroundImage: `
     linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
     url(${backgroundImg})
   `,
-                                backgroundSize: 'cover',
-                                backgroundRepeat: 'no-repeat',
-                                height: '980px',
-                                backgroundColor: '#3f3d45',
-                                margin: '0 auto',
-                                position: 'relative',
-                                backgroundPosition: '50%',
-                                marginTop: '2%'
-                            }}>
-                                <Grid className='container' style={{
-                                    padding: 50,
-                                    gap: '10px',
-                                    justifyContent: 'center',
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        height: '980px',
+                        backgroundColor: '#3f3d45',
+                        margin: '0 auto',
+                        position: 'relative',
+                        backgroundPosition: '50%',
+                        marginTop: props.isMobile ? '1%' : '2%'
+                    }}>
+                        <Grid className='container' style={{
+                            padding: props.isMobile ? 10 : 50,
+                            gap: '10px',
+                            justifyContent: 'center',
 
-                                }}>
-                                    <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
+                        }}>
+                            <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
 
 
-                                    </Grid>
+                            </Grid>
 
-                                    <Box sx={{ mx: 'auto', my: 1, mt: '8%' }}>
-                                        <Paper
-                                            elevation={8}
+                            <Box sx={{ mx: 'auto', my: 1, mt: '8%' }}>
+                                <Paper
+                                    elevation={!success && 8}
+                                    sx={{
+                                        maxWidth: !props.isMobile ? 600 : '100%',
+                                        margin: '0 auto',
+                                        borderRadius: success ? 'none' : 2,
+                                        overflow: 'hidden',
+                                        backgroundColor: success ? 'transparent' : '#1a2c38',
+                                        color: '#fff',
+                                        p: 2,
+                                    }}
+                                >
+                                    {
+                                        !success &&
+                                        <>
+                                            <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                                                📝 Solicitud de tipeo
+                                            </Typography>
+
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    backgroundColor: '#1e293b',
+                                                    borderRadius: '999px',
+                                                    p: '6px',
+                                                    mb: 3,
+                                                }}
+                                            >
+                                                {steps.map((label, index) => (
+                                                    <Box
+                                                        key={label}
+                                                        sx={{
+                                                            flex: 1,
+                                                            textAlign: 'center',
+                                                            borderRadius: '999px',
+                                                            backgroundColor: activeStep === index ? '#334155' : 'transparent',
+                                                            color: '#fff',
+                                                            fontWeight: 'bold',
+                                                            py: 1,
+                                                            transition: 'background-color 0.3s',
+                                                        }}
+                                                    >
+                                                        <Typography variant="body1">{label}</Typography>
+                                                    </Box>
+                                                ))}
+                                            </Box>
+                                        </>
+                                    }
+
+                                    {success ? (
+                                        <Box
                                             sx={{
-                                                maxWidth: !props.isMobile && 600,
+                                                backgroundColor: '#0c1b26',
+                                                borderRadius: '12px',
+                                                padding: 3,
+                                                width: '80%',
                                                 margin: '0 auto',
-                                                borderRadius: 2,
-                                                overflow: 'hidden',
-                                                backgroundColor: '#1a2c38',
-                                                color: '#fff',
-                                                p: 2,
+                                                textAlign: 'center',
+                                                color: 'white',
                                             }}
                                         >
-                                            {
-                                                !success &&
-                                                <>
-                                                    <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                                                        📝 Solicitud de tipeo
-                                                    </Typography>
+                                            {/* Título con ícono y botón cerrar */}
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center',
+                                                    mb: 2,
+                                                }}
+                                            >
+                                                <Typography sx={{ fontWeight: 'bold' }}>Solicitud de tipeo</Typography>
+                                                <Button sx={{ color: 'white' }} size="small">✕</Button>
+                                            </Box>
 
-                                                    <Box
-                                                        sx={{
-                                                            display: 'flex',
-                                                            justifyContent: 'space-between',
-                                                            backgroundColor: '#1e293b',
-                                                            borderRadius: '999px',
-                                                            p: '6px',
-                                                            mb: 3,
-                                                        }}
-                                                    >
-                                                        {steps.map((label, index) => (
-                                                            <Box
-                                                                key={label}
-                                                                sx={{
-                                                                    flex: 1,
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '999px',
-                                                                    backgroundColor: activeStep === index ? '#334155' : 'transparent',
-                                                                    color: '#fff',
-                                                                    fontWeight: 'bold',
-                                                                    py: 1,
-                                                                    transition: 'background-color 0.3s',
-                                                                }}
-                                                            >
-                                                                <Typography variant="body1">{label}</Typography>
-                                                            </Box>
-                                                        ))}
-                                                    </Box>
-                                                </>
-                                            }
+                                            {/* Imagen */}
+                                            <Box sx={{ mb: 2 }}>
+                                                <img
+                                                    src={successImg}// Colocá la ruta correcta a tu imagen
+                                                    alt="Caja fuerte"
+                                                    style={{ width: '100%', height: 'auto', margin: '0 auto' }}
+                                                />
+                                            </Box>
 
-                                            {success ? (
-                                                <Box
-                                                    sx={{
-                                                        backgroundColor: '#0c1b26',
-                                                        borderRadius: '12px',
-                                                        padding: 3,
-                                                        width: '100%',
-                                                        margin: '0 auto',
-                                                        textAlign: 'center',
-                                                        color: 'white',
+                                            {/* Mensaje principal */}
+                                            <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold', mb: 2 }}>
+                                                ¡Se completó tu solicitud de tipeo!
+                                            </Typography>
+
+                                            {/* Cuadro con correo */}
+                                            <Paper
+                                                elevation={0}
+                                                sx={{
+                                                    backgroundColor: '#15232f',
+                                                    color: 'white',
+                                                    padding: 2,
+                                                    borderRadius: '8px',
+                                                    mb: 3,
+                                                }}
+                                                style={{ border: '2px dashed #2a2e38' }}
+                                            >
+                                                <Typography sx={{ fontSize: '0.9rem', textAlign: 'left' }}>
+                                                    Cuando tu tipeo esté listo te llegará un correo a:
+                                                </Typography>
+                                                <Typography sx={{ fontWeight: 'bold', mt: 1, textAlign: 'left' }}>
+                                                    {userEmail}
+                                                </Typography>
+
+                                            </Paper>
+                                            <Box style={{display:'flex', alignItems:'center', gap:'5px', marginBottom: '5px'}}>
+
+                                                <Typography sx={{ fontSize: '0.9rem', textAlign: 'left' }}>
+                                                    Dirección de retiro:
+                                                </Typography>
+                                                <Typography sx={{ fontWeight: 'bold', mt: 1, textAlign: 'left' }}>
+                                                    {bnbAddress}
+                                                </Typography>
+                                            </Box>
+
+                                            {/* Botón */}
+                                            <Button
+                                                fullWidth
+                                                variant="contained"
+                                                sx={{
+                                                    backgroundColor: '#007bff',
+                                                    borderRadius: '8px',
+                                                    textTransform: 'none',
+                                                    fontWeight: 'bold',
+                                                    '&:hover': {
+                                                        backgroundColor: '#0066d6',
+                                                    },
+                                                }}
+                                                onClick={redirectHome}
+                                            >
+                                                Listo
+                                            </Button>
+                                        </Box>
+                                    ) : (
+                                        <>
+                                            {error && (
+                                                <Alert severity="error" sx={{ mb: 2 }}>
+                                                    {error}
+                                                </Alert>
+                                            )}
+                                            {getStepContent(activeStep)}
+                                            {isOpen && selectedImage && (
+                                                <div
+                                                    style={{
+                                                        position: 'fixed',
+                                                        top: 0,
+                                                        left: 0,
+                                                        width: '100vw',
+                                                        height: '100vh',
+                                                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        zIndex: 1000,
                                                     }}
                                                 >
-                                                    {/* Título con ícono y botón cerrar */}
-                                                    <Box
-                                                        sx={{
-                                                            display: 'flex',
-                                                            justifyContent: 'space-between',
-                                                            alignItems: 'center',
-                                                            mb: 2,
+                                                    {/* Botón X para cerrar */}
+                                                    <button
+                                                        onClick={closeImage}
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: 20,
+                                                            right: 20,
+                                                            background: 'transparent',
+                                                            border: 'none',
+                                                            fontSize: '32px',
+                                                            color: '#fff',
+                                                            cursor: 'pointer',
+                                                            zIndex: 1001,
                                                         }}
+                                                        aria-label="Cerrar visor"
                                                     >
-                                                        <Typography sx={{ fontWeight: 'bold' }}>Solicitud de tipeo</Typography>
-                                                        <Button sx={{ color: 'white' }} size="small">✕</Button>
-                                                    </Box>
+                                                        &times;
+                                                    </button>
 
-                                                    {/* Imagen */}
-                                                    <Box sx={{ mb: 2 }}>
-                                                        <img
-                                                            src={vault}// Colocá la ruta correcta a tu imagen
-                                                            alt="Caja fuerte"
-                                                            style={{ width: 80, height: 'auto', margin: '0 auto' }}
-                                                        />
-                                                    </Box>
-
-                                                    {/* Mensaje principal */}
-                                                    <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold', mb: 2 }}>
-                                                        ¡Se completó tu solicitud de tipeo!
-                                                    </Typography>
-
-                                                    {/* Cuadro con correo */}
-                                                    <Paper
-                                                        elevation={0}
-                                                        sx={{
-                                                            backgroundColor: '#15232f',
-                                                            color: 'white',
-                                                            padding: 2,
-                                                            borderRadius: '8px',
-                                                            mb: 3,
+                                                    {/* Imagen ampliada */}
+                                                    <img
+                                                        src={selectedImage}
+                                                        alt="Expanded"
+                                                        style={{
+                                                            maxWidth: '90%',
+                                                            maxHeight: '90%',
+                                                            borderRadius: 10,
+                                                            boxShadow: '0 0 20px rgba(0,0,0,0.5)',
                                                         }}
-                                                    >
-                                                        <Typography sx={{ fontSize: '0.9rem' }}>
-                                                            Cuando tu tipeo esté listo te llegará un correo a:
-                                                        </Typography>
-                                                        <Typography sx={{ fontWeight: 'bold', mt: 1 }}>
-                                                            {userEmail}
-                                                        </Typography>
-                                                    </Paper>
-
-                                                    {/* Botón */}
-                                                    <Button
-                                                        fullWidth
-                                                        variant="contained"
-                                                        sx={{
-                                                            backgroundColor: '#007bff',
-                                                            borderRadius: '8px',
-                                                            textTransform: 'none',
-                                                            fontWeight: 'bold',
-                                                            '&:hover': {
-                                                                backgroundColor: '#0066d6',
-                                                            },
-                                                        }}
-                                                        onClick={redirectHome}
-                                                    >
-                                                        Listo
-                                                    </Button>
-                                                </Box>
-                                            ) : (
-                                                <>
-                                                    {error && (
-                                                        <Alert severity="error" sx={{ mb: 2 }}>
-                                                            {error}
-                                                        </Alert>
-                                                    )}
-                                                    {getStepContent(activeStep)}
-                                                    {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+                                                        onClick={(e) => e.stopPropagation()} // evita que se cierre al hacer click sobre la imagen
+                                                    />
+                                                </div>
+                                            )}
+                                            {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
                                                 {
                                                     activeStep !== 0 &&
                                                     <Button
@@ -766,12 +877,12 @@ function Tipeo(props) {
                                                     )}
                                                 </Button> 
                                             </Box> */}
-                                                </>
-                                            )}
-                                        </Paper>
-                                    </Box>
-                                </Grid>
-                            </Grid>
+                                        </>
+                                    )}
+                                </Paper>
+                            </Box>
+                        </Grid>
+                    </Grid>
                 }
             </Grid>
         </Nlayout>

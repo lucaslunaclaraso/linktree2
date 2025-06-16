@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Button, List, ListItem, ListItemText, Card, CardContent, Grid } from '@mui/material';
+import { Box, Typography, Button, List, ListItem, ListItemText, Card, CardContent, Grid, Modal } from '@mui/material';
 import Nlayout from './Nlayout';
 import axios from 'axios';
 import backgroundImg from './main_intro.jpg'
+import { motion, AnimatePresence } from 'framer-motion';
+
 
 export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const { url } = useParams();
@@ -64,7 +66,30 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
             throw error;
         }
     };
+    const [open, setOpen] = useState()
+    const [progress, setProgress] = useState(100);
+    const duration = 5000; // 5 segundos
 
+    useEffect(() => {
+        if (open) {
+            setProgress(100); // <-- Reset progress
+
+            let interval = setInterval(() => {
+                setProgress((prev) => {
+                    if (prev <= 0) {
+                        clearInterval(interval);
+                        if (open) {
+                            setOpen(false);
+                        }
+                        return 0;
+                    }
+                    return prev - 2;
+                });
+            }, duration / 50);
+
+            return () => clearInterval(interval);
+        }
+    }, [open]);
     const sortear = () => {
         const shuffled = [...participantes].sort(() => 0.5 - Math.random());
         const ganadores = shuffled.slice(0, sorteo?.premios);
@@ -73,6 +98,10 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
         const nombreGan = ganadores?.map((p) => p?.nombre)
 
         guardarGanadores(url, nombreGan)
+        // MOSTRAR ALERTA SI GANÓ EL USUARIO
+        if (nombreGan.includes(usuarioKick)) {
+            setOpen(true); // o `setGanasteTipeo(true)` si querés un estado exclusivo
+        }
     };
 
     // Polling para actualizaciones en tiempo real
@@ -127,7 +156,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                     </Grid>
                     :
 
-                    <Box p={4} style={{ width: '85%', margin:'0 auto' }} >
+                    <Box p={4} style={{ width: '85%', margin: '0 auto' }} >
                         <Typography variant="h4" style={{ color: 'white' }}>{sorteo?.titulo}</Typography>
                         <Typography variant="subtitle1" style={{ color: 'white' }}>Premios: {sorteo?.premios}</Typography>
                         {
@@ -141,7 +170,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                             < Button onClick={sortear} variant="outlined" sx={{ mt: 2, ml: 2 }}>Sortear</Button>
                         }
 
-                        <Grid style={{ display: 'flex', alignItems: 'start', gap: '10px', marginBottom:'5%' }}>
+                        <Grid style={{ display: 'flex', alignItems: 'start', gap: '10px', marginBottom: '5%' }}>
 
                             <Card sx={{ mt: 4, width: '30%' }}>
                                 <CardContent sx={{ maxHeight: 300, overflowY: 'auto' }}>
@@ -187,6 +216,33 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
                     </Box>
             }
+
+            <Modal open={open} onClose={() => { setOpen(false) }}>
+                <AnimatePresence>
+                    {(open) && (
+                        <motion.div
+                            initial={{ x: -300, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: -300, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="toast-container"
+                        >
+                            <div className="toast-content">
+                                <div className="icon">🎉</div>
+                                <div className="text">
+                                    <strong>{open && '¡Felicidades!'}</strong>
+                                    {open && (
+                                        <p>¡Ganaste un <strong>tipeo</strong>! 🎁</p>
+                                    )
+                                    }
+                                </div>
+                                <button className="close-btn" onClick={() => { setOpen(false) }}>×</button>
+                            </div>
+                            <div className={open ? "progress-bar" : "progress-bar-error"} style={{ width: `${progress}%` }} />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </Modal>
         </Nlayout >
     );
 }

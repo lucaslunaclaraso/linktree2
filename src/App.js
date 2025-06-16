@@ -204,22 +204,22 @@ function App() {
         <div className="App">
             <Routes>
 
-                <Route exact path='/' element={<Home isMobile={isMobile} />}/>
+                <Route exact path='/' element={<Home isMobile={isMobile} />} />
                 <Route path='/stats' element={<Stats />} />
 
                 <Route path='/panel' element={<RutaPrivada><CrearSorteo isMobile={isMobile} sorteos={sorteos} setSorteos={setSorteos} /></RutaPrivada>} />
-                <Route path='/crearlink' element={<RutaPrivada><Paneltipeo isMobile={isMobile}   /></RutaPrivada>} />
+                <Route path='/crearlink' element={<RutaPrivada><Paneltipeo isMobile={isMobile} /></RutaPrivada>} />
                 <Route path="/tipeos/:url" element={<RutaPrivada><TipeoCustom isMobile={isMobile} /> </RutaPrivada>} />
 
                 <Route path="/listado" element={<RutaPrivada><ListadoSorteos sorteos={sorteos} /> </RutaPrivada>} />
 
-                <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} isMobile={isMobile} /></RutaPrivada>} />
-                <Route path="/solicitudes" element={<RutaPrivada><AdminPanel  isMobile={isMobile} /> </RutaPrivada>} />
-                
+                <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} isMobile={isMobile} /> </RutaPrivada>} />
+                <Route path="/solicitudes" element={<RutaPrivada><AdminPanel isMobile={isMobile} /> </RutaPrivada>} />
+
                 <Route path="/callback" element={<Callback />} />
-                <Route path="/tipeo" element={<Tipeo nombre={nombre} isMobile={isMobile}/>} />
-                <Route path="/ruleta" element={<Roller nombre={nombre}/>} />
-                <Route path="/shop" element={<Tienda nombre={nombre} isMobile={isMobile}/>} />
+                <Route path="/tipeo" element={<Tipeo nombre={nombre} isMobile={isMobile} />} />
+                <Route path="/ruleta" element={<Roller nombre={nombre} />} />
+                <Route path="/shop" element={<Tienda nombre={nombre} isMobile={isMobile} />} />
             </Routes>
         </div>
     );

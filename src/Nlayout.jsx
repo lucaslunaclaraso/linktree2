@@ -16,6 +16,7 @@ import { FaFacebookSquare } from 'react-icons/fa';
 import { FaCrown } from 'react-icons/fa';
 import { TbRating18Plus } from "react-icons/tb";
 import { IoIosSunny, IoMdClose, IoMdDownload, IoMdMenu } from 'react-icons/io';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import coin from './Wild_coin.png'
 import axios from 'axios';
@@ -314,6 +315,36 @@ function Nlayout(props) {
         backgroundRepeat: 'no-repeat',
         padding: isMobile ? '35px' : '150px 56px 56px'
     };
+
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleCheckboxChange = (event) => {
+        setIsChecked(event.target.checked);
+    };
+
+    const [progress, setProgress] = useState(100);
+    const duration = 5000; // 5 segundos
+    const [openModal, setOpenModal] = useState(false)
+    useEffect(() => {
+        if (openModal) {
+            setProgress(100); // <-- Reset progress
+
+            let interval = setInterval(() => {
+                setProgress((prev) => {
+                    if (prev <= 0) {
+                        clearInterval(interval);
+                        if (openModal) {
+                            setOpenModal(false);
+                        }
+                        return 0;
+                    }
+                    return prev - 2;
+                });
+            }, duration / 50);
+
+            return () => clearInterval(interval);
+        }
+    }, [openModal]);
     return (
         <Grid style={{ display: 'flex', flexDirection: 'column' }}>
 
@@ -341,7 +372,7 @@ function Nlayout(props) {
                             </Link>
 
 
-                            <Link to="/" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                            <div onClick={() => setOpenModal(true)} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
                                 <PiRankingFill style={{ color: 'white' }} className='itemMenu' />
 
                                 <Typography sx={{
@@ -353,11 +384,11 @@ function Nlayout(props) {
                                     fontFamily: 'Outfit,sans-serif'
                                 }} >Rankings</Typography>
 
-                            </Link>
+                            </div>
 
 
 
-                            <Link to="/shop" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                            <div onClick={() => setOpenModal(true)} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
                                 <FaBagShopping style={{ color: 'white' }} className='itemMenu' />
 
                                 <Typography sx={{
@@ -369,7 +400,7 @@ function Nlayout(props) {
                                     fontFamily: 'Outfit,sans-serif'
                                 }} >Shop</Typography>
 
-                            </Link>
+                            </div>
 
                         </Grid>
                     }
@@ -406,8 +437,8 @@ function Nlayout(props) {
                                     sx={{
                                         color: 'white',
                                         fontWeight: 'bold',
-                                        padding: isMobile ? '.75 rem 1rem':'0.75rem 2.5rem',
-                                        fontSize: isMobile ? 16:  '0.85rem',
+                                        padding: isMobile ? '.45 rem 1rem' : '0.45rem 2.5rem',
+                                        fontSize: isMobile ? 16 : '0.85rem',
                                         background: 'linear-gradient(90deg, #9f6a00 0%, #ffc651 100%)',
                                         border: '1px solid rgba(255, 255, 255, 0.2)',
                                         borderRadius: '12px',
@@ -546,7 +577,7 @@ function Nlayout(props) {
                         {user ?
                             <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                 <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: 8, borderRadius: '8px', background: '#10111c', justifyContent: 'center' }}>
-                                    <img src={coin} style={{ width: '30%' }} />
+                                    <img src={coin} style={{ width: '20%' }} />
                                     <Typography style={{ fontSize: 16, fontFamily: 'Outfit,sans-serif', color: 'hsla(0,0%,100%,.75)' }}>{Dcoins}</Typography>
                                 </Grid>
                                 {
@@ -565,7 +596,7 @@ function Nlayout(props) {
                                     </Typography>
                                 }
 
-                                <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}  onClick={handleClick}>
+                                <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }} onClick={handleClick}>
                                     <Grid style={{ width: '45px', height: '45px', padding: '4px', borderRadius: '75px', border: '1px solid #807ffb' }}>
                                         <img src={user?.profile} style={{ width: '100%', height: '100%', borderRadius: '36px' }} />
                                     </Grid>
@@ -574,7 +605,7 @@ function Nlayout(props) {
                                 </Grid>
                             </Grid>
                             :
-                            <Grid style={{ display: isMobile && 'flex', alignItems: 'center', justifyContent: isMobile && 'space-between', width: isMobile && '100%' }}>
+                            <Grid style={{ display: isMobile && 'flex', alignItems: 'center', justifyContent: isMobile && 'end', width: isMobile && '100%' }}>
                                 <Button
                                     onClick={handleOpen}
                                     sx={{
@@ -598,10 +629,7 @@ function Nlayout(props) {
                                 >
                                     Iniciar Sesión
                                 </Button>
-                                {isMobile &&
-                                    <div onClick={toggleMobileMenu} style={{ cursor: 'pointer' }}>
-                                        {menuOpen ? <IoMdClose size={30} style={{ color: 'white' }} /> : <IoMdMenu size={30} style={{ color: 'white' }} />}
-                                    </div>}
+
                             </Grid>
                         }
                     </Grid>
@@ -672,7 +700,9 @@ function Nlayout(props) {
                                 '&.Mui-checked': {
                                     color: 'white',
                                 },
-                            }} />
+
+                            }} checked={isChecked}
+                                onChange={handleCheckboxChange} />
                             <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif' }}>Confirmo que soy mayor de 18 años y leí los términos y condiciones de la página</Typography>
                         </Grid>
                         {/* Kick Login */}
@@ -683,7 +713,7 @@ function Nlayout(props) {
                                 padding: '0.75rem 2rem',
                                 fontSize: '.8rem',
                                 width: isMobile ? '100%' : '50%',
-
+                                cursor: !isChecked && 'not-allowed',
                                 backgroundImage: `linear-gradient(0deg, #00ff73, #00ff73),
                   linear-gradient(94deg, #00ff73 29.94%, #00ff73 83.55%)`,
                                 border: '2px solid rgba(118, 118, 245, 0.5)',
@@ -700,6 +730,7 @@ function Nlayout(props) {
                             style={{ margin: '0 auto' }}
                             startIcon={<FaKickstarterK size={20} />}
                             onClick={loginWithKick}
+                            disabled={!isChecked}
                         >
                             Iniciar Sesión con Kick
                         </Button>
@@ -729,19 +760,19 @@ function Nlayout(props) {
 
 
                     <div style={{ display: 'flex', alignItems: 'center', flexWrap: !isMobile && 'wrap', width: isMobile ? '100%' : '10%', flexFlow: !isMobile && 'row wrap', gap: '10px', flexDirection: isMobile && 'row' }}>
-                        <a href="https://discord.gg/toastergambling" class="footer-column-icon" aria-label="Discord">
+                        <a href="" class="footer-column-icon" aria-label="Discord">
                             <FaDiscord style={{ color: '#1877F2', fontSize: 25 }} />
 
                         </a>
-                        <a href="https://youtube.com/c/toasters" class="footer-column-icon" aria-label="YouTube">
+                        <a href="https://www.youtube.com/@dengueetimba" class="footer-column-icon" aria-label="YouTube">
                             <FaYoutube style={{ color: '#ff4e4e', fontSize: 25 }} />
 
                         </a>
-                        <a href="https://twitter.com/Toaster_gg" class="footer-column-icon" aria-label="Twitter">
+                        <a href="" class="footer-column-icon" aria-label="Twitter">
                             <FaFacebookSquare style={{ color: '#1877F2', fontSize: 25 }} />
 
                         </a>
-                        <a href="https://instagram.com/toaster" class="footer-column-icon" aria-label="Instagram">
+                        <a href="" class="footer-column-icon" aria-label="Instagram">
                             <FaInstagram style={{ fontSize: 25, color: 'white' }} />
 
                         </a>
@@ -763,6 +794,84 @@ function Nlayout(props) {
                 </Grid>
             </footer>
 
+            {isMobile &&
+                <Grid className="mobile-menu">
+                    <Link to="/" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                        <IoMdHome style={{ color: 'white' }} className='itemMenu' />
+
+                        <Typography sx={{
+                            background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            fontWeight: 'bold',
+                            fontSize: 16,
+                            fontFamily: 'Outfit,sans-serif'
+                        }} className='itemMenu' >Home</Typography>
+
+                    </Link>
+
+
+                    <a onClick={() => setOpenModal(true)} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                        <PiRankingFill style={{ color: 'white' }} className='itemMenu' />
+
+                        <Typography sx={{
+                            background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            fontWeight: 'bold',
+                            fontSize: 16,
+                            fontFamily: 'Outfit,sans-serif'
+                        }} >Rankings</Typography>
+
+                    </a>
+
+
+
+                    <a onClick={() => setOpenModal(true)} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                        <FaBagShopping style={{ color: 'white' }} className='itemMenu' />
+
+                        <Typography sx={{
+                            background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            fontWeight: 'bold',
+                            fontSize: 16,
+                            fontFamily: 'Outfit,sans-serif'
+                        }} >Shop</Typography>
+
+                    </a>
+                </Grid>
+            }
+
+            <Modal open={openModal} onClose={() => setOpenModal(false)} disableAutoFocus>
+                <AnimatePresence>
+                    {(openModal) && (
+                        <motion.div
+                            initial={{ x: -300, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: -300, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="toast-container"
+                        >
+                            <div className="toast-content">
+                                <div className="icon">💰</div>
+                                <div className="text">
+                                    <strong>{openModal && 'PROXIMAMENTE!'}</strong>
+                                    {
+                                        openModal &&
+                                        <p>Estamos trabajando!</p>
+                                    }
+                                </div>
+                                <button className="close-btn" onClick={() => {
+                                    setOpenModal(false);
+
+                                }}>×</button>
+                            </div>
+                            <div className={openModal ? "progress-bar" : "progress-bar-error"} style={{ width: `${progress}%` }} />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </Modal>
         </Grid >
     )
 }

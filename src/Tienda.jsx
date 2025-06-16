@@ -59,14 +59,16 @@ function Tienda(props) {
 
     useEffect(() => {
         if (open || error) {
+            setProgress(100); // <-- Reset progress
+
             let interval = setInterval(() => {
                 setProgress((prev) => {
                     if (prev <= 0) {
                         clearInterval(interval);
-                        if(open){
+                        if (open) {
                             setOpen(false);
-                        }else{
-                            setError(false)
+                        } else {
+                            setError(false);
                         }
                         return 0;
                     }
@@ -92,7 +94,7 @@ function Tienda(props) {
 
 
 
-                    <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: 4 }}>
+                    <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: 4, flexDirection: props.isMobile&&  'column' }}>
 
 
                         <StyledCard>
@@ -207,7 +209,10 @@ function Tienda(props) {
 
                                     }
                                 </div>
-                                <button className="close-btn" onClick={() => setOpen(false)}>×</button>
+                                <button className="close-btn" onClick={() => {
+                                    setOpen(false);
+                                    setError(false);
+                                }}>×</button>
                             </div>
                             <div className={open ? "progress-bar" : "progress-bar-error"} style={{ width: `${progress}%` }} />
                         </motion.div>
