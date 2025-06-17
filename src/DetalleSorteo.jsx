@@ -93,21 +93,37 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
             return () => clearInterval(interval);
         }
     }, [open]);
-    const sortear = () => {
-        const shuffled = [...participantes].sort(() => 0.5 - Math.random());
-        const ganadores = shuffled.slice(0, sorteo?.premios);
-        setGanadores(ganadores)
-
-        const nombreGan = ganadores?.map((p) => p?.nombre)
-
-        guardarGanadores(url, nombreGan)
-
-        // MOSTRAR ALERTA SI GANÓ EL USUARIO
-
-        if (nombreGan?.some(ganador => ganador === usuarioKick)) {
-            setOpen(true);
+    const obtenerGanadoresDelSorteoAnterior = async () => {
+        try {
+          const response = await fetch(`https://backmu.vercel.app/sorteo/${url}/ganadores-anteriores`);
+          const data = await response.json();
+          return data.ganadores || [];
+        } catch (err) {
+          console.error('Error al obtener blacklist:', err);
+          return [];
         }
-    };
+      };
+      
+
+      const sortear = async () => {
+        const blacklist = await obtenerGanadoresDelSorteoAnterior();
+        console.log('bl', blacklist)
+        const participantesValidos = participantes.filter(
+          (p) => !blacklist.includes(p.nombre)
+        );
+      
+        const shuffled = [...participantesValidos].sort(() => 0.5 - Math.random());
+        const ganadores = shuffled.slice(0, sorteo?.premios);
+      
+        setGanadores(ganadores);
+      
+        const nombreGan = ganadores.map((p) => p.nombre);
+        guardarGanadores(url, nombreGan);
+      
+        if (nombreGan.includes(usuarioKick)) {
+          setOpen(true);
+        }
+      };
 
     useEffect(() => {
         let intervalo;
