@@ -88,7 +88,7 @@ function Tipeo(props) {
         return true;
     };
 
-
+const [deshabilitarBoton, setDeshabilitarBoton] =useState(false)
 
     const handleRequestTipeo = async () => {
         setLoading(true);
@@ -124,7 +124,7 @@ function Tipeo(props) {
                 const data = await response.json();
                 return data.secure_url;
             };
-
+            setDeshabilitarBoton(true)
             const offerScreenshotUrl = await uploadToCloudinary(offerScreenshot);
             const bnbScreenshotUrl = await uploadToCloudinary(bnbScreenshot);
 
@@ -150,6 +150,7 @@ function Tipeo(props) {
             setError('Error: ' + err.message);
         } finally {
             setLoading(false);
+            setDeshabilitarBoton(false)
         }
     };
     const [isUploading, setIsUploading] = useState(false);
@@ -475,7 +476,7 @@ function Tipeo(props) {
                             <Button
                                 variant="contained"
                                 onClick={handleRequestTipeo}
-                                disabled={!bnbScreenshot}
+                                disabled={!bnbScreenshot || deshabilitarBoton}
 
                                 sx={{
                                     backgroundColor: '#3b82f6',
@@ -485,7 +486,7 @@ function Tipeo(props) {
                                     },
                                 }}
                             >
-                                Terminar
+                                {deshabilitarBoton ? 'Enviando solicitud' : 'Terminar'}
                             </Button>
                         </Box>
 
@@ -890,3 +891,7 @@ function Tipeo(props) {
 }
 
 export default Tipeo
+
+
+
+  

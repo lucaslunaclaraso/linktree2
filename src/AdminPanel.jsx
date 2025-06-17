@@ -18,6 +18,7 @@ import {
     DialogActions,
     Link,
     TextField,
+    Grid,
 } from '@mui/material';
 import axios from 'axios';
 import Nlayout from './Nlayout';
@@ -54,13 +55,13 @@ const AdminPanel = (props) => {
         setOpenRazon(true);
     };
     // Manejar acción de aceptar/rechazar
-    const handleAction = async (id, action,razon) => {
+    const handleAction = async (id, action, razon) => {
         setLoading(true);
         setError('');
         try {
             const response = await axios.put(
                 `https://backmu.vercel.app/solicitudes/${id}/update`,
-                { status: action, razon: razon},
+                { status: action, razon: razon },
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -85,6 +86,18 @@ const AdminPanel = (props) => {
         setSelectedScreenshot(url);
         setOpenDialog(true);
     };
+    const [bnb, setBnb] = useState()
+    const [openBnb, setOpenBnb] = useState(false)
+    const handleOpenAdrres = (add) => {
+
+        setBnb(add);
+        setOpenBnb(true);
+    };
+    const handleCloseAdrres = (add) => {
+
+        setBnb(null);
+        setOpenBnb(false);
+    };
 
     // Cerrar diálogo
     const handleCloseDialog = () => {
@@ -96,9 +109,15 @@ const AdminPanel = (props) => {
         <Nlayout>
             <Box sx={{ maxWidth: 1200, mx: 'auto', my: 4, p: 2 }}>
                 <Paper elevation={3} sx={{ p: 3 }}>
-                    <Typography variant="h4" align="center" gutterBottom>
-                        Solicitudes de Tipeo
-                    </Typography>
+                    <Grid style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+
+                        <Typography variant="h4" align="center" gutterBottom>
+                            Solicitudes de Tipeo -
+                        </Typography>
+                        <Typography variant="h4" align="center" gutterBottom>
+                            {solicitudes?.length}
+                        </Typography>
+                    </Grid>
                     {error && (
                         <Alert severity="error" sx={{ mb: 2 }}>
                             {error}
@@ -111,10 +130,11 @@ const AdminPanel = (props) => {
                     ) : solicitudes.length === 0 ? (
                         <Typography align="center">No hay solicitudes disponibles.</Typography>
                     ) : (
-                        <TableContainer component={Paper}>
+                        <TableContainer component={Paper} style={{ maxHeight: 600, overflow: 'scroll' }}>
                             <Table>
                                 <TableHead>
                                     <TableRow>
+                                        <TableCell>Fecha</TableCell>
                                         <TableCell>Nombre</TableCell>
                                         <TableCell>Email</TableCell>
                                         <TableCell>Captura Ajustes</TableCell>
@@ -127,6 +147,14 @@ const AdminPanel = (props) => {
                                 <TableBody>
                                     {solicitudes?.filter((sorteo) => sorteo.status === 'pending').reverse()?.map((solicitud) => (
                                         <TableRow key={solicitud.id}>
+                                            <TableCell> {new Date(solicitud.createdAt).toLocaleString('es-AR', {
+                                                day: '2-digit',
+                                                month: '2-digit',
+                                                year: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                hour12: false
+                                            })}</TableCell>
                                             <TableCell>{solicitud.nombre}</TableCell>
                                             <TableCell>{solicitud.email}</TableCell>
                                             <TableCell>
@@ -147,7 +175,17 @@ const AdminPanel = (props) => {
                                                     Ver Captura
                                                 </Button>
                                             </TableCell>
-                                            <TableCell>{solicitud.bnbAddress}</TableCell>
+                                            <TableCell>
+                                                <Button
+
+                                                    onClick={() => handleOpenAdrres(solicitud.bnbAddress)}
+                                                    underline="hover"
+                                                >
+                                                    Ver BnB Address
+                                                </Button>
+
+
+                                            </TableCell>
                                             <TableCell>
                                                 {solicitud.status === 'pending' ? 'Pendiente' :
                                                     solicitud.status === 'accepted' ? 'Aceptada' : 'Rechazada'}
@@ -204,6 +242,19 @@ const AdminPanel = (props) => {
                     </DialogActions>
                 </Dialog>
 
+
+                <Dialog open={openBnb} maxWidth="md" fullWidth>
+                    <DialogTitle>Visualizar Dirección BNB</DialogTitle>
+                    <DialogContent>
+                        <Typography>{bnb}</Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseAdrres} variant="outlined">
+                            Cerrar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
                 <Dialog open={openRazon} onClose={() => setOpenRazon(false)}>
                     <DialogTitle>Indicar razón del rechazo</DialogTitle>
                     <DialogContent>
@@ -222,7 +273,7 @@ const AdminPanel = (props) => {
                         </Button>
                         <Button
                             onClick={async () => {
-                                await  handleAction(solicitudRechazadaId, 'rejected', razonRechazo);
+                                await handleAction(solicitudRechazadaId, 'rejected', razonRechazo);
                                 setOpenRazon(false);
                                 setRazonRechazo('');
                             }}

@@ -44,6 +44,8 @@ function TipeoCustom(props) {
         }
 
     }
+
+  
     return (
         <Nlayout>
             <Grid style={{ margin: '0 auto', height: '600px', alignContent: 'center' }}>
