@@ -32,22 +32,41 @@ export const AuthProvider = ({ children }) => {
   }
   // Al montar el contexto, chequea expiración y carga usuario si está OK
   useEffect(() => {
+    const verifyToken = async () => {
+      const tokenString = localStorage.getItem('accessToken');
+      if (!tokenString) return;
 
-    const expiresAt = Number(localStorage.getItem('accessTokenExpiresAt'));
-    const now = Date.now();
+      try {
+        const res = await fetch('https://api.kick.com/public/v1/users', {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${tokenString}`,
+              'Accept': 'application/json',
+          },
+      });
 
-    if (!expiresAt || now >= expiresAt) {
-      // Token expirado o no existe: limpiar todo
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('accessTokenExpiresAt');
-      localStorage.removeItem('kick_user');
-      setUsername(null);
-    } else {
-      // Token válido: cargar usuario guardado (si hay)
-      const storedUser = localStorage.getItem('kick_user');
-      if (storedUser) setUsername(storedUser);
-    }
+      
+        if (!res.ok) {
+          // Token vencido o inválido
+          console.log('Token inválido, limpiando localStorage');
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('accessTokenExpiresAt');
+          localStorage.removeItem('kick_user');
+          localStorage.removeItem('kick_token');
+          localStorage.removeItem('kick_mail');
+          setUsername(null);
+          window.location.reload();
+        } else if (res.ok) {
+          const userData = await res.json();
+          setUsername(userData?.data[0]?.name); // o tokenObj.username si lo guardás
+        }
+      } catch (error) {
+        console.error('Error verificando token:', error);
+      }
+    };
+
+    verifyToken();
   }, []);
 
   const login = (user) => {

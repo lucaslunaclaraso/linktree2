@@ -270,7 +270,7 @@ function App() {
 
                 <Route path='/panel' element={<RutaPrivada><CrearSorteo isMobile={isMobile} sorteos={sorteos} setSorteos={setSorteos} /></RutaPrivada>} />
                 <Route path='/crearlink' element={<RutaPrivada><Paneltipeo isMobile={isMobile} /></RutaPrivada>} />
-                <Route path="/tipeos/:url" element={<RutaPrivada><TipeoCustom isMobile={isMobile} /> </RutaPrivada>} />
+                <Route path="/tipeos/:url" element={<TipeoCustom isMobile={isMobile} /> } />
 
                 <Route path="/listado" element={<RutaPrivada><ListadoSorteos sorteos={sorteos} /> </RutaPrivada>} />
 
