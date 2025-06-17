@@ -240,11 +240,8 @@ console.log( username)
     }
 
     useEffect(() => {
-        const intervalo = setInterval(() => {
             obtenerCoins();
-        }, 5000); // cada 15 segundos
-    
-        return () => clearInterval(intervalo); // limpiar si se desmonta
+        
     }, []);
 
     const toPanel = () => {
