@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
   if (kickTokenString) {
     const kickToken = JSON.parse(kickTokenString);
-    console.log('kick', kickToken)
+    
 
     const accessToken = kickToken.access_token;
     const refreshToken = kickToken.refresh_token;
