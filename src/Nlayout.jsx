@@ -42,7 +42,7 @@ const buttonBase = {
 function Nlayout(props) {
     const { username, logout } = useAuth();
     const [open, setOpen] = useState(false);
-console.log( username)
+    console.log(username)
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -240,8 +240,7 @@ console.log( username)
     }
 
     useEffect(() => {
-            obtenerCoins();
-        
+        obtenerCoins();
     }, []);
 
     const toPanel = () => {
@@ -250,7 +249,7 @@ console.log( username)
     const toPanelSorteo = () => {
         window.location.href = "/listado"
     }
-  
+
     const [width, setWidth] = useState(window.innerWidth);
 
     const isMobile = width <= 768;
@@ -262,8 +261,8 @@ console.log( username)
     }, []);
 
 
-    const isValidUser =        
-        (username=== 'eldenguee') || (username === 'lucaslunacl');
+    const isValidUser =
+        (username === 'eldenguee') || (username === 'lucaslunacl');
 
     const isLoggedIn = username;
     const redirectTipeo = () => {
@@ -577,7 +576,7 @@ console.log( username)
                             <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                 <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: 8, borderRadius: '8px', background: '#10111c', justifyContent: 'center' }}>
                                     <img src={coin} style={{ width: '20%' }} />
-                                    <Typography style={{ fontSize: 16, fontFamily: 'Outfit,sans-serif', color: 'hsla(0,0%,100%,.75)' }}>{Dcoins}</Typography>
+                                    <Typography style={{ fontSize: 16, fontFamily: 'Outfit,sans-serif', color: 'hsla(0,0%,100%,.75)' }}>{Dcoins ?? 0}</Typography>
                                 </Grid>
                                 {
                                     !isMobile &&
