@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
   if (kickTokenString) {
     const kickToken = JSON.parse(kickTokenString);
-    
+
 
     const accessToken = kickToken.access_token;
     const refreshToken = kickToken.refresh_token;
@@ -57,7 +57,12 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUsername(null);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('accessTokenExpiresAt');
     localStorage.removeItem('kick_user');
+    localStorage.removeItem('kick_token');
+    localStorage.removeItem('kick_mail');
   };
 
   return (
