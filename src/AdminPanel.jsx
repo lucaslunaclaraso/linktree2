@@ -17,6 +17,7 @@ import {
     DialogContent,
     DialogActions,
     Link,
+    TextField,
 } from '@mui/material';
 import axios from 'axios';
 import Nlayout from './Nlayout';
@@ -44,14 +45,22 @@ const AdminPanel = (props) => {
         fetchSolicitudes();
     }, []);
 
+    const [openRazon, setOpenRazon] = useState(false);
+    const [razonRechazo, setRazonRechazo] = useState('');
+    const [solicitudRechazadaId, setSolicitudRechazadaId] = useState(null);
+
+    const handleAbrirModalRechazo = (id) => {
+        setSolicitudRechazadaId(id);
+        setOpenRazon(true);
+    };
     // Manejar acción de aceptar/rechazar
-    const handleAction = async (id, action) => {
+    const handleAction = async (id, action,razon) => {
         setLoading(true);
         setError('');
         try {
             const response = await axios.put(
                 `https://backmu.vercel.app/solicitudes/${id}/update`,
-                { status: action },
+                { status: action, razon: razon},
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -82,13 +91,13 @@ const AdminPanel = (props) => {
         setOpenDialog(false);
         setSelectedScreenshot(null);
     };
-    
+
     return (
         <Nlayout>
             <Box sx={{ maxWidth: 1200, mx: 'auto', my: 4, p: 2 }}>
                 <Paper elevation={3} sx={{ p: 3 }}>
                     <Typography variant="h4" align="center" gutterBottom>
-                       Solicitudes de Tipeo
+                        Solicitudes de Tipeo
                     </Typography>
                     {error && (
                         <Alert severity="error" sx={{ mb: 2 }}>
@@ -116,13 +125,13 @@ const AdminPanel = (props) => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {solicitudes?.filter((sorteo) => sorteo.status === 'pending' ).reverse()?.map((solicitud) => (
+                                    {solicitudes?.filter((sorteo) => sorteo.status === 'pending').reverse()?.map((solicitud) => (
                                         <TableRow key={solicitud.id}>
                                             <TableCell>{solicitud.nombre}</TableCell>
                                             <TableCell>{solicitud.email}</TableCell>
                                             <TableCell>
                                                 <Button
-                                                   
+
                                                     onClick={() => handleOpenScreenshot(solicitud.offerScreenshot)}
                                                     underline="hover"
                                                 >
@@ -131,7 +140,7 @@ const AdminPanel = (props) => {
                                             </TableCell>
                                             <TableCell>
                                                 <Button
-                                                    
+
                                                     onClick={() => handleOpenScreenshot(solicitud.bnbScreenshot)}
                                                     underline="hover"
                                                 >
@@ -160,7 +169,7 @@ const AdminPanel = (props) => {
                                                             variant="contained"
                                                             color="error"
                                                             size="small"
-                                                            onClick={() => handleAction(solicitud.id, 'rejected')}
+                                                            onClick={() => handleAbrirModalRechazo(solicitud.id)}
                                                             disabled={loading}
                                                         >
                                                             Rechazar
@@ -177,7 +186,7 @@ const AdminPanel = (props) => {
                 </Paper>
 
                 {/* Diálogo para mostrar capturas */}
-                <Dialog open={openDialog}  maxWidth="md" fullWidth>
+                <Dialog open={openDialog} maxWidth="md" fullWidth>
                     <DialogTitle>Visualizar Captura</DialogTitle>
                     <DialogContent>
                         {selectedScreenshot && (
@@ -194,6 +203,37 @@ const AdminPanel = (props) => {
                         </Button>
                     </DialogActions>
                 </Dialog>
+
+                <Dialog open={openRazon} onClose={() => setOpenRazon(false)}>
+                    <DialogTitle>Indicar razón del rechazo</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            multiline
+                            fullWidth
+                            rows={4}
+                            value={razonRechazo}
+                            onChange={(e) => setRazonRechazo(e.target.value)}
+                            placeholder="Escribí la razón del rechazo..."
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setOpenRazon(false)} color="inherit">
+                            Cancelar
+                        </Button>
+                        <Button
+                            onClick={async () => {
+                                await  handleAction(solicitudRechazadaId, 'rejected', razonRechazo);
+                                setOpenRazon(false);
+                                setRazonRechazo('');
+                            }}
+                            color="error"
+                            variant="contained"
+                        >
+                            Confirmar rechazo
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
             </Box>
         </Nlayout>
     );
