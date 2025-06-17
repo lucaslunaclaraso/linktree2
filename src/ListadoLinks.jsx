@@ -38,9 +38,9 @@ function ListadoLinks() {
                                 </Typography>
                             </Grid>
                             <Grid sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                <Button variant="outlined" sx={{ backgroundColor: 'red', color: 'white' }}>
+                                {/* <Button variant="outlined" sx={{ backgroundColor: 'red', color: 'white' }}>
                                     Eliminar sorteo
-                                </Button>
+                                </Button> */}
                             </Grid>
                         </CardContent>
                     </Card>
