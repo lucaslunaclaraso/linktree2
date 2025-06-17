@@ -14,6 +14,25 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Al montar el contexto, chequea expiración y carga usuario si está OK
+  useEffect(() => {
+    const expiresAt = Number(localStorage.getItem('accessTokenExpiresAt'));
+    const now = Date.now();
+
+    if (!expiresAt || now >= expiresAt) {
+      // Token expirado o no existe: limpiar todo
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('accessTokenExpiresAt');
+      localStorage.removeItem('kickUser');
+      setUsername(null);
+    } else {
+      // Token válido: cargar usuario guardado (si hay)
+      const storedUser = localStorage.getItem('kickUser');
+      if (storedUser) setUsername(storedUser);
+    }
+  }, []);
+
   const login = (user) => {
     setUsername(user);
     localStorage.setItem('kick_user', user);

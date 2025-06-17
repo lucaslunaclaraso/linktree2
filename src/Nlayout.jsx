@@ -131,8 +131,7 @@ function Nlayout(props) {
         localStorage.setItem('kick_code_verifier', code_verifier);
 
         const criptoRandom = crypto.randomUUID()
-        console.log('criptoRandom', criptoRandom)
-        console.log('code_challenge', code_challenge)
+
         const params = new URLSearchParams({
             response_type: 'code',
             client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
