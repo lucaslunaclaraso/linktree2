@@ -21,7 +21,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import coin from './Wild_coin.png'
 import axios from 'axios';
 import Loader from './Loader';
-
+import { useAuth } from './authContext';
 
 const buttonBase = {
     px: 3,
@@ -40,8 +40,9 @@ const buttonBase = {
     gap: '0.5rem',
 };
 function Nlayout(props) {
+    const { username, logout } = useAuth();
     const [open, setOpen] = useState(false);
-
+console.log( username)
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -233,7 +234,7 @@ function Nlayout(props) {
     const nombre = localStorage.getItem('kick_user')
 
     const obtenerCoins = async () => {
-        const response = await axios.post('https://backmu.vercel.app/solicitudes/usuario', { nombre });
+        const response = await axios.post('https://backmu.vercel.app/solicitudes/usuario', { username });
         setDcoins(response?.data[0]?.Dcoins)
         setSolicitudes(response?.data[0]?.solicitudes)
     }
@@ -252,7 +253,7 @@ function Nlayout(props) {
     const toPanelSorteo = () => {
         window.location.href = "/listado"
     }
-    const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
+  
     const [width, setWidth] = useState(window.innerWidth);
 
     const isMobile = width <= 768;
@@ -264,12 +265,10 @@ function Nlayout(props) {
     }, []);
 
 
-    const isValidUser =
-        (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
-        (user?.name === 'eldenguee') || (user?.name === 'lucaslunacl');
+    const isValidUser =        
+        (username=== 'eldenguee') || (username === 'lucaslunacl');
 
-    const usuarioKick = localStorage.getItem('kick_user')
-    const isLoggedIn = usuarioKick;
+    const isLoggedIn = username;
     const redirectTipeo = () => {
         window.location.href = "/tipeo"
 
@@ -413,7 +412,7 @@ function Nlayout(props) {
                     <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: isMobile ? 'flex-start' : 'flex-end', gap: '15px', width: isMobile ? '100%' : '80%' }}>
                         <Box sx={{ position: 'relative', display: 'inline-block' }}>
                             {
-                                user?.name &&
+                                username &&
 
                                 <Box sx={{
                                     position: 'absolute',
@@ -433,7 +432,7 @@ function Nlayout(props) {
                                 </Box>
                             }
                             {
-                                user?.name &&
+                                username &&
 
                                 <Button
 
@@ -577,7 +576,7 @@ function Nlayout(props) {
                             </Button>
                         } */}
 
-                        {user || usuarioKick ?
+                        {username ?
                             <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                 <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: 8, borderRadius: '8px', background: '#10111c', justifyContent: 'center' }}>
                                     <img src={coin} style={{ width: '20%' }} />
@@ -595,7 +594,7 @@ function Nlayout(props) {
                                         textTransform: 'uppercase',
                                         fontFamily: 'Outfit,sans-serif'
 
-                                    }} > {user?.name || usuario}
+                                    }} > {username}
                                     </Typography>
                                 }
 
@@ -673,7 +672,7 @@ function Nlayout(props) {
                             </>
                         }
 
-                        <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
+                        <MenuItem onClick={logout}>Cerrar sesión</MenuItem>
                     </Menu>
 
                 </Toolbar>
