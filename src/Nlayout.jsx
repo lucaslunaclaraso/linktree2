@@ -429,7 +429,7 @@ function Nlayout(props) {
                                     boxShadow: '0 0 0 2px white',
                                 }}
                                 >
-                                    {solicitudes}
+                                    {solicitudes ?? 0}
                                 </Box>
                             }
                             {
