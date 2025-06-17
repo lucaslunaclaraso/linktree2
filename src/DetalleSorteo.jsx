@@ -96,7 +96,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
         setGanadores(ganadores)
 
         const nombreGan = ganadores?.map((p) => p?.nombre)
-
+        console.log('nombreGan', nombreGan)
         guardarGanadores(url, nombreGan)
         // MOSTRAR ALERTA SI GANÓ EL USUARIO
         if (nombreGan.includes(usuarioKick)) {

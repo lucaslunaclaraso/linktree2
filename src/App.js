@@ -8,7 +8,7 @@ import CrearSorteo from './CrearSorteo';
 import ListadoSorteos from './ListadoSorteos';
 import DetalleSorteo from './DetalleSorteo';
 import Callback from './Callback';
-import { Box, Button, Grid, Modal, Stack, Typography } from '@mui/material';
+import { Box, Button, Checkbox, Grid, Modal, Stack, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import backgroundImg from './main_intro.jpg'
@@ -21,6 +21,9 @@ import Paneltipeo from './Paneltipeo';
 import TipeoCustom from './TipeoCustom';
 import Roller from './Roller';
 import Tienda from './Tienda';
+import { IoCloseCircleOutline } from 'react-icons/io5';
+import backg from './main_intro.jpg'
+
 const style = {
     position: 'absolute',
     top: '50%',
@@ -78,8 +81,31 @@ function App() {
         const handleOpen = () => setOpen(true);
         const handleClose = () => setOpen(false);
 
+        const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+        const [isChecked, setIsChecked] = useState(false);
 
+        const handleCheckboxChange = (event) => {
+            setIsChecked(event.target.checked);
+        };
 
+        const style = {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'rgba(20, 20, 20, 0.95)',
+            borderRadius: 4,
+            boxShadow: 24,
+            backdropFilter: 'blur(8px)',
+            textAlign: 'center',
+            backgroundImage: `
+            linear-gradient(to bottom,  rgba(63, 61, 69, 0),rgb(73 22 227)),
+            url(${backg})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            padding: isMobile ? '35px' : '150px 56px 56px'
+        };
+    
         const loginWithKick = async () => {
 
             const { code_verifier, code_challenge } = await generatePKCE();
@@ -155,25 +181,59 @@ function App() {
 
                     <Modal open={open} onClose={handleClose}>
                         <Box sx={style}>
+                            <IoCloseCircleOutline onClick={() => handleClose()} style={{ color: 'white', position: 'absolute', backdropFilter: 'blur(16.2px)', top: '15px', right: '10px', fontSize: '32px', cursor: 'pointer' }} />
 
 
-                            <Stack spacing={2}>
+                            <Stack spacing={2} style={{ display: isMobile && 'flex', gap: isMobile && 10, flexDirection: isMobile && 'column' }}>
+                                <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '24px', fontFamily: 'Outfit,sans-serif' }} >
+                                    Bienvenidos a
+                                </Typography>
+                                <Typography sx={{
+                                    background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    fontWeight: 'bold',
+                                    fontSize: isMobile ? 28 : 45,
+                                    fontFamily: 'Belerofonte'
+                                }} >Eldenguee.com</Typography>
 
+                                <Grid style={{ display: 'flex', alignItems: 'center', width: isMobile && '100%' }}>
+                                    <Checkbox {...label} sx={{
+                                        color: 'white',
+                                        '&.Mui-checked': {
+                                            color: 'white',
+                                        },
 
+                                    }} checked={isChecked}
+                                        onChange={handleCheckboxChange} />
+                                    <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif' }}>Confirmo que soy mayor de 18 años y leí los términos y condiciones de la página</Typography>
+                                </Grid>
                                 {/* Kick Login */}
                                 <Button
                                     sx={{
-                                        ...buttonBase,
-                                        color: '#00ff73',
-                                        borderColor: '#00ff73',
+                                        color: 'black',
+                                        fontWeight: 'bold',
+                                        padding: '0.75rem 2rem',
+                                        fontSize: '.8rem',
+                                        width: isMobile ? '100%' : '50%',
+                                        cursor: !isChecked && 'not-allowed',
+                                        backgroundImage: `linear-gradient(0deg, #00ff73, #00ff73),
+                  linear-gradient(94deg, #00ff73 29.94%, #00ff73 83.55%)`,
+                                        border: '2px solid rgba(118, 118, 245, 0.5)',
+                                        borderRadius: '12px',
+                                        boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
+                                        textTransform: 'uppercase',
+                                        transition: 'all 0.3s ease-in-out',
+                                        margin: '0 auto',
                                         '&:hover': {
-                                            backgroundColor: 'rgba(0, 255, 115, 0.1)',
-                                            boxShadow: '0 0 10px #00ff73',
+                                            boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
+                                            transform: 'scale(1.05)',
                                         },
                                     }}
+                                    style={{ margin: '0 auto' }}
                                     startIcon={<FaKickstarterK size={20} />}
                                     onClick={loginWithKick}
-                                    redirectTo={location.pathname}
+                                    disabled={!isChecked}
                                 >
                                     Iniciar Sesión con Kick
                                 </Button>

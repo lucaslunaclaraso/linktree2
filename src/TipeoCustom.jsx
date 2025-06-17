@@ -20,9 +20,10 @@ function TipeoCustom(props) {
         setSolicitud(peticion?.data)
     }
     useEffect(() => { obtenerSorteos() }, [])
-
+   
     const usuariosValidos = solicitud?.tipeo?.usuarios?.split(",")
-    const isValid = usuariosValidos < solicitud?.tipeo?.premios;
+    const isValid = usuariosValidos === undefined || usuariosValidos < solicitud?.tipeo?.premios;
+
     
     const solicitarTipeo = async () => {
         const peticion = await axios.post(`https://backmu.vercel.app/solicitudes/${url}/unirse`, { nombre })
