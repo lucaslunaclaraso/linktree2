@@ -96,33 +96,40 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
         setGanadores(ganadores)
 
         const nombreGan = ganadores?.map((p) => p?.nombre)
-        
+
         guardarGanadores(url, nombreGan)
-       
+
         // MOSTRAR ALERTA SI GANÓ EL USUARIO
-       
+
         if (nombreGan?.some(ganador => ganador === usuarioKick)) {
             setOpen(true);
         }
     };
-  
+
     useEffect(() => {
+        let intervalo;
+        let yaMostrado = false; // bandera local
+
         const verificarGanador = async () => {
             try {
-                const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}/ganadores`)
+                const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}/ganadores`);
+                const data = peticion?.data;
 
-                const data = peticion?.data
-                console.log('dat', data)
-                if (data?.some((ganador) => ganador === usuarioKick)) {
+                if (!yaMostrado && data?.some((ganador) => ganador === usuarioKick)) {
                     setOpen(true);
+                    yaMostrado = true; // marca como ya mostrado
+                    clearInterval(intervalo); // detiene verificación
                 }
             } catch (error) {
                 console.error("Error al verificar ganadores", error);
             }
         };
-    
-        verificarGanador();
-    }, [open]);
+
+        // Verificar cada 5 segundos
+        intervalo = setInterval(verificarGanador, 5000);
+
+        return () => clearInterval(intervalo); // limpieza si se desmonta
+    }, []);
     // Polling para actualizaciones en tiempo real
     useEffect(() => {
         obtenerSorteos(); // Carga inicial
