@@ -234,7 +234,7 @@ console.log( username)
     const nombre = localStorage.getItem('kick_user')
 
     const obtenerCoins = async () => {
-        const response = await axios.post('https://backmu.vercel.app/solicitudes/usuario', { username });
+        const response = await axios.post('https://backmu.vercel.app/solicitudes/usuario', { nombre });
         setDcoins(response?.data[0]?.Dcoins)
         setSolicitudes(response?.data[0]?.solicitudes)
     }
