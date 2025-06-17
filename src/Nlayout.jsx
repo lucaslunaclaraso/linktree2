@@ -239,13 +239,12 @@ function Nlayout(props) {
     }
 
     useEffect(() => {
-        setTimeout(() => {
-            obtenerCoins()
-        }, [
-            1000
-        ])
-
-    }, [15000])
+        const intervalo = setInterval(() => {
+            obtenerCoins();
+        }, 15000); // cada 15 segundos
+    
+        return () => clearInterval(intervalo); // limpiar si se desmonta
+    }, []);
 
     const toPanel = () => {
         window.location.href = "/panel"
@@ -284,6 +283,9 @@ function Nlayout(props) {
     }
     const redirectCrearSolicitudes = () => {
         window.location.href = "/crearlink"
+    }
+    const redirectListadoLinks = () => {
+        window.location.href = "/listalinks"
     }
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     const location = useLocation();
@@ -665,6 +667,7 @@ function Nlayout(props) {
                             <>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? redirectSolicitudes : handleOpen}>Solicitudes de tipeo</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? redirectCrearSolicitudes : handleOpen}>Crear Link de tipeo</MenuItem>
+                                <MenuItem onClick={isLoggedIn && isValidUser ? redirectListadoLinks : handleOpen}>Listado de Links</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? toPanelSorteo : ''}>Lista de Sorteos</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? toPanel : ''}>Crear Sorteo</MenuItem>
                             </>

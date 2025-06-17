@@ -23,6 +23,7 @@ import Roller from './Roller';
 import Tienda from './Tienda';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import backg from './main_intro.jpg'
+import ListadoLinks from './ListadoLinks';
 
 const style = {
     position: 'absolute',
@@ -105,7 +106,7 @@ function App() {
             backgroundRepeat: 'no-repeat',
             padding: isMobile ? '35px' : '150px 56px 56px'
         };
-    
+
         const loginWithKick = async () => {
 
             const { code_verifier, code_challenge } = await generatePKCE();
@@ -277,6 +278,7 @@ function App() {
                 <Route path="/solicitudes" element={<RutaPrivada><AdminPanel isMobile={isMobile} /> </RutaPrivada>} />
 
                 <Route path="/callback" element={<Callback />} />
+                <Route path="/listalinks" element={<RutaPrivada><ListadoLinks isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/tipeo" element={<Tipeo nombre={nombre} isMobile={isMobile} />} />
                 <Route path="/ruleta" element={<Roller nombre={nombre} />} />
                 <Route path="/shop" element={<Tienda nombre={nombre} isMobile={isMobile} />} />
