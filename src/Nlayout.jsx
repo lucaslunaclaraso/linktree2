@@ -231,6 +231,7 @@ function Nlayout(props) {
     };
     const [solicitudes, setSolicitudes] = useState()
     const nombre = localStorage.getItem('kick_user')
+
     const obtenerCoins = async () => {
         const response = await axios.post('https://backmu.vercel.app/solicitudes/usuario', { nombre });
         setDcoins(response?.data[0]?.Dcoins)
@@ -244,7 +245,7 @@ function Nlayout(props) {
             1000
         ])
 
-    }, [10000])
+    }, [15000])
 
     const toPanel = () => {
         window.location.href = "/panel"
