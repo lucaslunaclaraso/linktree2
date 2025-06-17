@@ -241,7 +241,7 @@ function Nlayout(props) {
     useEffect(() => {
         const intervalo = setInterval(() => {
             obtenerCoins();
-        }, 15000); // cada 15 segundos
+        }, 5000); // cada 15 segundos
     
         return () => clearInterval(intervalo); // limpiar si se desmonta
     }, []);
