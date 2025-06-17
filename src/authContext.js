@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Al iniciar la app, cargar el usuario del localStorage
-    const storedUser = localStorage.getItem('kickUser');
+    const storedUser = localStorage.getItem('kick_user');
     if (storedUser) {
       setUsername(storedUser);
     }
@@ -16,12 +16,12 @@ export const AuthProvider = ({ children }) => {
 
   const login = (user) => {
     setUsername(user);
-    localStorage.setItem('kickUser', user);
+    localStorage.setItem('kick_user', user);
   };
 
   const logout = () => {
     setUsername(null);
-    localStorage.removeItem('kickUser');
+    localStorage.removeItem('kick_user');
   };
 
   return (
