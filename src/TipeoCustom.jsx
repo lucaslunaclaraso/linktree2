@@ -3,13 +3,15 @@ import Nlayout from './Nlayout'
 import { Button, Grid } from '@mui/material'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from './authContext';
 
 function TipeoCustom(props) {
     const { url } = useParams();
     const navigate = useNavigate();
+    const { username, logout } = useAuth();
 
     const tipeo = true
-    const nombre = localStorage.getItem('kick_user')
+    const nombre = username
     const mail = localStorage.getItem('kick_mail')
     const [registrado, setRegistrado] = useState('')
     const [deshabilitar, setDeshabilitar] = useState(false)

@@ -5,10 +5,13 @@ import Nlayout from './Nlayout';
 import axios from 'axios';
 import backgroundImg from './main_intro.jpg'
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from './authContext';
 
 
 export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const { url } = useParams();
+    const { username, logout } = useAuth();
+
     const [sorteo, setSorteo] = useState()
     const [participantes, setParticipantes] = useState()
     const [ganadores, setGanadores] = useState()
@@ -47,7 +50,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const usuarioKick = localStorage.getItem('kick_user')
     const mailKick = localStorage.getItem('kick_mail')
     const unirse = () => {
-        const nombre = usuario || usuarioKick;
+        const nombre = username;
         const mail = mailKick
         if (!nombre) return;
         UnirseAlSorteo(nombre, mail)
