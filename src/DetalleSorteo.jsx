@@ -106,6 +106,23 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
         }
     };
   
+    useEffect(() => {
+        const verificarGanador = async () => {
+            try {
+                const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}/ganadores`)
+
+                const data = peticion?.data
+                console.log('dat', data)
+                if (data?.some((ganador) => ganador === usuarioKick)) {
+                    setOpen(true);
+                }
+            } catch (error) {
+                console.error("Error al verificar ganadores", error);
+            }
+        };
+    
+        verificarGanador();
+    }, [open]);
     // Polling para actualizaciones en tiempo real
     useEffect(() => {
         obtenerSorteos(); // Carga inicial
