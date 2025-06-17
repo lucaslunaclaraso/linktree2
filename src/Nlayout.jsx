@@ -42,7 +42,7 @@ const buttonBase = {
 function Nlayout(props) {
     const { username, logout } = useAuth();
     const [open, setOpen] = useState(false);
-    console.log(username)
+    
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
