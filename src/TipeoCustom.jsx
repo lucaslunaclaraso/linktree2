@@ -26,6 +26,9 @@ function TipeoCustom(props) {
     const usuariosValidos = solicitud?.tipeo?.usuarios?.split(",")
     const isValid = usuariosValidos === undefined || usuariosValidos?.length < solicitud?.tipeo?.premios;
 
+    console.log('isValid',isValid)
+    console.log('usuariosValidos',usuariosValidos?.length)
+    console.log('usuariosValidos',solicitud?.tipeo?.premios)
 
     const solicitarTipeo = async () => {
         const peticion = await axios.post(`https://backmu.vercel.app/solicitudes/${url}/unirse`, { nombre })
