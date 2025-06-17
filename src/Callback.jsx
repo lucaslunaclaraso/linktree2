@@ -55,18 +55,8 @@ export default function Callback() {
 
         if (data.access_token) {
           localStorage.setItem('kick_token', JSON.stringify(data));
-          const kickTokenString = localStorage.getItem('kick_token');
 
-          if (kickTokenString) {
-            const kickToken = JSON.parse(kickTokenString);
-
-            const accessToken = kickToken.access_token;
-            const refreshToken = kickToken.refresh_token;
-            const expiresIn = kickToken.expires_in;
-
-            // Ahora podés usar esas variables
-            console.log(accessToken, refreshToken, expiresIn);
-          }
+         
           // Obtener datos del usuario
           const response = await fetch('https://api.kick.com/public/v1/users', {
             method: 'GET',
