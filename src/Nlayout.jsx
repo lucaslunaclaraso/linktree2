@@ -574,7 +574,7 @@ function Nlayout(props) {
                             </Button>
                         } */}
 
-                        {user ?
+                        {user || usuarioKick ?
                             <Grid style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                 <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: 8, borderRadius: '8px', background: '#10111c', justifyContent: 'center' }}>
                                     <img src={coin} style={{ width: '20%' }} />

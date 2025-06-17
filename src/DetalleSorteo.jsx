@@ -96,13 +96,13 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
         setGanadores(ganadores)
 
         const nombreGan = ganadores?.map((p) => p?.nombre)
-        console.log('nombreGan', nombreGan)
+        
         guardarGanadores(url, nombreGan)
        
         // MOSTRAR ALERTA SI GANÓ EL USUARIO
        
-        if (nombreGan?.map(ganador => ganador?.includes(usuarioKick))) {
-            setOpen(true); // o `setGanasteTipeo(true)` si querés un estado exclusivo
+        if (nombreGan?.some(ganador => ganador === usuarioKick)) {
+            setOpen(true);
         }
     };
   
