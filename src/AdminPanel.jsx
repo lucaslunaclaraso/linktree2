@@ -135,7 +135,7 @@ const AdminPanel = (props) => {
     return (
         <Nlayout >
            
-            <Box sx={{ maxWidth: 1200, mx: 'auto', my: 4, p: 2, minHeight: '90vh' }} className="backgroundAnimado" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+            <Box sx={{  mx: 'auto', my: 4, p: 2, minHeight: '90vh' }} className="backgroundAnimado" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
                 {/* SVG como fondo */}
                 <svg ref={svgRef}
                     xmlns="http://www.w3.org/2000/svg"
@@ -173,7 +173,7 @@ const AdminPanel = (props) => {
                     <ellipse cx="0%" cy="24.69135802469136%" fill="url(#leaderboard_intro_bg_svg__b)" clip-path="url(#leaderboard_intro_bg_svg__c)" rx="450" ry="300"></ellipse>
                     <circle cx="50%" cy="50%" r="5000" fill="url(#leaderboard_intro_bg_svg__d)" clip-path="url(#leaderboard_intro_bg_svg__c)"></circle>
                 </svg>
-                <Paper elevation={3} sx={{ p: 3 }}>
+                <Paper elevation={3} sx={{ p: 3, width: '90%' }}>
                     <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
                         <Typography variant="h4" align="center" gutterBottom>
@@ -195,7 +195,7 @@ const AdminPanel = (props) => {
                     ) : solicitudes.length === 0 ? (
                         <Typography align="center">No hay solicitudes disponibles.</Typography>
                     ) : (
-                        <TableContainer component={Paper} style={{ maxHeight: 600, overflow: 'scroll' }}>
+                        <TableContainer component={Paper} style={{ maxHeight: 600, overflow: 'scroll', width: '100%' }}>
                             <Table>
                                 <TableHead>
                                     <TableRow>
@@ -241,15 +241,7 @@ const AdminPanel = (props) => {
                                                 </Button>
                                             </TableCell>
                                             <TableCell>
-                                                <Button
-
-                                                    onClick={() => handleOpenAdrres(solicitud.bnbAddress)}
-                                                    underline="hover"
-                                                >
-                                                    Ver BnB Address
-                                                </Button>
-
-
+                                                {solicitud.bnbAddress}
                                             </TableCell>
                                             <TableCell>
                                                 {solicitud.status === 'pending' ? 'Pendiente' :

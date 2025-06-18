@@ -34,7 +34,14 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const verifyToken = async () => {
       const tokenString = localStorage.getItem('accessToken');
-      if (!tokenString) return;
+      if (!tokenString) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('accessTokenExpiresAt');
+        localStorage.removeItem('kick_user');
+        localStorage.removeItem('kick_token');
+        localStorage.removeItem('kick_mail');
+      };
 
       try {
         const res = await fetch('https://api.kick.com/public/v1/users', {
