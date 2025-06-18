@@ -97,9 +97,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
         try {
             const response = await fetch(`https://backmu.vercel.app/sorteo/${url}/ganadores-anteriores`);
             const data = await response.json();
-            return data.ganadores || [];
+            return Array.isArray(data.ganadores) ? data.ganadores : [];
         } catch (err) {
-            console.error('Error al obtener blacklist:', err);
+            console.error('Error al obtener la blacklist:', err);
             return [];
         }
     };
@@ -107,20 +107,21 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     const sortear = async () => {
         const blacklist = await obtenerGanadoresDelSorteoAnterior();
-        console.log('bl', blacklist)
+       
+    
         const participantesValidos = participantes.filter(
             (p) => !blacklist.includes(p.nombre)
         );
-
+    
         const shuffled = [...participantesValidos].sort(() => 0.5 - Math.random());
-        const ganadores = shuffled.slice(0, sorteo?.premios);
-
+        const ganadores = shuffled.slice(0, sorteo?.premios || 0);
+    
         setGanadores(ganadores);
-
-        const nombreGan = ganadores.map((p) => p.nombre);
-        guardarGanadores(url, nombreGan);
-
-        if (nombreGan.includes(usuarioKick)) {
+    
+        const nombresGanadores = ganadores.map((p) => p.nombre);
+        guardarGanadores(url, nombresGanadores);
+    
+        if (nombresGanadores.includes(usuarioKick)) {
             setOpen(true);
         }
     };
