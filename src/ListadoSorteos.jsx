@@ -31,16 +31,16 @@ export default function ListadoSorteos({ sorteos }) {
         <Nlayout>
             <Box p={4}>
                 {
-                    !listadoSorteos?.length ?
+                    !listadoSorteos?.filter((sorteo) => sorteo.estado === 'activo').length ?
 
-                        <Card  sx={{ mb: 2 }}>
+                        <Card sx={{ mb: 2 }}>
                             <CardContent>
                                 <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <Typography variant="h6">NO HAY SORTEOS CREADOS</Typography>
-                                   
+
 
                                 </Grid>
-                               
+
                             </CardContent>
                         </Card>
                         :
