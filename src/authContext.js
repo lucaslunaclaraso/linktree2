@@ -41,6 +41,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('kick_user');
         localStorage.removeItem('kick_token');
         localStorage.removeItem('kick_mail');
+        return;
       };
 
       try {
