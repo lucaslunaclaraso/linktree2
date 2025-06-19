@@ -46,84 +46,16 @@ function Nlayout(props) {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    useEffect(() => {
-        window.fbAsyncInit = function () {
-            window.FB.init({
-                appId: '591315836747826', // Replace with your App ID
-                cookie: true,
-                xfbml: true,
-                version: 'v20.0',
-            });
-            window.FB.AppEvents.logPageView();
-        };
-
-        (function (d, s, id) {
-            let js,
-                fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {
-                return;
-            }
-            js = d.createElement(s);
-            js.id = id;
-            js.src = 'https://connect.facebook.net/en_US/sdk.js';
-            fjs.parentNode.insertBefore(js, fjs);
-        })(document, 'script', 'facebook-jssdk');
-    }, []);
+    
     const [user, setUser] = useState(null); // State to store user data (name, logged-in status)
-    // useEffect(() => {
-    //     // Check Facebook login status on component mount
-    //     if (window.FB) {
-    //         window.FB.getLoginStatus((response) => {
-    //             if (response.status === 'connected') {
-    //                 // User is logged in, fetch their data
-    //                 fetchUserData();
-    //             } else {
-    //                 // User is not logged in, check localStorage for cached user data
-    //                 const storedUser = localStorage.getItem('fbUser');
-    //                 console.log('storedUser', storedUser)
-    //                 if (storedUser) {
-    //                     setUser(JSON.parse(storedUser));
-    //                 }
-    //             }
-    //         });
-    //     }
-    // }, []);
-    // const handleFacebookLogin = () => {
-    //     if (user) {
-    //         // If user is logged in, log them out
-    //         window.FB.logout(() => {
-    //             setUser(null);
-    //             localStorage.removeItem('fbUser');
-    //             localStorage.removeItem('fbAccessToken');
-    //             console.log('User logged out');
-    //         });
-    //     } else {
-    //         // Trigger Facebook login
-    //         window.FB.login(
-    //             (response) => {
-    //                 if (response.authResponse) {
-    //                     const accessToken = response.authResponse.accessToken;
-    //                     console.log('Facebook Access Token:', accessToken);
-    //                     // Fetch user data directly from Facebook
-    //                     fetchUserData(accessToken);
-    //                 } else {
-    //                     console.log('User cancelled login or did not fully authorize.');
-    //                 }
-    //             },
-    //             { scope: 'public_profile,email' } // Request necessary permissions
-    //         );
-    //     }
-    // };
+   
 
 
     const redirectUri = "/callback";
     const clientId = "01JW6K1RY4R70K7B6KSJ8GK5CV";
     const scope = "user"; // según lo que pediste
 
-    // const loginWithKick = () => {
-    //   const url = `https://id.kick.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}`;
-    //   window.location.href = url;
-    // };
+
 
     const loginWithKick = async () => {
 
@@ -136,7 +68,7 @@ function Nlayout(props) {
             response_type: 'code',
             client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
             redirect_uri: 'https://eldenguee.com/callback',
-            scope: 'user:read',
+            scope: 'channel:read user:read events:subscribe ',
             code_challenge: code_challenge,
             code_challenge_method: 'S256',
             state: criptoRandom,
