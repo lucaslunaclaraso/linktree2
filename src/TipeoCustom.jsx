@@ -24,16 +24,17 @@ function TipeoCustom(props) {
         const peticion = await axios.get(`https://backmu.vercel.app/solicitudes/${url}`)
         setSolicitud(peticion?.data)
     }
-    console.log('solicitud', solicitud)
-    const VerificarSolicitud = async () => {
+    
+    const VerificarSolicitud = async (nombre) => {
         const peticion = await axios.post(`https://backmu.vercel.app/solicitudes/${url}/verificar`, { nombre })
         setReclamado(peticion?.data?.reclamado)
     }
+
     useEffect(() => {
         obtenerSorteos();
         setTimeout((
 
-            VerificarSolicitud()
+            VerificarSolicitud(nombre)
 
         ), [2000])
 
