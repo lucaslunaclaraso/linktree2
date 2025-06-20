@@ -32,11 +32,7 @@ function TipeoCustom(props) {
 
     useEffect(() => {
         obtenerSorteos();
-        setTimeout((
-
-            VerificarSolicitud(nombre)
-
-        ), [2000])
+       
 
     }, [])
 
