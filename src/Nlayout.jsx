@@ -68,7 +68,7 @@ function Nlayout(props) {
             response_type: 'code',
             client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
             redirect_uri: 'https://eldenguee.com/callback',
-            scope: 'channel:read user:read events:subscribe chat:write',
+            scope: 'chat:write channel:read user:read events:subscribe',
             code_challenge: code_challenge,
             code_challenge_method: 'S256',
             state: criptoRandom,
