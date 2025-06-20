@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Nlayout from './Nlayout'
-import { Button, Grid } from '@mui/material'
+import { Button, Grid, Typography } from '@mui/material'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from './authContext';
+import backgroundImg from './main_intro.jpg'
 
 function TipeoCustom(props) {
     const { url } = useParams();
@@ -17,22 +18,34 @@ function TipeoCustom(props) {
     const [deshabilitar, setDeshabilitar] = useState(false)
     const isLoggedIn = nombre;
     const [solicitud, setSolicitud] = useState()
+    const [reclamado, setReclamado] = useState()
+
     const obtenerSorteos = async () => {
         const peticion = await axios.get(`https://backmu.vercel.app/solicitudes/${url}`)
         setSolicitud(peticion?.data)
     }
-    useEffect(() => { obtenerSorteos() }, [])
+    console.log('solicitud', solicitud)
+    const VerificarSolicitud = async () => {
+        const peticion = await axios.post(`https://backmu.vercel.app/solicitudes/${url}/verificar`, { nombre })
+        setReclamado(peticion?.data?.reclamado)
+    }
+    useEffect(() => {
+        obtenerSorteos();
+        setTimeout((
+
+            VerificarSolicitud()
+
+        ), [2000])
+
+    }, [])
 
     const usuariosValidos = solicitud?.tipeo?.usuarios?.split(",")
     const isValid = usuariosValidos === undefined || usuariosValidos?.length < solicitud?.tipeo?.premios;
 
-    console.log('isValid', isValid)
-    console.log('usuariosValidos', usuariosValidos?.length)
-    console.log('usuariosValidos', solicitud?.tipeo?.premios)
 
     const solicitarTipeo = async () => {
         const peticion = await axios.post(`https://backmu.vercel.app/solicitudes/${url}/unirse`, { nombre })
-        console.log(peticion)
+        setReclamado(peticion?.data?.reclamado)
         if (!peticion?.data?.registrado) {
             const peticionUser = await axios.post(`https://backmu.vercel.app/sorteo/crearUser`, { nombre, mail, tipeo })
             navigate(`/tipeo`); // o usar url si lo devuelves completo
@@ -46,7 +59,7 @@ function TipeoCustom(props) {
     }
     const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
     const svgRef = useRef(null);
-
+    console.log(reclamado)
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width * 100; // Convert to percentage
@@ -114,33 +127,75 @@ function TipeoCustom(props) {
                     <ellipse cx="0%" cy="24.69135802469136%" fill="url(#leaderboard_intro_bg_svg__b)" clip-path="url(#leaderboard_intro_bg_svg__c)" rx="450" ry="300"></ellipse>
                     <circle cx="50%" cy="50%" r="5000" fill="url(#leaderboard_intro_bg_svg__d)" clip-path="url(#leaderboard_intro_bg_svg__c)"></circle>
                 </svg>
-                <Grid style={{ margin: '0 auto', height: '600px', alignContent: 'center', width:'20%' }} >
+                <Grid style={{ margin: '0 auto', height: '600px', alignContent: 'center', width: solicitud?.tipeo?.estado === 'inactivo' ? '100%': '20%' }} >
+                    {
+                        solicitud?.tipeo?.estado === 'inactivo' ?
+                            <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '-30%' : '-10%', width: '100%' }}>
 
-                    <Button
+                                <Grid style={{
+                                    backgroundImage: `
+            linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
+            url(${backgroundImg})
+          `,
+                                    backgroundSize: 'cover',
+                                    backgroundRepeat: 'no-repeat',
+                                    height: '980px',
+                                    backgroundColor: '#3f3d45',
+                                    margin: '0 auto',
+                                    position: 'relative',
+                                    backgroundPosition: '50%'
+                                }}>
+                                    <Grid className='container' style={{
+                                        
+                                        gap: '10px',
+                                        justifyContent: 'center',
 
-                        sx={{
-                            color: 'black',
-                            fontWeight: 'bold',
-                            padding: '0.75rem 2rem',
-                            fontSize: '.8rem',
-                            width: '100%',
-                            backgroundImage: `linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)`,
-                            border: '2px solid #e0c060',
-                            borderRadius: '12px',
-                            boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
-                            textTransform: 'uppercase',
-                            margin: '0 auto',
-                            transition: 'all 0.3s ease-in-out',
-                            '&:hover': {
-                                boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
-                                transform: 'scale(1.05)',
-                            },
-                        }}
-                        onClick={isLoggedIn && isValid ? solicitarTipeo : ''}
-                        disabled={!isValid}
-                    >
-                        {!isValid ? 'LIMITE ALCANZADO' : 'Reclamar solicitud de tipeo'}
-                    </Button>
+                                    }}>
+                                        <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
+                                            <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif' }} >
+                                                eldenguee.com
+                                            </Typography>
+                                            <Typography sx={{
+                                                background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
+                                                WebkitBackgroundClip: 'text',
+                                                WebkitTextFillColor: 'transparent',
+                                                fontWeight: 'bold',
+                                                fontSize: props.isMobile ? 32 : 65,
+                                                fontFamily: 'Belerofonte'
+                                            }} >El Link no existe</Typography>
+                                        </Grid>
+
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            :
+
+                            <Button
+
+                                sx={{
+                                    color: 'black',
+                                    fontWeight: 'bold',
+                                    padding: '0.75rem 2rem',
+                                    fontSize: '.8rem',
+                                    width: '100%',
+                                    backgroundImage: `linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)`,
+                                    border: '2px solid #e0c060',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
+                                    textTransform: 'uppercase',
+                                    margin: '0 auto',
+                                    transition: 'all 0.3s ease-in-out',
+                                    '&:hover': {
+                                        boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
+                                        transform: 'scale(1.05)',
+                                    },
+                                }}
+                                onClick={isLoggedIn && isValid ? solicitarTipeo : ''}
+                                disabled={!isValid || reclamado}
+                            >
+                                {!isValid ? reclamado ? 'YA RECLAMASTE' : 'LIMITE ALCANZADO' : 'Reclamar solicitud de tipeo'}
+                            </Button>
+                    }
                 </Grid>
             </Grid>
 

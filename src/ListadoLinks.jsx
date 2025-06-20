@@ -10,6 +10,11 @@ function ListadoLinks() {
 
         setListadoLinks(peticion?.data)
     }
+
+    const EliminarLink = async (id, estado) => {
+        const peticion = await axios.post(`https://backmu.vercel.app/solicitudes/${id}/estado`,{estado})
+        obtenerSorteos()
+    }
     useEffect(() => { obtenerSorteos() }, [])
 
     return (
@@ -24,7 +29,7 @@ function ListadoLinks() {
                     pr: 1
                 }}
             >
-                {listadoLinks?.map((sorteo) => (
+                {listadoLinks?.filter((l) => l?.estado === 'activo')?.map((sorteo) => (
                     <Card key={sorteo.id} sx={{ mb: 2 }}>
                         <CardContent>
                             <Grid sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -38,9 +43,9 @@ function ListadoLinks() {
                                 </Typography>
                             </Grid>
                             <Grid sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                {/* <Button variant="outlined" sx={{ backgroundColor: 'red', color: 'white' }}>
-                                    Eliminar sorteo
-                                </Button> */}
+                                <Button variant="outlined" sx={{ backgroundColor: 'red', color: 'white' }} onClick={() => EliminarLink(sorteo?.id, 'inactivo')}>
+                                    Eliminar Link
+                                </Button>
                             </Grid>
                         </CardContent>
                     </Card>
