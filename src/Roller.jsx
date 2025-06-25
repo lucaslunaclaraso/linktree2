@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import io from 'socket.io-client';
 import * as XLSX from 'xlsx';
-// const socket = io('http://54.39.131.40:8000'); // mismo que el socket
+const socket = io('http://54.39.131.40:8000'); // mismo que el socket
 const items = [
   { name: 'AK-47', color: '#ef5350' },
   { name: 'Desert Eagle', color: '#42a5f5' },
@@ -59,16 +59,11 @@ const Roller = () => {
     // Revisa el DOM del iframe cada 1 segundo
     const interval = setInterval(checkForAlerts, 1000);
 
-    // Simulación para pruebas (eliminar en producción)
-    const simInterval = setInterval(() => {
-      const usernames = ['Gamer123', 'ProStreamer', 'FanDeKick', 'SuscribtorX', 'Leyenda99'];
-      const randomUser = usernames[Math.floor(Math.random() * usernames.length)];
-      handleSubscription({ username: randomUser });
-    }, 10000);
+   
 
     return () => {
       clearInterval(interval);
-      clearInterval(simInterval);
+     
     };
   }, [rolling]);
 
@@ -99,7 +94,7 @@ const Roller = () => {
     setWinner(null);
     setRolling(true);
     setOffset(0); // Reiniciar el offset para que el giro comience desde el principio
-    audioRef.current.play().catch(() => {});
+    audioRef.current.play().catch(() => { });
 
     // Seleccionar ítem ganador aleatorio
     const targetItemIndex = Math.floor(Math.random() * items.length);
@@ -139,43 +134,32 @@ const Roller = () => {
   }, []);
   const eventosRef = useRef([]);
   const [excelUrl, setExcelUrl] = useState(null);
-  // useEffect(() => {
-  //   // const handleNuevoMensaje = ({ username, content }) => {
-  //   //   eventosRef.current.push({
-  //   //     tipo: 'mensaje',
-  //   //     usuario: username,
-  //   //     contenido: content,
-  //   //     fecha: new Date().toLocaleString()
-  //   //   });
-  //   // };
+  useEffect(() => {
+    const handleNuevoFollow = ({ username }) => {
+      console.log('Nuevo follower:', username);
 
-  //   const handleNuevoFollow = ({ data }) => {
-  //     eventosRef.current.push({
-  //       tipo: 'follow',
-  //       usuario: data,
-  //       contenido: 'Nuevo seguidor',
-  //       fecha: new Date().toLocaleString()
-  //     });
+      // Iniciar la ruleta si no está girando
+      if (!rolling) {
+        handleSubscription({ username }); // <-- ESTA LÍNEA inicia el giro
+      }
+      console.log('user', username)
+      // Agregar al array persistente
+      eventosRef.current.push({
+        tipo: 'follow',
+        usuario: username,
+        contenido: 'Nuevo seguidor',
+        fecha: new Date().toLocaleString()
+      });
 
-  //     // Generar Excel y crear URL de descarga
-  //     const ws = XLSX.utils.json_to_sheet(eventosRef.current);
-  //     const wb = XLSX.utils.book_new();
-  //     XLSX.utils.book_append_sheet(wb, ws, 'Eventos');
+      
+    };
 
-  //     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-  //     const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-  //     const url = URL.createObjectURL(blob);
-  //     setExcelUrl(url); // guardamos el link
-  //   };
+    socket.on('nuevo-follow', handleNuevoFollow);
 
-  //   // socket.on('nuevo-mensaje', handleNuevoMensaje);
-  //   socket.on('nuevo-follow', handleNuevoFollow);
-
-  //   return () => {
-  //     // socket.off('nuevo-mensaje', handleNuevoMensaje);
-  //     socket.off('nuevo-follow', handleNuevoFollow);
-  //   };
-  // }, []);
+    return () => {
+      socket.off('nuevo-follow', handleNuevoFollow);
+    };
+  }, []);
   return (
     <Box sx={{ textAlign: 'center', bgcolor: '#121212', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 2 }}>
       {lastSub && (
@@ -238,7 +222,7 @@ const Roller = () => {
             ))}
           </Box>
         </Box>
-        
+
       </Box>
       {/* Iframe oculto para cargar el widget de BotRix */}
       <iframe
@@ -268,11 +252,7 @@ const Roller = () => {
       >
         Girar
       </Button>
-      {/* {excelUrl && (
-        <a href={excelUrl} download="eventos.xlsx">
-          📥 Descargar Excel
-        </a>
-      )} */}
+     
       {/* Mensaje de ganador */}
       {winner && (
         <Typography
@@ -285,7 +265,7 @@ const Roller = () => {
             textTransform: 'uppercase',
           }}
         >
-           ¡Ganaste: {winner.name}!
+          ¡Ganaste: {winner.name}!
         </Typography>
       )}
     </Box>
