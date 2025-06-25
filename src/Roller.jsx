@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import io from 'socket.io-client';
 import * as XLSX from 'xlsx';
-const socket = io('https://tired-parents-warn.loca.lt', {
+const socket = io('https://light-things-beg.loca.lt', {
   transports: ['websocket', 'polling'], // permite ambos métodos
 });
 const items = [
