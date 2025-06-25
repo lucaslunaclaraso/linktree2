@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import io from 'socket.io-client';
 import * as XLSX from 'xlsx';
-const socket = io('https://25a4-54-39-131-40.ngrok-free.app'); // mismo que el socket
+const socket = io('https://tired-parents-warn.loca.lt', {
+  transports: ['websocket', 'polling'], // permite ambos métodos
+});
 const items = [
   { name: 'AK-47', color: '#ef5350' },
   { name: 'Desert Eagle', color: '#42a5f5' },
@@ -16,11 +18,12 @@ const VISIBLE_ITEMS = 3; // Ítems visibles
 const ROLL_DURATION = 2000; // Duración del giro (2 segundos)
 const SPEED_MULTIPLIER = 5; // Factor para mayor velocidad
 socket.on('connect', () => {
-  console.log('✅ Conectado al servidor socket.io');
+  console.log('✅ Conectado al socket');
 });
 
 socket.on('connect_error', (err) => {
   console.error('❌ Error de conexión:', err.message);
+  console.error(err);
 });
 const Roller = () => {
   const [rolling, setRolling] = useState(false);
