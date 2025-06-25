@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import io from 'socket.io-client';
 import * as XLSX from 'xlsx';
-const socket = io('http://54.39.131.40:8000'); // mismo que el socket
+const socket = io('https://002c-54-39-131-40.ngrok-free.app'); // mismo que el socket
 const items = [
   { name: 'AK-47', color: '#ef5350' },
   { name: 'Desert Eagle', color: '#42a5f5' },
