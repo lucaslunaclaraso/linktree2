@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, Typography } from '@mui/material';
-
+import io from 'socket.io-client';
+import * as XLSX from 'xlsx';
+const socket = io('http://54.39.131.40:8000'); // mismo que el socket
 const items = [
   { name: 'AK-47', color: '#ef5350' },
   { name: 'Desert Eagle', color: '#42a5f5' },
@@ -135,7 +137,45 @@ const Roller = () => {
       if (audioRef.current) audioRef.current.pause();
     };
   }, []);
+  const eventosRef = useRef([]);
+  const [excelUrl, setExcelUrl] = useState(null);
+  useEffect(() => {
+    // const handleNuevoMensaje = ({ username, content }) => {
+    //   eventosRef.current.push({
+    //     tipo: 'mensaje',
+    //     usuario: username,
+    //     contenido: content,
+    //     fecha: new Date().toLocaleString()
+    //   });
+    // };
 
+    const handleNuevoFollow = ({ data }) => {
+      eventosRef.current.push({
+        tipo: 'follow',
+        usuario: data,
+        contenido: 'Nuevo seguidor',
+        fecha: new Date().toLocaleString()
+      });
+
+      // Generar Excel y crear URL de descarga
+      const ws = XLSX.utils.json_to_sheet(eventosRef.current);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Eventos');
+
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+      setExcelUrl(url); // guardamos el link
+    };
+
+    // socket.on('nuevo-mensaje', handleNuevoMensaje);
+    socket.on('nuevo-follow', handleNuevoFollow);
+
+    return () => {
+      // socket.off('nuevo-mensaje', handleNuevoMensaje);
+      socket.off('nuevo-follow', handleNuevoFollow);
+    };
+  }, []);
   return (
     <Box sx={{ textAlign: 'center', bgcolor: '#121212', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 2 }}>
       {lastSub && (
@@ -198,6 +238,7 @@ const Roller = () => {
             ))}
           </Box>
         </Box>
+        
       </Box>
       {/* Iframe oculto para cargar el widget de BotRix */}
       <iframe
@@ -227,6 +268,11 @@ const Roller = () => {
       >
         Girar
       </Button>
+      {excelUrl && (
+        <a href={excelUrl} download="eventos.xlsx">
+          📥 Descargar Excel
+        </a>
+      )}
       {/* Mensaje de ganador */}
       {winner && (
         <Typography
