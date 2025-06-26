@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import io from 'socket.io-client';
-import * as XLSX from 'xlsx';
+
 const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
-  transports: ['websocket', 'polling'], // permite ambos métodos
+  transports: ['websocket', 'polling'],
 });
+
 const items = [
   { name: 'AK-47', color: '#ef5350' },
   { name: 'Desert Eagle', color: '#42a5f5' },
@@ -13,18 +14,11 @@ const items = [
   { name: 'USP-S', color: '#ab47bc' },
 ];
 
-const ITEM_WIDTH = 180; // Ancho de cada ítem
-const VISIBLE_ITEMS = 3; // Ítems visibles
-const ROLL_DURATION = 2000; // Duración del giro (2 segundos)
-const SPEED_MULTIPLIER = 5; // Factor para mayor velocidad
-socket.on('connect', () => {
-  console.log('✅ Conectado al socket');
-});
+const ITEM_WIDTH = 180;
+const VISIBLE_ITEMS = 3;
+const ROLL_DURATION = 2000;
+const SPEED_MULTIPLIER = 5;
 
-socket.on('connect_error', (err) => {
-  console.error('❌ Error de conexión:', err.message);
-  console.error(err);
-});
 const Roller = () => {
   const [rolling, setRolling] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -33,59 +27,14 @@ const Roller = () => {
   const animationRef = useRef(null);
   const audioRef = useRef(null);
   const iframeRef = useRef(null);
+  const eventosRef = useRef([]);
+  const queueRef = useRef([]); // ⬅️ Cola de usuarios
 
-  // Calcular cuántas veces repetir los ítems para evitar espacios vacíos
   const totalItemsWidth = items.length * ITEM_WIDTH;
   const maxOffset = totalItemsWidth * SPEED_MULTIPLIER * 2;
   const repeatCount = Math.ceil(maxOffset / totalItemsWidth) + 1;
   const repeatedItems = Array(repeatCount).fill(items).flat();
 
-  // Detectar cambios en el DOM del iframe para capturar alertas
-  useEffect(() => {
-    const iframe = iframeRef.current;
-    if (!iframe) return;
-
-    const checkForAlerts = () => {
-      try {
-        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-        // Busca un elemento que indique una alerta (ajusta el selector según el DOM del widget)
-        const alertElement = iframeDocument.querySelector('div[class*="alert"], div[class*="notification"]');
-        if (alertElement && alertElement.textContent) {
-          const alertText = alertElement.textContent.trim();
-          // Verifica si el texto indica una suscripción (ajusta según el formato de BotRix)
-          if (alertText && alertText.includes('subscribed') && !rolling) {
-            // Extrae el nombre del usuario (esto puede variar según el formato del texto)
-            const usernameMatch = alertText.match(/@(\w+)/) || alertText.match(/(\w+) subscribed/);
-            const username = usernameMatch ? usernameMatch[1] : 'Usuario de Prueba';
-            handleSubscription({ username });
-          }
-        }
-      } catch (error) {
-        console.error('Error al acceder al DOM del iframe:', error);
-      }
-    };
-
-    // Revisa el DOM del iframe cada 1 segundo
-    const interval = setInterval(checkForAlerts, 1000);
-
-
-
-    return () => {
-      clearInterval(interval);
-
-    };
-  }, [rolling]);
-
-  const handleSubscription = (user) => {
-    if (!rolling) {
-      setRolling(true);
-      setLastSub(user.username);
-      setWinner(null);
-      startRoll();
-    }
-  };
-
-  // Inicializar audio
   useEffect(() => {
     audioRef.current = new Audio('https://freesound.org/data/previews/482/482663_10066982-lq.mp3');
     audioRef.current.loop = true;
@@ -95,19 +44,16 @@ const Roller = () => {
     };
   }, []);
 
-  // Función de easing para animación rápida pero suave
   const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
   const startRoll = () => {
     if (rolling) return;
+
     setWinner(null);
-    setRolling(true);
-    setOffset(0); // Reiniciar el offset para que el giro comience desde el principio
+    setOffset(0);
     audioRef.current.play().catch(() => { });
 
-    // Seleccionar ítem ganador aleatorio
     const targetItemIndex = Math.floor(Math.random() * items.length);
-    // Calcular offset para centrar el ítem ganador, con más vueltas para mayor velocidad
     const baseOffset = (items.length + targetItemIndex) * ITEM_WIDTH + ITEM_WIDTH / 2 - (VISIBLE_ITEMS * ITEM_WIDTH) / 2;
     const extraLoops = items.length * ITEM_WIDTH * SPEED_MULTIPLIER;
     const targetOffset = -(baseOffset + extraLoops);
@@ -117,28 +63,59 @@ const Roller = () => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / ROLL_DURATION, 1);
       const easedProgress = easeOutCubic(progress);
-      const currentOffset = easedProgress * (targetOffset - 0) + 0; // Usar 0 como punto de partida
+      const currentOffset = easedProgress * targetOffset;
 
       setOffset(currentOffset);
 
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
-        // Establecer el ganador y detener el audio inmediatamente
         setOffset(targetOffset);
         setWinner(items[targetItemIndex]);
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
 
-        // Establecer rolling a false después de 7 segundos
         setTimeout(() => {
           setRolling(false);
-        }, 10000); // 7000 ms = 7 segundos
+          processQueue(); // ⬅️ Sigue con el siguiente de la cola
+        }, 10000);
       }
     };
 
     animationRef.current = requestAnimationFrame(animate);
   };
+
+  const processQueue = () => {
+    if (queueRef.current.length === 0) return;
+
+    const nextUser = queueRef.current.shift();
+    setLastSub(nextUser);
+    setRolling(true);
+    setWinner(null);
+    startRoll();
+  };
+
+  const handleNuevoFollow = ({ username }) => {
+    console.log('Nuevo follower:', username);
+    queueRef.current.push(username);
+    eventosRef.current.push({
+      tipo: 'follow',
+      usuario: username,
+      contenido: 'Nuevo seguidor',
+      fecha: new Date().toLocaleString(),
+    });
+
+    if (!rolling) {
+      processQueue();
+    }
+  };
+
+  useEffect(() => {
+    socket.on('nuevo-follow', handleNuevoFollow);
+    return () => {
+      socket.off('nuevo-follow', handleNuevoFollow);
+    };
+  }, [rolling]);
 
   useEffect(() => {
     return () => {
@@ -146,34 +123,7 @@ const Roller = () => {
       if (audioRef.current) audioRef.current.pause();
     };
   }, []);
-  const eventosRef = useRef([]);
-  const [excelUrl, setExcelUrl] = useState(null);
-  useEffect(() => {
-    const handleNuevoFollow = ({ username }) => {
-      console.log('Nuevo follower:', username);
 
-      // Iniciar la ruleta si no está girando
-      if (!rolling) {
-        handleSubscription({ username }); // <-- ESTA LÍNEA inicia el giro
-      }
-      console.log('user', username)
-      // Agregar al array persistente
-      eventosRef.current.push({
-        tipo: 'follow',
-        usuario: username,
-        contenido: 'Nuevo seguidor',
-        fecha: new Date().toLocaleString()
-      });
-
-
-    };
-
-    socket.on('nuevo-follow', handleNuevoFollow);
-
-    return () => {
-      socket.off('nuevo-follow', handleNuevoFollow);
-    };
-  }, []);
   return (
     <Box
       sx={{
@@ -193,14 +143,11 @@ const Roller = () => {
         </Typography>
       )}
 
-      {/* Mostrar la ruleta solo cuando rolling es true */}
       {rolling && (
         <>
-          {/* Marca central */}
           <Box sx={{ position: 'absolute', top: -40, left: '50%', transform: 'translateX(-50%)', fontSize: 40, color: '#ef5350', zIndex: 2 }}>
             ▼
           </Box>
-          {/* Contenedor del roller */}
           <Box
             sx={{
               position: 'relative',
@@ -227,7 +174,6 @@ const Roller = () => {
                   transition: rolling ? 'none' : 'transform 0.3s ease-out',
                 }}
               >
-                {/* Ítems repetidos dinámicamente */}
                 {repeatedItems.map((item, idx) => (
                   <Box
                     key={idx}
@@ -262,7 +208,6 @@ const Roller = () => {
         </>
       )}
 
-      {/* Iframe oculto para cargar el widget de BotRix */}
       <iframe
         ref={iframeRef}
         src="https://botrix.live/alerts?bid=3DaOGe3SpkYHh7JprKrZ9A"
@@ -270,29 +215,6 @@ const Roller = () => {
         title="BotRix Alerts Widget"
       />
 
-      {/* Botón de girar */}
-      {/* <Button
-      variant="contained"
-      onClick={startRoll}
-      disabled={rolling}
-      sx={{
-        mt: 4,
-        px: 6,
-        py: 1.5,
-        fontSize: 18,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        bgcolor: '#0288d1',
-        borderRadius: 2,
-        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-        '&:hover': { bgcolor: '#0277bd' },
-        '&:disabled': { bgcolor: '#616161', cursor: 'not-allowed' },
-      }}
-    >
-      Girar
-    </Button> */}
-
-      {/* Mensaje de ganador */}
       {winner && rolling && (
         <Typography
           sx={{
