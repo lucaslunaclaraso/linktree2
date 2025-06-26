@@ -6,8 +6,11 @@ import axios from 'axios';
 import backgroundImg from './main_intro.jpg'
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from './authContext';
+import io from 'socket.io-client';
 
-
+const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
+    transports: ['websocket', 'polling'],
+});
 export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const { url } = useParams();
     const { username, logout } = useAuth();
@@ -107,44 +110,44 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     const sortear = async () => {
         const blacklist = await obtenerGanadoresDelSorteoAnterior();
-    
+
         // Participantes válidos = no están en blacklist
         const participantesValidos = participantes.filter(
             (p) => !blacklist.includes(p.nombre)
         );
-    
+
         const premiosTotales = sorteo?.premios || 0;
-    
+
         // Mezclar válidos
         const shuffledValidos = [...participantesValidos].sort(() => 0.5 - Math.random());
         const ganadoresValidos = shuffledValidos.slice(0, premiosTotales);
-    
+
         const faltantes = premiosTotales - ganadoresValidos.length;
-    
+
         let ganadoresCompletos = [...ganadoresValidos];
-    
+
         if (faltantes > 0) {
             // Solo usar los de la blacklist que están participando en el sorteo
             const blacklistParticipando = participantes.filter((p) =>
                 blacklist.includes(p.nombre)
             );
-    
+
             const shuffledBlacklist = [...blacklistParticipando].sort(() => 0.5 - Math.random());
             const ganadoresDeBlacklist = shuffledBlacklist.slice(0, faltantes);
-    
+
             ganadoresCompletos = [...ganadoresCompletos, ...ganadoresDeBlacklist];
         }
-    
+
         setGanadores(ganadoresCompletos);
-    
+
         const nombresGanadores = ganadoresCompletos.map((p) => p.nombre);
         guardarGanadores(url, nombresGanadores);
-    
+
         if (nombresGanadores.includes(usuarioKick)) {
             setOpen(true);
         }
     };
-    
+
 
     useEffect(() => {
         let intervalo;
@@ -206,6 +209,28 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
             }
         }
     };
+
+    // Agregar al estado existente
+    const [userMessageCounts, setUserMessageCounts] = useState({});
+    const handleChatMessage = ({ username }) => {
+        console.log('Nuevo mensaje de chat:', username);
+        setUserMessageCounts((prev) => ({
+            ...prev,
+            [username]: (prev[username] || 0) + 1,
+        }));
+    };
+    const getUserColor = (messageCount) => {
+        if (messageCount >= 10) return '#ffeb3b'; // Yellow
+        if (messageCount >= 5) return '#66bb6a'; // Green
+        return '#ffffff'; // Default (white)
+    };
+    useEffect(() => {
+        socket.on('nuevo-mensaje', handleChatMessage);
+        return () => {
+            socket.off('nuevo-mensaje', handleChatMessage);
+        };
+    }, []);
+
     return (
         <Nlayout>
             <Grid className="backgroundAnimado" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
@@ -215,7 +240,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                     width="1920"
                     height="1234"
                     fill="none"
-                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover',zIndex: -1}}
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 }}
                     className="highlight-block-bg leaderboard-intro-bg">
                     <defs>
                         <radialGradient id="leaderboard_intro_bg_svg__a" cx="0" cy="0" r="1" gradientTransform="rotate(90 452.72 546.22) scale(1141.5)" gradientUnits="userSpaceOnUse">
@@ -312,7 +337,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                                         <List>
                                             {participantes?.map((u, i) => (
                                                 <ListItem key={i}>
-                                                    <ListItemText primary={u?.nombre} />
+                                                    <ListItemText primary={u?.nombre} sx={{
+                                                        color: getUserColor(userMessageCounts[u?.nombre] || 0),
+                                                    }} />
                                                 </ListItem>
                                             ))}
                                         </List>

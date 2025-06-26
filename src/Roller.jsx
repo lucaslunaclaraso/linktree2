@@ -96,7 +96,7 @@ const Roller = () => {
   };
 
   const handleNuevoFollow = ({ username }) => {
-    console.log('Nuevo follower:', username);
+
     queueRef.current.push(username);
     eventosRef.current.push({
       tipo: 'follow',
@@ -110,10 +110,14 @@ const Roller = () => {
     }
   };
 
+
   useEffect(() => {
+    
     socket.on('nuevo-follow', handleNuevoFollow);
     return () => {
       socket.off('nuevo-follow', handleNuevoFollow);
+     
+
     };
   }, [rolling]);
 
