@@ -107,24 +107,44 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     const sortear = async () => {
         const blacklist = await obtenerGanadoresDelSorteoAnterior();
-       
     
+        // Participantes válidos = no están en blacklist
         const participantesValidos = participantes.filter(
             (p) => !blacklist.includes(p.nombre)
         );
     
-        const shuffled = [...participantesValidos].sort(() => 0.5 - Math.random());
-        const ganadores = shuffled.slice(0, sorteo?.premios || 0);
+        const premiosTotales = sorteo?.premios || 0;
     
-        setGanadores(ganadores);
+        // Mezclar válidos
+        const shuffledValidos = [...participantesValidos].sort(() => 0.5 - Math.random());
+        const ganadoresValidos = shuffledValidos.slice(0, premiosTotales);
     
-        const nombresGanadores = ganadores.map((p) => p.nombre);
+        const faltantes = premiosTotales - ganadoresValidos.length;
+    
+        let ganadoresCompletos = [...ganadoresValidos];
+    
+        if (faltantes > 0) {
+            // Solo usar los de la blacklist que están participando en el sorteo
+            const blacklistParticipando = participantes.filter((p) =>
+                blacklist.includes(p.nombre)
+            );
+    
+            const shuffledBlacklist = [...blacklistParticipando].sort(() => 0.5 - Math.random());
+            const ganadoresDeBlacklist = shuffledBlacklist.slice(0, faltantes);
+    
+            ganadoresCompletos = [...ganadoresCompletos, ...ganadoresDeBlacklist];
+        }
+    
+        setGanadores(ganadoresCompletos);
+    
+        const nombresGanadores = ganadoresCompletos.map((p) => p.nombre);
         guardarGanadores(url, nombresGanadores);
     
         if (nombresGanadores.includes(usuarioKick)) {
             setOpen(true);
         }
     };
+    
 
     useEffect(() => {
         let intervalo;
