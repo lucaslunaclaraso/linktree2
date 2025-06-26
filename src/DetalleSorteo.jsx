@@ -220,6 +220,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
         }));
     };
     const getUserColor = (messageCount) => {
+        if (messageCount < 10) return 'black'; // Yellow
         if (messageCount >= 10) return '#ffeb3b'; // Yellow
         if (messageCount >= 5) return '#66bb6a'; // Green
         return '#ffffff'; // Default (white)
@@ -338,7 +339,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                                             {participantes?.map((u, i) => (
                                                 <ListItem key={i}>
                                                     <ListItemText primary={u?.nombre} sx={{
-                                                        color: getUserColor(userMessageCounts[u?.nombre] || 0),
+                                                        color: getUserColor(userMessageCounts[u?.nombre] || 0) ,
                                                     }} />
                                                 </ListItem>
                                             ))}
