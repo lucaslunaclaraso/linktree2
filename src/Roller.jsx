@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import io from 'socket.io-client';
 import * as XLSX from 'xlsx';
-const socket = io('https://light-things-beg.loca.lt', {
+const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
   transports: ['websocket', 'polling'], // permite ambos métodos
 });
 const items = [
@@ -170,13 +170,27 @@ const Roller = () => {
     };
   }, []);
   return (
-    <Box sx={{ textAlign: 'center', bgcolor: '#121212', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 2 }}>
-      {lastSub && (
-        <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
-          ¡{lastSub} se ha suscrito o regaló subs! Abriendo caja...
-        </Typography>
-      )}
-      <Box sx={{ position: 'relative', width: { xs: '100%', sm: `${VISIBLE_ITEMS * ITEM_WIDTH}px` }, maxWidth: '100%', mx: 'auto' }}>
+    <Box
+    sx={{
+      textAlign: 'center',
+      bgcolor: 'green',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      p: 2,
+    }}
+  >
+    {lastSub && rolling && (
+      <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
+        ¡{lastSub} se ha suscrito o regaló subs! Abriendo caja...
+      </Typography>
+    )}
+
+    {/* Mostrar la ruleta solo cuando rolling es true */}
+    {rolling && (
+      <>
         {/* Marca central */}
         <Box sx={{ position: 'absolute', top: -40, left: '50%', transform: 'translateX(-50%)', fontSize: 40, color: '#ef5350', zIndex: 2 }}>
           ▼
@@ -184,100 +198,111 @@ const Roller = () => {
         {/* Contenedor del roller */}
         <Box
           sx={{
-            width: '100%',
-            height: 150,
-            overflow: 'hidden',
-            border: '4px solid #424242',
-            borderRadius: 3,
-            bgcolor: 'linear-gradient(135deg, #212121, #424242)',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+            position: 'relative',
+            width: { xs: '100%', sm: `${VISIBLE_ITEMS * ITEM_WIDTH}px` },
+            maxWidth: '100%',
+            mx: 'auto',
           }}
         >
           <Box
             sx={{
-              display: 'flex',
-              transform: `translateX(${offset}px)`,
-              transition: rolling ? 'none' : 'transform 0.3s ease-out',
+              width: '100%',
+              height: 150,
+              overflow: 'hidden',
+              border: '4px solid #424242',
+              borderRadius: 3,
+              bgcolor: 'linear-gradient(135deg, #212121, #424242)',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
             }}
           >
-            {/* Ítems repetidos dinámicamente para evitar espacios vacíos */}
-            {repeatedItems.map((item, idx) => (
-              <Box
-                key={idx}
-                sx={{
-                  width: ITEM_WIDTH,
-                  height: 150,
-                  flexShrink: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRight: '2px solid #616161',
-                  bgcolor: item.color,
-                  color: '#fff',
-                  fontWeight: winner?.name === item.name ? 'bold' : 'normal',
-                  fontSize: 20,
-                  fontFamily: '"Roboto", sans-serif',
-                  textTransform: 'uppercase',
-                  letterSpacing: 1,
-                  transition: 'all 0.3s',
-                  ...(winner?.name === item.name && {
-                    boxShadow: '0 0 12px #ffeb3b',
-                    border: '2px solid #ffeb3b',
-                  }),
-                }}
-              >
-                {item.name}
-              </Box>
-            ))}
+            <Box
+              sx={{
+                display: 'flex',
+                transform: `translateX(${offset}px)`,
+                transition: rolling ? 'none' : 'transform 0.3s ease-out',
+              }}
+            >
+              {/* Ítems repetidos dinámicamente */}
+              {repeatedItems.map((item, idx) => (
+                <Box
+                  key={idx}
+                  sx={{
+                    width: ITEM_WIDTH,
+                    height: 150,
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRight: '2px solid #616161',
+                    bgcolor: item.color,
+                    color: '#fff',
+                    fontWeight: winner?.name === item.name ? 'bold' : 'normal',
+                    fontSize: 20,
+                    fontFamily: '"Roboto", sans-serif',
+                    textTransform: 'uppercase',
+                    letterSpacing: 1,
+                    transition: 'all 0.3s',
+                    ...(winner?.name === item.name && {
+                      boxShadow: '0 0 12px #ffeb3b',
+                      border: '2px solid #ffeb3b',
+                    }),
+                  }}
+                >
+                  {item.name}
+                </Box>
+              ))}
+            </Box>
           </Box>
         </Box>
+      </>
+    )}
 
-      </Box>
-      {/* Iframe oculto para cargar el widget de BotRix */}
-      <iframe
-        ref={iframeRef}
-        src="https://botrix.live/alerts?bid=3DaOGe3SpkYHh7JprKrZ9A"
-        style={{ display: 'none' }}
-        title="BotRix Alerts Widget"
-      />
-      {/* Botón de girar */}
-      <Button
-        variant="contained"
-        onClick={startRoll}
-        disabled={rolling}
+    {/* Iframe oculto para cargar el widget de BotRix */}
+    <iframe
+      ref={iframeRef}
+      src="https://botrix.live/alerts?bid=3DaOGe3SpkYHh7JprKrZ9A"
+      style={{ display: 'none' }}
+      title="BotRix Alerts Widget"
+    />
+
+    {/* Botón de girar */}
+    {/* <Button
+      variant="contained"
+      onClick={startRoll}
+      disabled={rolling}
+      sx={{
+        mt: 4,
+        px: 6,
+        py: 1.5,
+        fontSize: 18,
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        bgcolor: '#0288d1',
+        borderRadius: 2,
+        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+        '&:hover': { bgcolor: '#0277bd' },
+        '&:disabled': { bgcolor: '#616161', cursor: 'not-allowed' },
+      }}
+    >
+      Girar
+    </Button> */}
+
+    {/* Mensaje de ganador */}
+    {winner && rolling &&(
+      <Typography
         sx={{
           mt: 4,
-          px: 6,
-          py: 1.5,
-          fontSize: 18,
+          fontSize: 24,
           fontWeight: 'bold',
+          color: '#ffeb3b',
+          fontFamily: '"Roboto", sans-serif',
           textTransform: 'uppercase',
-          bgcolor: '#0288d1',
-          borderRadius: 2,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-          '&:hover': { bgcolor: '#0277bd' },
-          '&:disabled': { bgcolor: '#616161', cursor: 'not-allowed' },
         }}
       >
-        Girar
-      </Button>
-     
-      {/* Mensaje de ganador */}
-      {winner && (
-        <Typography
-          sx={{
-            mt: 4,
-            fontSize: 24,
-            fontWeight: 'bold',
-            color: '#ffeb3b',
-            fontFamily: '"Roboto", sans-serif',
-            textTransform: 'uppercase',
-          }}
-        >
-          ¡Ganaste: {winner.name}!
-        </Typography>
-      )}
-    </Box>
+        ¡Ganaste: {winner.name}!
+      </Typography>
+    )}
+  </Box>
   );
 };
 
