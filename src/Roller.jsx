@@ -68,11 +68,11 @@ const Roller = () => {
     // Revisa el DOM del iframe cada 1 segundo
     const interval = setInterval(checkForAlerts, 1000);
 
-   
+
 
     return () => {
       clearInterval(interval);
-     
+
     };
   }, [rolling]);
 
@@ -124,11 +124,16 @@ const Roller = () => {
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
-        setRolling(false);
+        // Establecer el ganador y detener el audio inmediatamente
         setOffset(targetOffset);
         setWinner(items[targetItemIndex]);
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
+
+        // Establecer rolling a false después de 7 segundos
+        setTimeout(() => {
+          setRolling(false);
+        }, 10000); // 7000 ms = 7 segundos
       }
     };
 
@@ -160,7 +165,7 @@ const Roller = () => {
         fecha: new Date().toLocaleString()
       });
 
-      
+
     };
 
     socket.on('nuevo-follow', handleNuevoFollow);
@@ -171,102 +176,102 @@ const Roller = () => {
   }, []);
   return (
     <Box
-    sx={{
-      textAlign: 'center',
-      bgcolor: 'green',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      p: 2,
-    }}
-  >
-    {lastSub && rolling && (
-      <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
-        ¡{lastSub} se ha suscrito o regaló subs! Abriendo caja...
-      </Typography>
-    )}
+      sx={{
+        textAlign: 'center',
+        bgcolor: 'green',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 2,
+      }}
+    >
+      {lastSub && rolling && (
+        <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
+          ¡{lastSub} se ha suscrito o regaló subs! Abriendo caja...
+        </Typography>
+      )}
 
-    {/* Mostrar la ruleta solo cuando rolling es true */}
-    {rolling && (
-      <>
-        {/* Marca central */}
-        <Box sx={{ position: 'absolute', top: -40, left: '50%', transform: 'translateX(-50%)', fontSize: 40, color: '#ef5350', zIndex: 2 }}>
-          ▼
-        </Box>
-        {/* Contenedor del roller */}
-        <Box
-          sx={{
-            position: 'relative',
-            width: { xs: '100%', sm: `${VISIBLE_ITEMS * ITEM_WIDTH}px` },
-            maxWidth: '100%',
-            mx: 'auto',
-          }}
-        >
+      {/* Mostrar la ruleta solo cuando rolling es true */}
+      {rolling && (
+        <>
+          {/* Marca central */}
+          <Box sx={{ position: 'absolute', top: -40, left: '50%', transform: 'translateX(-50%)', fontSize: 40, color: '#ef5350', zIndex: 2 }}>
+            ▼
+          </Box>
+          {/* Contenedor del roller */}
           <Box
             sx={{
-              width: '100%',
-              height: 150,
-              overflow: 'hidden',
-              border: '4px solid #424242',
-              borderRadius: 3,
-              bgcolor: 'linear-gradient(135deg, #212121, #424242)',
-              boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+              position: 'relative',
+              width: { xs: '100%', sm: `${VISIBLE_ITEMS * ITEM_WIDTH}px` },
+              maxWidth: '100%',
+              mx: 'auto',
             }}
           >
             <Box
               sx={{
-                display: 'flex',
-                transform: `translateX(${offset}px)`,
-                transition: rolling ? 'none' : 'transform 0.3s ease-out',
+                width: '100%',
+                height: 150,
+                overflow: 'hidden',
+                border: '4px solid #424242',
+                borderRadius: 3,
+                bgcolor: 'linear-gradient(135deg, #212121, #424242)',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
               }}
             >
-              {/* Ítems repetidos dinámicamente */}
-              {repeatedItems.map((item, idx) => (
-                <Box
-                  key={idx}
-                  sx={{
-                    width: ITEM_WIDTH,
-                    height: 150,
-                    flexShrink: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRight: '2px solid #616161',
-                    bgcolor: item.color,
-                    color: '#fff',
-                    fontWeight: winner?.name === item.name ? 'bold' : 'normal',
-                    fontSize: 20,
-                    fontFamily: '"Roboto", sans-serif',
-                    textTransform: 'uppercase',
-                    letterSpacing: 1,
-                    transition: 'all 0.3s',
-                    ...(winner?.name === item.name && {
-                      boxShadow: '0 0 12px #ffeb3b',
-                      border: '2px solid #ffeb3b',
-                    }),
-                  }}
-                >
-                  {item.name}
-                </Box>
-              ))}
+              <Box
+                sx={{
+                  display: 'flex',
+                  transform: `translateX(${offset}px)`,
+                  transition: rolling ? 'none' : 'transform 0.3s ease-out',
+                }}
+              >
+                {/* Ítems repetidos dinámicamente */}
+                {repeatedItems.map((item, idx) => (
+                  <Box
+                    key={idx}
+                    sx={{
+                      width: ITEM_WIDTH,
+                      height: 150,
+                      flexShrink: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRight: '2px solid #616161',
+                      bgcolor: item.color,
+                      color: '#fff',
+                      fontWeight: winner?.name === item.name ? 'bold' : 'normal',
+                      fontSize: 20,
+                      fontFamily: '"Roboto", sans-serif',
+                      textTransform: 'uppercase',
+                      letterSpacing: 1,
+                      transition: 'all 0.3s',
+                      ...(winner?.name === item.name && {
+                        boxShadow: '0 0 12px #ffeb3b',
+                        border: '2px solid #ffeb3b',
+                      }),
+                    }}
+                  >
+                    {item.name}
+                  </Box>
+                ))}
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </>
-    )}
+        </>
+      )}
 
-    {/* Iframe oculto para cargar el widget de BotRix */}
-    <iframe
-      ref={iframeRef}
-      src="https://botrix.live/alerts?bid=3DaOGe3SpkYHh7JprKrZ9A"
-      style={{ display: 'none' }}
-      title="BotRix Alerts Widget"
-    />
+      {/* Iframe oculto para cargar el widget de BotRix */}
+      <iframe
+        ref={iframeRef}
+        src="https://botrix.live/alerts?bid=3DaOGe3SpkYHh7JprKrZ9A"
+        style={{ display: 'none' }}
+        title="BotRix Alerts Widget"
+      />
 
-    {/* Botón de girar */}
-    {/* <Button
+      {/* Botón de girar */}
+      {/* <Button
       variant="contained"
       onClick={startRoll}
       disabled={rolling}
@@ -287,22 +292,22 @@ const Roller = () => {
       Girar
     </Button> */}
 
-    {/* Mensaje de ganador */}
-    {winner && rolling &&(
-      <Typography
-        sx={{
-          mt: 4,
-          fontSize: 24,
-          fontWeight: 'bold',
-          color: '#ffeb3b',
-          fontFamily: '"Roboto", sans-serif',
-          textTransform: 'uppercase',
-        }}
-      >
-        ¡Ganaste: {winner.name}!
-      </Typography>
-    )}
-  </Box>
+      {/* Mensaje de ganador */}
+      {winner && rolling && (
+        <Typography
+          sx={{
+            mt: 4,
+            fontSize: 24,
+            fontWeight: 'bold',
+            color: '#ffeb3b',
+            fontFamily: '"Roboto", sans-serif',
+            textTransform: 'uppercase',
+          }}
+        >
+          ¡Ganaste: {winner.name}!
+        </Typography>
+      )}
+    </Box>
   );
 };
 
