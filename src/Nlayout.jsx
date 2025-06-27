@@ -679,7 +679,7 @@ function Nlayout(props) {
 
 
                     <div class="footer-column">
-                        <img src={logoDengue} style={{ borderRadius: '50%', width: isMobile ? '50%' : '15%' }} />
+                        <img src={logoDengue} style={{ borderRadius: '50%', width: isMobile ? '20%' : '15%' }} />
 
                         <div class="footer-copyrights">© Copyrights 2025 eldenguee.com</div>
                         <img src={gamble} alt="GambleAware logo" width="172" height="24" />
