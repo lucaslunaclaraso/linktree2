@@ -212,9 +212,15 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     // Agregar al estado existente
       // Guardar userMessageCounts en localStorage cada vez que cambie
-  useEffect(() => {
-    localStorage.setItem('userMessageCounts', JSON.stringify(userMessageCounts));
-  }, [userMessageCounts]);
+      useEffect(() => {
+        try {
+          if (Object.keys(userMessageCounts).length > 0) {
+            localStorage.setItem('userMessageCounts', JSON.stringify(userMessageCounts));
+          }
+        } catch (error) {
+          console.error('Error al guardar userMessageCounts en localStorage:', error);
+        }
+      }, [userMessageCounts]);
     const [userMessageCounts, setUserMessageCounts] = useState({});
     const handleChatMessage = ({ username }) => {
         console.log('Nuevo mensaje de chat:', username);
