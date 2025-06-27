@@ -211,6 +211,10 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     };
 
     // Agregar al estado existente
+      // Guardar userMessageCounts en localStorage cada vez que cambie
+  useEffect(() => {
+    localStorage.setItem('userMessageCounts', JSON.stringify(userMessageCounts));
+  }, [userMessageCounts]);
     const [userMessageCounts, setUserMessageCounts] = useState({});
     const handleChatMessage = ({ username }) => {
         console.log('Nuevo mensaje de chat:', username);
@@ -220,10 +224,12 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
         }));
     };
     const getUserColor = (messageCount) => {
-        if (messageCount < 5) return 'black'; // Yellow
-        if (messageCount >= 10) return '#ffeb3b'; // Yellow
-        if (messageCount >= 5) return '#66bb6a'; // Green
-        return '#ffffff'; // Default (white)
+        if (messageCount >= 200) return { color: '#ff0000cc', bonus: 10 }; // Rojo (+10%)
+        if (messageCount >= 150) return { color: '#ed6e07cc', bonus: 8 }; // Naranja (+8%)
+        if (messageCount >= 100) return { color: '#bec800cc', bonus: 6 }; // Amarillo (+6%)
+        if (messageCount >= 70) return { color: '#33e64bcc', bonus: 4 }; // Verde Claro (+4%)
+        if (messageCount >= 30) return { color: '#008a13cc', bonus: 2 }; // Verde Oscuro (+2%)
+        return { color: 'black', bonus: 0 }; // Default (sin bonus)
     };
     useEffect(() => {
         socket.on('nuevo-mensaje', handleChatMessage);
@@ -338,8 +344,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                                         <List>
                                             {participantes?.map((u, i) => (
                                                 <ListItem key={i}>
-                                                    <ListItemText primary={u?.nombre} sx={{
-                                                        color: getUserColor(userMessageCounts[u?.nombre] || 0) ,
+                                                    <ListItemText primary={u?.nombre} secondary={getUserColor(userMessageCounts[u?.nombre]?.bonus)} sx={{
+                                                        color: getUserColor(userMessageCounts[u?.nombre]?.color || 0) ,
                                                     }} />
                                                 </ListItem>
                                             ))}
