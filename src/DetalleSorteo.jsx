@@ -3,252 +3,243 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography, Button, List, ListItem, ListItemText, Card, CardContent, Grid, Modal } from '@mui/material';
 import Nlayout from './Nlayout';
 import axios from 'axios';
-import backgroundImg from './main_intro.jpg'
+import backgroundImg from './main_intro.jpg';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from './authContext';
 import io from 'socket.io-client';
 
 const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
-    transports: ['websocket', 'polling'],
+  transports: ['websocket', 'polling'],
 });
+
 export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
-    const { url } = useParams();
-    const { username, logout } = useAuth();
+  const { url } = useParams();
+  const { username, logout } = useAuth();
 
-    const [sorteo, setSorteo] = useState()
-    const [participantes, setParticipantes] = useState()
-    const [ganadores, setGanadores] = useState()
-    const [unirseSorteo, setUnirseSorteo] = useState()
+  const [sorteo, setSorteo] = useState();
+  const [participantes, setParticipantes] = useState();
+  const [ganadores, setGanadores] = useState();
+  const [unirseSorteo, setUnirseSorteo] = useState();
 
-    const obtenerSorteos = async () => {
-        const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}`)
-        setSorteo(peticion?.data?.sorteo)
-        setParticipantes(peticion?.data?.participantes)
+  // Inicializar userMessageCounts desde localStorage
+  const [userMessageCounts, setUserMessageCounts] = useState(() => {
+    try {
+      const stored = localStorage.getItem('userMessageCounts');
+      return stored ? JSON.parse(stored) : {};
+    } catch (error) {
+      console.error('Error al leer userMessageCounts de localStorage:', error);
+      return {};
     }
+  });
 
-    const UnirseAlSorteo = async (nombre, mail) => {
+  const obtenerSorteos = async () => {
+    const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}`);
+    setSorteo(peticion?.data?.sorteo);
+    setParticipantes(peticion?.data?.participantes);
+  };
 
-        try {
-            const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre, mail })
-            const peticionUser = await axios.post(`https://backmu.vercel.app/sorteo/crearUser`, { nombre, mail })
+  const UnirseAlSorteo = async (nombre, mail) => {
+    try {
+      const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre, mail });
+      const peticionUser = await axios.post(`https://backmu.vercel.app/sorteo/crearUser`, { nombre, mail });
 
-            if (peticion?.data?.success) {
-                obtenerSorteos()
-            } else {
-                setUnirseSorteo(true)
-                alert('ERROR YA TE UNISTE')
-
-            }
-        } catch (error) {
-            setUnirseSorteo(true)
-
-            alert('ERROR YA TE UNISTE')
-        }
-
+      if (peticion?.data?.success) {
+        obtenerSorteos();
+      } else {
+        setUnirseSorteo(true);
+        alert('ERROR YA TE UNISTE');
+      }
+    } catch (error) {
+      setUnirseSorteo(true);
+      alert('ERROR YA TE UNISTE');
     }
-    useEffect(() => { obtenerSorteos() }, [])
+  };
 
+  useEffect(() => {
+    obtenerSorteos();
+  }, []);
 
-    const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
-    const usuarioKick = localStorage.getItem('kick_user')
-    const mailKick = localStorage.getItem('kick_mail')
-    const unirse = () => {
-        const nombre = username;
-        const mail = mailKick
-        if (!nombre) return;
-        UnirseAlSorteo(nombre, mail)
-    };
+  const usuario = localStorage.getItem('fbUser')?.replaceAll('"', '');
+  const usuarioKick = localStorage.getItem('kick_user');
+  const mailKick = localStorage.getItem('kick_mail');
 
+  const unirse = () => {
+    const nombre = username;
+    const mail = mailKick;
+    if (!nombre) return;
+    UnirseAlSorteo(nombre, mail);
+  };
 
-    const guardarGanadores = async (url, ganadores) => {
-        try {
-            const response = await axios.put(`https://backmu.vercel.app/sorteo/${url}/ganadores`, {
-                ganadores, // puede ser string, array o JSON.stringify(...) según cómo guardes en la BD
-            });
-            console.log('Ganadores guardados:', response.data);
-            return response.data;
-        } catch (error) {
-            console.error('Error al guardar ganadores:', error);
-            throw error;
-        }
-    };
-    const [open, setOpen] = useState()
-    const [progress, setProgress] = useState(100);
-    const duration = 5000; // 5 segundos
+  const guardarGanadores = async (url, ganadores) => {
+    try {
+      const response = await axios.put(`https://backmu.vercel.app/sorteo/${url}/ganadores`, {
+        ganadores,
+      });
+      console.log('Ganadores guardados:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error al guardar ganadores:', error);
+      throw error;
+    }
+  };
 
-    useEffect(() => {
-        if (open) {
-            setProgress(100); // <-- Reset progress
+  const [open, setOpen] = useState();
+  const [progress, setProgress] = useState(100);
+  const duration = 5000;
 
-            let interval = setInterval(() => {
-                setProgress((prev) => {
-                    if (prev <= 0) {
-                        clearInterval(interval);
-                        if (open) {
-                            setOpen(false);
-                        }
-                        return 0;
-                    }
-                    return prev - 2;
-                });
-            }, duration / 50);
-
-            return () => clearInterval(interval);
-        }
-    }, [open]);
-    const obtenerGanadoresDelSorteoAnterior = async () => {
-        try {
-            const response = await fetch(`https://backmu.vercel.app/sorteo/${url}/ganadores-anteriores`);
-            const data = await response.json();
-            return Array.isArray(data.ganadores) ? data.ganadores : [];
-        } catch (err) {
-            console.error('Error al obtener la blacklist:', err);
-            return [];
-        }
-    };
-
-
-    const sortear = async () => {
-        const blacklist = await obtenerGanadoresDelSorteoAnterior();
-
-        // Participantes válidos = no están en blacklist
-        const participantesValidos = participantes.filter(
-            (p) => !blacklist.includes(p.nombre)
-        );
-
-        const premiosTotales = sorteo?.premios || 0;
-
-        // Mezclar válidos
-        const shuffledValidos = [...participantesValidos].sort(() => 0.5 - Math.random());
-        const ganadoresValidos = shuffledValidos.slice(0, premiosTotales);
-
-        const faltantes = premiosTotales - ganadoresValidos.length;
-
-        let ganadoresCompletos = [...ganadoresValidos];
-
-        if (faltantes > 0) {
-            // Solo usar los de la blacklist que están participando en el sorteo
-            const blacklistParticipando = participantes.filter((p) =>
-                blacklist.includes(p.nombre)
-            );
-
-            const shuffledBlacklist = [...blacklistParticipando].sort(() => 0.5 - Math.random());
-            const ganadoresDeBlacklist = shuffledBlacklist.slice(0, faltantes);
-
-            ganadoresCompletos = [...ganadoresCompletos, ...ganadoresDeBlacklist];
-        }
-
-        setGanadores(ganadoresCompletos);
-
-        const nombresGanadores = ganadoresCompletos.map((p) => p.nombre);
-        guardarGanadores(url, nombresGanadores);
-
-        if (nombresGanadores.includes(usuarioKick)) {
-            setOpen(true);
-        }
-    };
-
-
-    useEffect(() => {
-        let intervalo;
-        let yaMostrado = false; // bandera local
-
-        const verificarGanador = async () => {
-            try {
-                const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}/ganadores`);
-                const data = peticion?.data;
-
-                if (!yaMostrado && data?.some((ganador) => ganador === usuarioKick)) {
-                    setOpen(true);
-                    yaMostrado = true; // marca como ya mostrado
-                    clearInterval(intervalo); // detiene verificación
-                }
-            } catch (error) {
-                console.error("Error al verificar ganadores", error);
+  useEffect(() => {
+    if (open) {
+      setProgress(100);
+      let interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev <= 0) {
+            clearInterval(interval);
+            if (open) {
+              setOpen(false);
             }
-        };
-
-        // Verificar cada 5 segundos
-        intervalo = setInterval(verificarGanador, 5000);
-
-        return () => clearInterval(intervalo); // limpieza si se desmonta
-    }, []);
-    // Polling para actualizaciones en tiempo real
-    useEffect(() => {
-        obtenerSorteos(); // Carga inicial
-        const interval = setInterval(obtenerSorteos, 5000); // Consulta cada 5 segundos
-
-        // Limpieza del intervalo al desmontar el componente
-        return () => clearInterval(interval);
-    }, [url]); // Dependencia en url para recargar si cambia
-    const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
-    const svgRef = useRef(null);
-
-    const handleMouseMove = (e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width * 100; // Convert to percentage
-        const y = (e.clientY - rect.top) / rect.height * 100;
-        setMousePos({ x, y });
-
-        if (svgRef.current) {
-            const ellipse = svgRef.current.querySelector('ellipse');
-            if (ellipse) {
-                ellipse.setAttribute('cx', `${x}%`);
-                ellipse.setAttribute('cy', `${y}%`);
-            }
-        }
-    };
-
-    const handleMouseLeave = () => {
-        setMousePos({ x: -100, y: -100 });
-        if (svgRef.current) {
-            const ellipse = svgRef.current.querySelector('ellipse');
-            if (ellipse) {
-                ellipse.setAttribute('cx', '1.25%'); // Reset to initial position
-                ellipse.setAttribute('cy', '82.24121557454892%');
-            }
-        }
-    };
-
-    // Agregar al estado existente
-      // Guardar userMessageCounts en localStorage cada vez que cambie
-      useEffect(() => {
-        try {
-          if (Object.keys(userMessageCounts).length > 0) {
-            localStorage.setItem('userMessageCounts', JSON.stringify(userMessageCounts));
+            return 0;
           }
-        } catch (error) {
-          console.error('Error al guardar userMessageCounts en localStorage:', error);
-        }
-      }, [userMessageCounts]);
-    const [userMessageCounts, setUserMessageCounts] = useState({});
-    const handleChatMessage = ({ username }) => {
-        console.log('Nuevo mensaje de chat:', username);
-        setUserMessageCounts((prev) => ({
-            ...prev,
-            [username]: (prev[username] || 0) + 1,
-        }));
-    };
-    const getUserColor = (messageCount) => {
-        if (messageCount >= 200) return { color: '#ff0000cc', bonus: 10 }; // Rojo (+10%)
-        if (messageCount >= 150) return { color: '#ed6e07cc', bonus: 8 }; // Naranja (+8%)
-        if (messageCount >= 100) return { color: '#bec800cc', bonus: 6 }; // Amarillo (+6%)
-        if (messageCount >= 70) return { color: '#33e64bcc', bonus: 4 }; // Verde Claro (+4%)
-        if (messageCount >= 30) return { color: '#008a13cc', bonus: 2 }; // Verde Oscuro (+2%)
-        return { color: 'black', bonus: 0 }; // Default (sin bonus)
-    };
-    useEffect(() => {
-        socket.on('nuevo-mensaje', handleChatMessage);
-        return () => {
-            socket.off('nuevo-mensaje', handleChatMessage);
-        };
-    }, []);
+          return prev - 2;
+        });
+      }, duration / 50);
+      return () => clearInterval(interval);
+    }
+  }, [open]);
 
-    return (
-        <Nlayout>
-            <Grid className="backgroundAnimado" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
-                {/* SVG como fondo */}
-                <svg ref={svgRef}
+  const obtenerGanadoresDelSorteoAnterior = async () => {
+    try {
+      const response = await fetch(`https://backmu.vercel.app/sorteo/${url}/ganadores-anteriores`);
+      const data = await response.json();
+      return Array.isArray(data.ganadores) ? data.ganadores : [];
+    } catch (err) {
+      console.error('Error al obtener la blacklist:', err);
+      return [];
+    }
+  };
+
+  const sortear = async () => {
+    const blacklist = await obtenerGanadoresDelSorteoAnterior();
+    const participantesValidos = participantes.filter((p) => !blacklist.includes(p.nombre));
+    const premiosTotales = sorteo?.premios || 0;
+    const shuffledValidos = [...participantesValidos].sort(() => 0.5 - Math.random());
+    const ganadoresValidos = shuffledValidos.slice(0, premiosTotales);
+    const faltantes = premiosTotales - ganadoresValidos.length;
+    let ganadoresCompletos = [...ganadoresValidos];
+
+    if (faltantes > 0) {
+      const blacklistParticipando = participantes.filter((p) => blacklist.includes(p.nombre));
+      const shuffledBlacklist = [...blacklistParticipando].sort(() => 0.5 - Math.random());
+      const ganadoresDeBlacklist = shuffledBlacklist.slice(0, faltantes);
+      ganadoresCompletos = [...ganadoresCompletos, ...ganadoresDeBlacklist];
+    }
+
+    setGanadores(ganadoresCompletos);
+    const nombresGanadores = ganadoresCompletos.map((p) => p.nombre);
+    guardarGanadores(url, nombresGanadores);
+
+    if (nombresGanadores.includes(usuarioKick)) {
+      setOpen(true);
+    }
+  };
+
+  useEffect(() => {
+    let intervalo;
+    let yaMostrado = false;
+
+    const verificarGanador = async () => {
+      try {
+        const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}/ganadores`);
+        const data = peticion?.data;
+
+        if (!yaMostrado && data?.some((ganador) => ganador === usuarioKick)) {
+          setOpen(true);
+          yaMostrado = true;
+          clearInterval(intervalo);
+        }
+      } catch (error) {
+        console.error('Error al verificar ganadores', error);
+      }
+    };
+
+    intervalo = setInterval(verificarGanador, 5000);
+    return () => clearInterval(intervalo);
+  }, []);
+
+  useEffect(() => {
+    obtenerSorteos();
+    const interval = setInterval(obtenerSorteos, 5000);
+    return () => clearInterval(interval);
+  }, [url]);
+
+  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+  const svgRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setMousePos({ x, y });
+
+    if (svgRef.current) {
+      const ellipse = svgRef.current.querySelector('ellipse');
+      if (ellipse) {
+        ellipse.setAttribute('cx', `${x}%`);
+        ellipse.setAttribute('cy', `${y}%`);
+      }
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos({ x: -100, y: -100 });
+    if (svgRef.current) {
+      const ellipse = svgRef.current.querySelector('ellipse');
+      if (ellipse) {
+        ellipse.setAttribute('cx', '1.25%');
+        ellipse.setAttribute('cy', '82.24121557454892%');
+      }
+    }
+  };
+
+  // Guardar userMessageCounts en localStorage
+  useEffect(() => {
+    try {
+      if (Object.keys(userMessageCounts).length > 0) {
+        localStorage.setItem('userMessageCounts', JSON.stringify(userMessageCounts));
+      }
+    } catch (error) {
+      console.error('Error al guardar userMessageCounts en localStorage:', error);
+    }
+  }, [userMessageCounts]);
+
+  const handleChatMessage = ({ username }) => {
+    console.log('Nuevo mensaje de chat:', username);
+    setUserMessageCounts((prev) => ({
+      ...prev,
+      [username]: (prev[username] || 0) + 1,
+    }));
+  };
+
+  const getUserColor = (messageCount) => {
+    if (messageCount >= 200) return { color: '#ff0000cc', bonus: 10 }; // Rojo (+10%)
+    if (messageCount >= 150) return { color: '#ed6e07cc', bonus: 8 }; // Naranja (+8%)
+    if (messageCount >= 100) return { color: '#bec800cc', bonus: 6 }; // Amarillo (+6%)
+    if (messageCount >= 70) return { color: '#33e64bcc', bonus: 4 }; // Verde Claro (+4%)
+    if (messageCount >= 30) return { color: '#008a13cc', bonus: 2 }; // Verde Oscuro (+2%)
+    return { color: 'black', bonus: 0 }; // Default (sin bonus)
+  };
+
+  useEffect(() => {
+    socket.on('nuevo-mensaje', handleChatMessage);
+    return () => {
+      socket.off('nuevo-mensaje', handleChatMessage);
+    };
+  }, []);
+
+  return (
+    <Nlayout>
+      <Grid className="backgroundAnimado" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+        {/* SVG como fondo */}
+        <svg ref={svgRef}
                     xmlns="http://www.w3.org/2000/svg"
                     width="1920"
                     height="1234"
@@ -284,141 +275,138 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                     <ellipse cx="0%" cy="24.69135802469136%" fill="url(#leaderboard_intro_bg_svg__b)" clip-path="url(#leaderboard_intro_bg_svg__c)" rx="450" ry="300"></ellipse>
                     <circle cx="50%" cy="50%" r="5000" fill="url(#leaderboard_intro_bg_svg__d)" clip-path="url(#leaderboard_intro_bg_svg__c)"></circle>
                 </svg>
-                {
-                    sorteo?.estado === 'oculto' ?
-                        <Grid style={{ background: '#11111d', marginTop: isMobile ? '-30%' : '-10%', width: '100%' }}>
 
-                            <Grid style={{
-                                backgroundImage: `
-            linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
-            url(${backgroundImg})
-          `,
-                                backgroundSize: 'cover',
-                                backgroundRepeat: 'no-repeat',
-                                height: '980px',
-                                backgroundColor: '#3f3d45',
-                                margin: '0 auto',
-                                position: 'relative',
-                                backgroundPosition: '50%'
-                            }}>
-                                <Grid className='container' style={{
-                                    padding: 50,
-                                    gap: '10px',
-                                    justifyContent: 'center',
-
-                                }}>
-                                    <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
-                                        <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif' }} >
-                                            eldenguee.com
-                                        </Typography>
-                                        <Typography sx={{
-                                            background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
-                                            WebkitBackgroundClip: 'text',
-                                            WebkitTextFillColor: 'transparent',
-                                            fontWeight: 'bold',
-                                            fontSize: isMobile ? 32 : 65,
-                                            fontFamily: 'Belerofonte'
-                                        }} >El sorteo no existe</Typography>
-                                    </Grid>
-
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        :
-
-                        <Box p={4} style={{ width: '85%', margin: '0 auto' }} >
-
-
-                            <Typography variant="h4" style={{ color: 'white' }}>{sorteo?.titulo}</Typography>
-                            <Typography variant="subtitle1" style={{ color: 'white' }}>Premios: {sorteo?.premios}</Typography>
-                            {
-                                !sorteo?.ganadores?.length &&
-                                <Button onClick={unirse} variant="contained" sx={{ mt: 2, backgroundColor: unirseSorteo && 'red', color: unirseSorteo && 'white' }}> {unirseSorteo ? 'YA ESTAS PARTICIPANDO' : 'PARTICIPAR'}</Button>
-                            }
-
-
-                            {
-                                (usuarioKick === 'eldenguee' || usuarioKick === 'lucaslunacl') &&
-                                < Button onClick={sortear} variant="outlined" sx={{ mt: 2, ml: 2 }}>Sortear</Button>
-                            }
-
-                            <Grid style={{ display: 'flex', alignItems: 'start', gap: '10px', marginBottom: '5%', zIndex: 9999 }}>
-
-                                <Card sx={{ mt: 4, width: '30%', border: '2px dashed #2a2e38' }}>
-                                    <CardContent sx={{ maxHeight: 300, overflowY: 'auto' }}>
-                                        <Typography variant="h6">Participantes: {participantes?.length} </Typography>
-                                        <List>
-                                            {participantes?.map((u, i) => (
-                                                <ListItem key={i}>
-                                                    <ListItemText primary={u?.nombre} secondary={getUserColor(userMessageCounts[u?.nombre]?.bonus)} sx={{
-                                                        color: getUserColor(userMessageCounts[u?.nombre]?.color || 0) ,
-                                                    }} />
-                                                </ListItem>
-                                            ))}
-                                        </List>
-                                    </CardContent>
-                                </Card>
-
-
-                                {sorteo?.ganadores?.length > 0 && (
-                                    <Card sx={{ mt: 4, bgcolor: '#e0f7fa', width: '30%', border: '2px dashed #2a2e38' }}>
-                                        <CardContent>
-                                            <Typography variant="h6">🎉 Ganadores 🎉</Typography>
-                                            <List>
-                                                {JSON.parse(sorteo.ganadores).map((ganador, index) => (
-                                                    <ListItem key={index}>
-                                                        <Grid style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                                            <Typography style={{ fontWeight: 'bold' }}>
-                                                                Puesto {index + 1}:
-                                                            </Typography>
-                                                            <Typography >
-                                                                {ganador}
-                                                            </Typography>
-
-
-                                                        </Grid>
-
-                                                    </ListItem>
-                                                ))}
-                                            </List>
-                                        </CardContent>
-                                    </Card>
-                                )}
-                            </Grid>
-
-
-
-                        </Box>
-                }
-
-                <Modal open={open} onClose={() => { setOpen(false) }}>
-                    <AnimatePresence>
-                        {(open) && (
-                            <motion.div
-                                initial={{ x: -300, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                exit={{ x: -300, opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                                className="toast-container"
-                            >
-                                <div className="toast-content">
-                                    <div className="icon">🎉</div>
-                                    <div className="text">
-                                        <strong>{open && '¡Felicidades!'}</strong>
-                                        {open && (
-                                            <p>¡Ganaste un <strong>tipeo</strong>! 🎁</p>
-                                        )
-                                        }
-                                    </div>
-                                    <button className="close-btn" onClick={() => { setOpen(false) }}>×</button>
-                                </div>
-                                <div className={open ? "progress-bar" : "progress-bar-error"} style={{ width: `${progress}%` }} />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </Modal>
+        {sorteo?.estado === 'oculto' ? (
+          <Grid style={{ background: '#11111d', marginTop: isMobile ? '-30%' : '-10%', width: '100%' }}>
+            <Grid
+              style={{
+                backgroundImage: `
+                  linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
+                  url(${backgroundImg})
+                `,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                height: '980px',
+                backgroundColor: '#3f3d45',
+                margin: '0 auto',
+                position: 'relative',
+                backgroundPosition: '50%',
+              }}
+            >
+              <Grid className="container" style={{ padding: 50, gap: '10px', justifyContent: 'center' }}>
+                <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
+                  <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '32px', fontFamily: 'Outfit,sans-serif' }}>
+                    eldenguee.com
+                  </Typography>
+                  <Typography
+                    sx={{
+                      background: 'linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      fontWeight: 'bold',
+                      fontSize: isMobile ? 32 : 65,
+                      fontFamily: 'Belerofonte',
+                    }}
+                  >
+                    El sorteo no existe
+                  </Typography>
+                </Grid>
+              </Grid>
             </Grid>
+          </Grid>
+        ) : (
+          <Box p={4} style={{ width: '85%', margin: '0 auto' }}>
+            <Typography variant="h4" style={{ color: 'white' }}>
+              {sorteo?.titulo}
+            </Typography>
+            <Typography variant="subtitle1" style={{ color: 'white' }}>
+              Premios: {sorteo?.premios}
+            </Typography>
+            {!sorteo?.ganadores?.length && (
+              <Button
+                onClick={unirse}
+                variant="contained"
+                sx={{ mt: 2, backgroundColor: unirseSorteo && 'red', color: unirseSorteo && 'white' }}
+              >
+                {unirseSorteo ? 'YA ESTAS PARTICIPANDO' : 'PARTICIPAR'}
+              </Button>
+            )}
+            {(usuarioKick === 'eldenguee' || usuarioKick === 'lucaslunacl') && (
+              <Button onClick={sortear} variant="outlined" sx={{ mt: 2, ml: 2 }}>
+                Sortear
+              </Button>
+            )}
 
-        </Nlayout >
-    );
+            <Grid style={{ display: 'flex', alignItems: 'start', gap: '10px', marginBottom: '5%', zIndex: 9999 }}>
+              <Card sx={{ mt: 4, width: '30%', border: '2px dashed #2a2e38' }}>
+                <CardContent sx={{ maxHeight: 300, overflowY: 'auto' }}>
+                  <Typography variant="h6">Participantes: {participantes?.length}</Typography>
+                  <List>
+                    {participantes?.map((u, i) => {
+                      const { color, bonus } = getUserColor(userMessageCounts[u?.nombre] || 0);
+                      return (
+                        <ListItem key={i}>
+                          <ListItemText
+                            primary={
+                              <span>
+                                <span style={{ color }}>{u?.nombre}</span> (+{bonus}%)
+                              </span>
+                            }
+                          />
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                </CardContent>
+              </Card>
+
+              {sorteo?.ganadores?.length > 0 && (
+                <Card sx={{ mt: 4, bgcolor: '#e0f7fa', width: '30%', border: '2px dashed #2a2e38' }}>
+                  <CardContent>
+                    <Typography variant="h6">🎉 Ganadores 🎉</Typography>
+                    <List>
+                      {JSON.parse(sorteo.ganadores).map((ganador, index) => (
+                        <ListItem key={index}>
+                          <Grid style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <Typography style={{ fontWeight: 'bold' }}>Puesto {index + 1}:</Typography>
+                            <Typography>{ganador}</Typography>
+                          </Grid>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </CardContent>
+                </Card>
+              )}
+            </Grid>
+          </Box>
+        )}
+
+        <Modal open={open} onClose={() => setOpen(false)}>
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                initial={{ x: -300, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -300, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="toast-container"
+              >
+                <div className="toast-content">
+                  <div className="icon">🎉</div>
+                  <div className="text">
+                    <strong>{open && '¡Felicidades!'}</strong>
+                    {open && <p>¡Ganaste un <strong>tipeo</strong>! 🎁</p>}
+                  </div>
+                  <button className="close-btn" onClick={() => setOpen(false)}>
+                    ×
+                  </button>
+                </div>
+                <div className={open ? 'progress-bar' : 'progress-bar-error'} style={{ width: `${progress}%` }} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </Modal>
+      </Grid>
+    </Nlayout>
+  );
 }
