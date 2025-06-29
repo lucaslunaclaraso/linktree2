@@ -21,7 +21,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   const [ganadores, setGanadores] = useState();
   const [unirseSorteo, setUnirseSorteo] = useState();
 
-  // Inicializar userMessageCounts desde localStorage
+  // Initialize userMessageCounts and reset on new sorteo
   const [userMessageCounts, setUserMessageCounts] = useState(() => {
     try {
       const stored = localStorage.getItem('userMessageCounts');
@@ -36,6 +36,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}`);
     setSorteo(peticion?.data?.sorteo);
     setParticipantes(peticion?.data?.participantes);
+    // Reset userMessageCounts when loading a new sorteo
+    setUserMessageCounts({});
+    localStorage.removeItem('userMessageCounts');
   };
 
   const UnirseAlSorteo = async (nombre, mail) => {
@@ -45,7 +48,6 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
       if (peticion?.data?.success) {
         setUnirseSorteo(true);
-
         obtenerSorteos();
       } else {
         setUnirseSorteo(true);
@@ -202,7 +204,6 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     }
   };
 
-  // Guardar userMessageCounts en localStorage
   useEffect(() => {
     try {
       if (Object.keys(userMessageCounts).length > 0) {
@@ -240,8 +241,10 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   return (
     <Nlayout>
       <Grid className="backgroundAnimado" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
-        {/* SVG como fondo */}
-        <svg ref={svgRef}
+        {/* SVG background code remains unchanged */}
+        {/* ... SVG background code ... */}
+ {/* SVG como fondo */}
+ <svg ref={svgRef}
                     xmlns="http://www.w3.org/2000/svg"
                     width="1920"
                     height="1234"
@@ -277,7 +280,6 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                     <ellipse cx="0%" cy="24.69135802469136%" fill="url(#leaderboard_intro_bg_svg__b)" clip-path="url(#leaderboard_intro_bg_svg__c)" rx="450" ry="300"></ellipse>
                     <circle cx="50%" cy="50%" r="5000" fill="url(#leaderboard_intro_bg_svg__d)" clip-path="url(#leaderboard_intro_bg_svg__c)"></circle>
                 </svg>
-
         {sorteo?.estado === 'oculto' ? (
           <Grid style={{ background: '#11111d', marginTop: isMobile ? '-30%' : '-10%', width: '100%' }}>
             <Grid
@@ -351,7 +353,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                           <ListItemText
                             primary={
                               <span>
-                                <span style={{ color }}>{u?.nombre}</span> (+{bonus}%)
+                                <span style={{ color }}>{u?.nombre}</span>
+                                {bonus > 0 && <span> (+{bonus}%)</span>}
                               </span>
                             }
                           />
@@ -367,14 +370,17 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                   <CardContent>
                     <Typography variant="h6">🎉 Ganadores 🎉</Typography>
                     <List>
-                      {JSON.parse(sorteo.ganadores).map((ganador, index) => (
-                        <ListItem key={index}>
-                          <Grid style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <Typography style={{ fontWeight: 'bold' }}>Puesto {index + 1}:</Typography>
-                            <Typography>{ganador}</Typography>
-                          </Grid>
-                        </ListItem>
-                      ))}
+                      {JSON.parse(sorteo.ganadores).map((ganador, index) => {
+                        const { color } = getUserColor(userMessageCounts[ganador] || 0);
+                        return (
+                          <ListItem key={index}>
+                            <Grid style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                              <Typography style={{ fontWeight: 'bold' }}>Puesto {index + 1}:</Typography>
+                              <Typography style={{ color }}>{ganador}</Typography>
+                            </Grid>
+                          </ListItem>
+                        );
+                      })}
                     </List>
                   </CardContent>
                 </Card>
