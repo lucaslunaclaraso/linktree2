@@ -39,9 +39,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     setParticipantes(peticion?.data?.participantes);
   };
 
-  const UnirseAlSorteo = async (nombre, mail) => {
+  const UnirseAlSorteo = async (nombre, mail, facebook) => {
     try {
-      const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre, mail });
+      const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre, mail, facebook });
       const peticionUser = await axios.post(`https://backmu.vercel.app/sorteo/crearUser`, { nombre, mail });
 
       if (peticion?.data?.success) {
@@ -84,7 +84,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const nombre = username;
     const mail = mailKick;
     if (!nombre) return;
-    UnirseAlSorteo(nombre, mail);
+    UnirseAlSorteo(nombre, mail, isFromFacebook);
   };
 
   const guardarGanadores = async (url, ganadores) => {
@@ -368,7 +368,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                             primary={
                               <span>
                                 <span style={{ color }}>{u?.nombre}</span> {bonus > 0 && <span> (+{bonus}%) </span>}
-                                {isFromFacebook && <FaFacebook />}
+                                {u?.facebook && <FaFacebook />}
                               </span>
                             }
                           />
