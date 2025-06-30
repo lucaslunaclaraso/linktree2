@@ -6,6 +6,7 @@ import Nlayout from './Nlayout';
 
 export default function CrearSorteo() {
     const [titulo, setTitulo] = useState('');
+    const [clave, setClave] = useState('');
     const [premios, setPremios] = useState('');
     const navigate = useNavigate();
 
@@ -13,11 +14,12 @@ export default function CrearSorteo() {
         try {
             const response = await axios.post('https://backmu.vercel.app/sorteo', {
                 titulo,
-                premios
+                premios,
+                clave
             });
 
             const { id, url } = response.data;
-            navigate(`/sorteo/${id}`); // o usar url si lo devuelves completo
+            navigate(`/sorteo/${id}${clave ? `?fb=${encodeURIComponent(clave)}` : ''}`);
         } catch (error) {
             console.error('Error al crear sorteo:', error);
             alert('Hubo un error al crear el sorteo.');
@@ -44,6 +46,13 @@ export default function CrearSorteo() {
                             margin="normal"
                             value={premios}
                             onChange={(e) => setPremios(e.target.value)}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Palabra Clave"
+                            margin="normal"
+                            value={clave}
+                            onChange={(e) => setClave(e.target.value)}
                         />
                         <Button variant="contained" color="primary" fullWidth onClick={handleCrear}>
                             Crear
