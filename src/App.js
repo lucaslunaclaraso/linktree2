@@ -280,7 +280,7 @@ function App() {
 
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/listalinks" element={<RutaPrivada><ListadoLinks isMobile={isMobile} /> </RutaPrivada>} />
-                <Route path="/dar-coins" element={<DarCoins isMobile={isMobile} /> } />
+                <Route path="/dar-coins" element={<RutaPrivada><DarCoins isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/tipeo" element={<Tipeo nombre={nombre} isMobile={isMobile} />} />
                 <Route path="/ruleta" element={<Roller nombre={nombre} />} />
                 <Route path="/shop" element={<Tienda nombre={nombre} isMobile={isMobile} />} />
