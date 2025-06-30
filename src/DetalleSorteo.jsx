@@ -41,7 +41,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
   const UnirseAlSorteo = async (nombre, mail, facebook) => {
     try {
-      const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre, mail, facebook });
+      const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre, mail });
       const peticionUser = await axios.post(`https://backmu.vercel.app/sorteo/crearUser`, { nombre, mail });
 
       if (peticion?.data?.success) {
