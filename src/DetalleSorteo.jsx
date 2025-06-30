@@ -7,6 +7,7 @@ import backgroundImg from './main_intro.jpg';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from './authContext';
 import io from 'socket.io-client';
+import { FaFacebook } from "react-icons/fa";
 
 const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
   transports: ['websocket', 'polling'],
@@ -15,7 +16,7 @@ const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
 export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   const { url } = useParams();
   const { username, logout } = useAuth();
-
+  const [isFromFacebook, setIsFromFacebook] = useState(false);
   const [sorteo, setSorteo] = useState();
   const [participantes, setParticipantes] = useState();
   const [ganadores, setGanadores] = useState();
@@ -66,7 +67,14 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   useEffect(() => {
     obtenerSorteos();
   }, []);
-
+  
+    // Detectar si el usuario viene de Facebook
+    useEffect(() => {
+      const referrer = document.referrer;
+      if (referrer.includes('facebook.com')) {
+        setIsFromFacebook(true);
+      }
+    }, []);
   const usuario = localStorage.getItem('fbUser')?.replaceAll('"', '');
   const usuarioKick = localStorage.getItem('kick_user');
   const mailKick = localStorage.getItem('kick_mail');
@@ -358,7 +366,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                           <ListItemText
                             primary={
                               <span>
-                                <span style={{ color }}>{u?.nombre}</span> {bonus > 0 && <span> (+{bonus}%)</span>}
+                                <span style={{ color }}>{u?.nombre}</span> {bonus > 0 && <span> (+{bonus}%) </span>} 
+                               {isFromFacebook && <FaFacebook />}
                               </span>
                             }
                           />
