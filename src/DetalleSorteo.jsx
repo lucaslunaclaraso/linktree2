@@ -67,14 +67,15 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   useEffect(() => {
     obtenerSorteos();
   }, []);
-  
-    // Detectar si el usuario viene de Facebook
-    useEffect(() => {
-      const referrer = document.referrer;
-      if (referrer.includes('facebook.com')) {
-        setIsFromFacebook(true);
-      }
-    }, []);
+
+  // Detectar si el usuario viene de Facebook
+  useEffect(() => {
+    const referrer = document.referrer;
+    if (referrer.includes('facebook.com')) {
+      setIsFromFacebook(true);
+    }
+  }, []);
+  console.log('isfromFb', isFromFacebook)
   const usuario = localStorage.getItem('fbUser')?.replaceAll('"', '');
   const usuarioKick = localStorage.getItem('kick_user');
   const mailKick = localStorage.getItem('kick_mail');
@@ -366,8 +367,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                           <ListItemText
                             primary={
                               <span>
-                                <span style={{ color }}>{u?.nombre}</span> {bonus > 0 && <span> (+{bonus}%) </span>} 
-                               {isFromFacebook && <FaFacebook />}
+                                <span style={{ color }}>{u?.nombre}</span> {bonus > 0 && <span> (+{bonus}%) </span>}
+                                {isFromFacebook && <FaFacebook />}
                               </span>
                             }
                           />
