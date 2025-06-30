@@ -392,7 +392,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                             primary={
                               <span>
                                 <span style={{ color }}>{u?.nombre}</span> {bonus > 0 && <span> (+{bonus}%) </span>}
-                                {u?.facebook && <FaFacebook />}
+                                {u?.facebook && <FaFacebook  style={{ marginLeft: '8px', color: '#3b5998' }}/>}
                               </span>
                             }
                           />
