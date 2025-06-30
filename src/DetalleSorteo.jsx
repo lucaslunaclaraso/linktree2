@@ -358,7 +358,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                           <ListItemText
                             primary={
                               <span>
-                                <span style={{ color }}>{u?.nombre}</span> (+{bonus}%)
+                                <span style={{ color }}>{u?.nombre}</span> {bonus > 0 && <span> (+{bonus}%)</span>}
                               </span>
                             }
                           />
