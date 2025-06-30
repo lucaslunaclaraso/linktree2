@@ -392,7 +392,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                           <ListItem key={index}>
                             <Grid style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                               <Typography style={{ fontWeight: 'bold' }}>Puesto {index + 1}:</Typography>
-                              <Typography style={{ color }}>{ganador} {participante?.fromFacebook && (
+                              <Typography style={{ color }}>{ganador} {participante?.facebook && (
                                 <FaFacebook style={{ marginLeft: '8px', color: '#3b5998' }} />
                               )}</Typography>
 
