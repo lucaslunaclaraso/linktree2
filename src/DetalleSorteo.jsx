@@ -67,8 +67,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   const actualizar = () => {
   const usuarioKick = localStorage.getItem('kick_user');
 
-    const nombre = username;
-    console.log('nombre', nombre)
+    
+    console.log('nombre', usuarioKick)
     const searchParams = new URLSearchParams(window.location.search);
     const claveFb = searchParams.get('fb');
     console.log('claveFb', claveFb)
