@@ -386,11 +386,17 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                     <List>
                       {JSON.parse(sorteo.ganadores).map((ganador, index) => {
                         const { color } = getUserColor(userMessageCounts[ganador] || 0);
+
+                        const participante = participantes.find((p) => p.nombre === ganador);
                         return (
                           <ListItem key={index}>
                             <Grid style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                               <Typography style={{ fontWeight: 'bold' }}>Puesto {index + 1}:</Typography>
-                              <Typography style={{ color }}>{ganador}</Typography>
+                              <Typography style={{ color }}>{ganador} {participante?.fromFacebook && (
+                                <FaFacebook style={{ marginLeft: '8px', color: '#3b5998' }} />
+                              )}</Typography>
+
+
                             </Grid>
                           </ListItem>
                         );
@@ -429,6 +435,6 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
           </AnimatePresence>
         </Modal>
       </Grid>
-    </Nlayout>
+    </Nlayout >
   );
 }
