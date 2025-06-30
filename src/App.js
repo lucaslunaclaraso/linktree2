@@ -24,6 +24,7 @@ import Tienda from './Tienda';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import backg from './main_intro.jpg'
 import ListadoLinks from './ListadoLinks';
+import DarCoins from './DarCoins';
 
 const style = {
     position: 'absolute',
@@ -279,6 +280,7 @@ function App() {
 
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/listalinks" element={<RutaPrivada><ListadoLinks isMobile={isMobile} /> </RutaPrivada>} />
+                <Route path="/dar-coins" element={<DarCoins isMobile={isMobile} /> } />
                 <Route path="/tipeo" element={<Tipeo nombre={nombre} isMobile={isMobile} />} />
                 <Route path="/ruleta" element={<Roller nombre={nombre} />} />
                 <Route path="/shop" element={<Tienda nombre={nombre} isMobile={isMobile} />} />

@@ -207,6 +207,9 @@ function Nlayout(props) {
     const redirectSolicitudes = () => {
         window.location.href = "/solicitudes"
     }
+    const darCoins = () => {
+        window.location.href = "/dar-coins"
+    }
     const redirectCrearSolicitudes = () => {
         window.location.href = "/crearlink"
     }
@@ -591,6 +594,7 @@ function Nlayout(props) {
                         {
                             (isValidUser) &&
                             <>
+                                <MenuItem onClick={isLoggedIn && isValidUser ? darCoins : handleOpen}>Dar Coins</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? redirectSolicitudes : handleOpen}>Solicitudes de tipeo</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? redirectCrearSolicitudes : handleOpen}>Crear Link de tipeo</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? redirectListadoLinks : handleOpen}>Listado de Links</MenuItem>
