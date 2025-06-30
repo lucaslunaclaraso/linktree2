@@ -65,15 +65,17 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   };
 
   const actualizar = () => {
+  const usuarioKick = localStorage.getItem('kick_user');
+
     const nombre = username;
     console.log('nombre', nombre)
     const searchParams = new URLSearchParams(window.location.search);
     const claveFb = searchParams.get('fb');
     console.log('claveFb', claveFb)
 
-    if (nombre && claveFb) {
+    if (usuarioKick && claveFb) {
       axios.post(`https://backmu.vercel.app/sorteo/${url}/actualizar-fb`, {
-        nombre: nombre,
+        nombre: usuarioKick,
         facebook: true,
         clave: claveFb, // se manda como clave para validar
       }).catch((err) => {
