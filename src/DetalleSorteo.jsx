@@ -49,8 +49,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
         obtenerSorteos();// Reiniciar userMessageCounts y limpiar localStorage para este sorteo
         setUserMessageCounts({});
+        localStorage.setItem('userMessageCounts', {});
         try {
-          localStorage.removeItem(`userMessageCounts_${url}`);
+          localStorage.removeItem(`userMessageCounts`);
         } catch (error) {
           console.error('Error al limpiar userMessageCounts de localStorage:', error);
         }
@@ -83,6 +84,13 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       });
     }
   }
+  useEffect(() => {
+    if (!localStorage.getItem('hasVisitedBefore')) {
+      localStorage.removeItem('userMessageCounts');
+      localStorage.setItem('hasVisitedBefore', 'true');
+    }
+  }, []);
+  
   useEffect(() => {
     obtenerSorteos();
 
