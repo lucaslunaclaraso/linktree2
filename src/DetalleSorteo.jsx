@@ -37,6 +37,10 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}`);
     setSorteo(peticion?.data?.sorteo);
     setParticipantes(peticion?.data?.participantes);
+    if (!localStorage.getItem('hasVisitedBefore')) {
+      localStorage.removeItem('userMessageCounts');
+      localStorage.setItem('hasVisitedBefore', 'true');
+    }
   };
 
   const UnirseAlSorteo = async (nombre, mail, facebook) => {
@@ -66,13 +70,12 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   };
 
   const actualizar = () => {
-    const usuarioKick = localStorage.getItem('kick_user');
+  const usuarioKick = localStorage.getItem('kick_user');
 
 
-   
     const searchParams = new URLSearchParams(window.location.search);
     const claveFb = searchParams.get('fb');
-   
+    
 
     if (usuarioKick && claveFb) {
       axios.post(`https://backmu.vercel.app/sorteo/${url}/actualizar-fb`, {
@@ -84,11 +87,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       });
     }
   }
-  useEffect(() => {
-    console.log('🧹 Eliminando userMessageCounts');
-    localStorage.removeItem('userMessageCounts');
-  }, []); // Se ejecuta solo una vez al montar el componente
-
+ 
+  
   useEffect(() => {
     obtenerSorteos();
 
@@ -105,7 +105,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       setIsFromFacebook(true);
     }
   }, []);
- 
+
   const usuario = localStorage.getItem('fbUser')?.replaceAll('"', '');
   const usuarioKick = localStorage.getItem('kick_user');
   const mailKick = localStorage.getItem('kick_mail');
@@ -398,7 +398,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                             primary={
                               <span>
                                 <span style={{ color }}>{u?.nombre}</span> {bonus > 0 && <span> (+{bonus}%) </span>}
-                                {u?.facebook && <FaFacebook style={{ marginLeft: '8px', color: '#3b5998' }} />}
+                                {u?.facebook && <FaFacebook  style={{ marginLeft: '8px', color: '#3b5998' }}/>}
                               </span>
                             }
                           />
