@@ -282,6 +282,17 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   };
 
   useEffect(() => {
+    const usuarioKick = localStorage.getItem('kick_user');
+
+    // Enviar creatorId al conectar
+    if (usuarioKick === 'lucaslunacl') {
+      socket.on('connect', () => {
+        console.log('Conectado al servidor:', socket.id);
+        socket.emit('register-creator',  '15789-52' );
+      });
+    }
+
+
     socket.on('nuevo-mensaje', handleChatMessage);
     return () => {
       socket.off('nuevo-mensaje', handleChatMessage);
