@@ -21,30 +21,15 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   const [participantes, setParticipantes] = useState();
   const [ganadores, setGanadores] = useState();
   const [unirseSorteo, setUnirseSorteo] = useState();
-
-  // Inicializar userMessageCounts desde localStorage
-  const [userMessageCounts, setUserMessageCounts] = useState(() => {
-    try {
-      const stored = localStorage.getItem('userMessageCounts');
-      return stored ? JSON.parse(stored) : {};
-    } catch (error) {
-      console.error('Error al leer userMessageCounts de localStorage:', error);
-      return {};
-    }
-  });
+  const [messageCounts, setMessageCounts] = useState({});
+  const [currentRaffleId, setCurrentRaffleId] = useState(url);
+ 
 
   const obtenerSorteos = async () => {
     const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}`);
     setSorteo(peticion?.data?.sorteo);
     setParticipantes(peticion?.data?.participantes);
-    try {
-      if (!localStorage.getItem('hasVisitedBefore')) {
-        localStorage.removeItem('userMessageCounts');
-        localStorage.setItem('hasVisitedBefore', 'true');
-      }
-    } catch (error) {
-      console.error('Error al limpiar userMessageCounts de localStorage:', error);
-    }
+   
 
   };
 
@@ -57,13 +42,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
         setUnirseSorteo(true);
 
         obtenerSorteos();// Reiniciar userMessageCounts y limpiar localStorage para este sorteo
-        setUserMessageCounts({});
-        localStorage.setItem('userMessageCounts', {});
-        try {
-          localStorage.removeItem(`userMessageCounts`);
-        } catch (error) {
-          console.error('Error al limpiar userMessageCounts de localStorage:', error);
-        }
+        
       } else {
         setUnirseSorteo(true);
         alert('ERROR YA TE UNISTE');
@@ -217,8 +196,23 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     return () => clearInterval(intervalo);
   }, []);
 
+  const iniciarNuevoSorteo = async () => {
+    const raffleId = url
+    try {
+      socket.emit('start-raffle', { raffleId });
+      
+      setCurrentRaffleId(raffleId);
+      setMessageCounts({});
+    
+    } catch (error) {
+      console.error('Error al crear sorteo:', error);
+      alert('Error al crear el sorteo');
+    }
+  };
+
   useEffect(() => {
     obtenerSorteos();
+    iniciarNuevoSorteo();
     const interval = setInterval(obtenerSorteos, 5000);
     return () => clearInterval(interval);
   }, [url]);
@@ -253,22 +247,11 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   };
 
   // Guardar userMessageCounts en localStorage
-  useEffect(() => {
-    try {
-      if (Object.keys(userMessageCounts).length > 0) {
-        localStorage.setItem('userMessageCounts', JSON.stringify(userMessageCounts));
-      }
-    } catch (error) {
-      console.error('Error al guardar userMessageCounts en localStorage:', error);
-    }
-  }, [userMessageCounts]);
+  
 
   const handleChatMessage = ({ username }) => {
     console.log('Nuevo mensaje de chat:', username);
-    setUserMessageCounts((prev) => ({
-      ...prev,
-      [username]: (prev[username] || 0) + 1,
-    }));
+    
   };
 
   const getUserColor = (messageCount) => {
@@ -280,6 +263,24 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     return { color: 'black', bonus: 0 }; // Default (sin bonus)
   };
+
+  const obtenerConteoMensajes = async () => {
+    try {
+      const response = await axios.get(`https://backmu.vercel.app/sorteo/${url}/conteo-mensajes`);
+      setMessageCounts(response.data.counts || {});
+    } catch (error) {
+      console.error('Error al obtener conteo de mensajes:', error);
+      setMessageCounts({});
+    }
+  };
+
+  useEffect(() => {
+    obtenerConteoMensajes();
+    const interval = setInterval(() => {
+      obtenerConteoMensajes();
+    }, 45000); // Actualizar cada 45 segundos
+    return () => clearInterval(interval);
+  }, [url]);
 
   useEffect(() => {
     const usuarioKick = localStorage.getItem('kick_user');
@@ -294,7 +295,11 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       });
     }
 
-
+    socket.on('raffle-started', (data) => {
+      console.log(data.message);
+      setCurrentRaffleId(data.raffleId);
+      setMessageCounts({});
+    });
     socket.on('nuevo-mensaje', handleChatMessage);
     return () => {
       socket.off('nuevo-mensaje', handleChatMessage);
@@ -409,7 +414,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                   <Typography variant="h6">Participantes: {participantes?.length}</Typography>
                   <List>
                     {participantes?.map((u, i) => {
-                      const { color, bonus } = getUserColor(userMessageCounts[u?.nombre] || 0);
+                      const { color, bonus } = getUserColor(messageCounts[u?.nombre] || 0);
                       return (
                         <ListItem key={i}>
                           <ListItemText
@@ -433,7 +438,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                     <Typography variant="h6">🎉 Ganadores 🎉</Typography>
                     <List>
                       {JSON.parse(sorteo.ganadores).map((ganador, index) => {
-                        const { color } = getUserColor(userMessageCounts[ganador] || 0);
+                        const { color } = getUserColor(messageCounts[ganador] || 0);
 
                         const participante = participantes.find((p) => p.nombre === ganador);
                         return (
