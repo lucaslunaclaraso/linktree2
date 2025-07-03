@@ -23,13 +23,13 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   const [unirseSorteo, setUnirseSorteo] = useState();
   const [messageCounts, setMessageCounts] = useState({});
   const [currentRaffleId, setCurrentRaffleId] = useState(url);
- 
+
 
   const obtenerSorteos = async () => {
     const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}`);
     setSorteo(peticion?.data?.sorteo);
     setParticipantes(peticion?.data?.participantes);
-   
+
 
   };
 
@@ -42,7 +42,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
         setUnirseSorteo(true);
 
         obtenerSorteos();// Reiniciar userMessageCounts y limpiar localStorage para este sorteo
-        
+
       } else {
         setUnirseSorteo(true);
         alert('ERROR YA TE UNISTE');
@@ -196,24 +196,11 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     return () => clearInterval(intervalo);
   }, []);
 
-  const iniciarNuevoSorteo = async () => {
-    console.log(url)
-    console.log('iniciar')
-    try {
-      socket.emit('start-raffle', { raffleId: url });
-      
-      setCurrentRaffleId(url);
-      setMessageCounts({});
-    
-    } catch (error) {
-      console.error('Error al crear sorteo:', error);
-      alert('Error al crear el sorteo');
-    }
-  };
 
+  
   useEffect(() => {
     obtenerSorteos();
-    iniciarNuevoSorteo();
+    
     const interval = setInterval(obtenerSorteos, 5000);
     return () => clearInterval(interval);
   }, [url]);
@@ -248,11 +235,11 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   };
 
   // Guardar userMessageCounts en localStorage
-  
+
 
   const handleChatMessage = ({ username }) => {
     console.log('Nuevo mensaje de chat:', username);
-    
+
   };
 
   const getUserColor = (messageCount) => {
@@ -293,6 +280,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       socket.on('connect', () => {
         console.log('Conectado al servidor:', socket.id);
         socket.emit('register-creator', { creatorId: '15789-52' });
+        socket.emit('start-raffle', { raffleId: url });
+
       });
     }
 
