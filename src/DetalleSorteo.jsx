@@ -290,7 +290,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       console.log('entro')
       socket.on('connect', () => {
         console.log('Conectado al servidor:', socket.id);
-        socket.emit('register-creator', '15789-52');
+        socket.emit('register-creator', { creatorId: '15789-52' });
       });
     }
 
