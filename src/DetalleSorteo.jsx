@@ -197,11 +197,12 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   }, []);
 
   const iniciarNuevoSorteo = async () => {
-    const raffleId = url
+    console.log(url)
+    console.log('iniciar')
     try {
-      socket.emit('start-raffle', { raffleId });
+      socket.emit('start-raffle', { url });
       
-      setCurrentRaffleId(raffleId);
+      setCurrentRaffleId(url);
       setMessageCounts({});
     
     } catch (error) {
@@ -297,6 +298,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     socket.on('raffle-started', (data) => {
       console.log(data.message);
+      console.log('falle')
       setCurrentRaffleId(data.raffleId);
       setMessageCounts({});
     });
