@@ -200,7 +200,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     console.log(url)
     console.log('iniciar')
     try {
-      socket.emit('start-raffle', { url });
+      socket.emit('start-raffle', { raffleId: url });
       
       setCurrentRaffleId(url);
       setMessageCounts({});
