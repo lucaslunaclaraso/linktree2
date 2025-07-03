@@ -285,10 +285,12 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const usuarioKick = localStorage.getItem('kick_user');
 
     // Enviar creatorId al conectar
+    console.log('usu', usuarioKick)
     if (usuarioKick === 'lucaslunacl') {
+      console.log('entro')
       socket.on('connect', () => {
         console.log('Conectado al servidor:', socket.id);
-        socket.emit('register-creator',  '15789-52' );
+        socket.emit('register-creator', '15789-52');
       });
     }
 
