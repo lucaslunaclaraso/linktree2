@@ -415,7 +415,6 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                   <Grid style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
 
                     <Typography variant="h6">Participantes: {participantes?.length}</Typography>
-                    <Typography variant="h6">⏳ Próxima actualización en: {tiempoRestante} segundos</Typography>
                   </Grid>
 
                   <List>
@@ -436,6 +435,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                     })}
                   </List>
                 </CardContent>
+                <Typography style={{fontSize:14}}>⏳ Próxima actualización en: {tiempoRestante} segundos</Typography>
+
               </Card>
 
               {sorteo?.ganadores?.length > 0 && (
