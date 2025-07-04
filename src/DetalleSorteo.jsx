@@ -410,9 +410,10 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
             )}
 
             <Grid style={{ display: 'flex', flexDirection: isMobile && 'column', alignItems: 'start', gap: '10px', marginBottom: '5%', zIndex: 9999 }}>
-              <Card sx={{ mt: 4, width: isMobile ? '100%' : '30%', border: '2px dashed #2a2e38' }}>
+
+              <Card sx={{ mt: 4, width: isMobile ? '100%' : '30%', border: '2px dashed #2a2e38', display:'flex', flexDirection:'column'}}>
                 <CardContent sx={{ maxHeight: 300, overflowY: 'auto' }}>
-                  <Grid style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+                  <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
                     <Typography variant="h6">Participantes: {participantes?.length}</Typography>
                   </Grid>
@@ -435,9 +436,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                     })}
                   </List>
                 </CardContent>
-                <Typography style={{fontSize:14, textAlign:'center'}}>⏳ Los colores se actualizan en: {tiempoRestante} segundos</Typography>
-
+                <Typography style={{ fontSize: 14, textAlign: 'center', color: '#f2bb47' }}>⏳ Los colores se actualizan en: {tiempoRestante} segundos</Typography>
               </Card>
+
 
               {sorteo?.ganadores?.length > 0 && (
                 <Card sx={{ mt: 4, bgcolor: '#e0f7fa', width: isMobile ? '100%' : '30%', border: '2px dashed #2a2e38' }}>
