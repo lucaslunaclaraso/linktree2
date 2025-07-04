@@ -86,10 +86,7 @@ function Tipeo(props) {
             return false;
         }
 
-        if(activeStep === 2 && (bnbAddress === '0x3f1bD53eB8A3F5d60147A5C0c47279a')){
-            setError('La dirección BNB debe ser una real..');
-            return false;
-        }
+       
         return true;
     };
 
@@ -103,7 +100,10 @@ const [deshabilitarBoton, setDeshabilitarBoton] =useState(false)
             if (!bnbAddress.startsWith('0x')) {
                 throw new Error('UPS! eso no parece una dirección BNB');
             }
-
+            if(activeStep === 2 && (bnbAddress === '0x3f1bD53eB8A3F5d60147A5C0c47279a')){
+                setError('La dirección BNB debe ser una real..');
+                return false;
+            }
             // Validar datos antes de procesar
             if (!offerScreenshot || !bnbScreenshot || !bnbAddress) {
 
