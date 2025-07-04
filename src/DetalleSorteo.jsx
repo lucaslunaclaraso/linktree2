@@ -410,7 +410,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
             )}
 
             <Grid style={{ display: 'flex', flexDirection: isMobile && 'column', alignItems: 'start', gap: '10px', marginBottom: '5%', zIndex: 9999 }}>
-              <Grid style={{display:'flex', flexDirection: 'column', gap:'10px'}}>
+              <Grid style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <Card sx={{ mt: 4, width: isMobile ? '100%' : '100%', border: '2px dashed #2a2e38', display: 'flex', flexDirection: 'column' }}>
                   <CardContent sx={{ maxHeight: 300, overflowY: 'auto' }}>
                     <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -425,8 +425,10 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                           <ListItem key={i}>
                             <ListItemText
                               primary={
-                                <span style={{display:'flex', alignItems:'center', gap:'5px'}}>
-                                  <span style={{ color }}>{u?.nombre}</span> {bonus > 0 && <span> (+{bonus}%) </span>}
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                  <span style={{ color }}>
+                                    {u?.suscriptor ? <strong>{u?.nombre}</strong> : u?.nombre}
+                                  </span> {bonus > 0 && <span> (+{bonus}%) </span>}
 
                                   {u?.facebook && <FaFacebook style={{ marginLeft: '8px', color: '#3b5998' }} />}
 
