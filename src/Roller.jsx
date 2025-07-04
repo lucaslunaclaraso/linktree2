@@ -9,7 +9,7 @@ const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
 const items = [
   { name: 'AK-47', color: '#ef5350' },
   { name: 'Desert Eagle', color: '#42a5f5' },
-  { name: 'AWP', color: '#66bb6a' },
+  { name: 'AWP', color: 'blue' },
   { name: 'M4A4', color: '#ffca28' },
   { name: 'USP-S', color: '#ab47bc' },
 ];
@@ -87,7 +87,7 @@ const Roller = () => {
 
   const processQueue = () => {
     if (queueRef.current.length === 0) return;
-
+    console.log(' queueRef.current', queueRef.current)
     const nextUser = queueRef.current.shift();
     setLastSub(nextUser);
     setRolling(true);
@@ -112,11 +112,11 @@ const Roller = () => {
 
 
   useEffect(() => {
-    
+
     socket.on('nuevo-follow', handleNuevoFollow);
     return () => {
       socket.off('nuevo-follow', handleNuevoFollow);
-     
+
 
     };
   }, [rolling]);
