@@ -197,10 +197,10 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   }, []);
 
 
-  
+
   useEffect(() => {
     obtenerSorteos();
-    
+
     const interval = setInterval(obtenerSorteos, 5000);
     return () => clearInterval(interval);
   }, [url]);
@@ -261,19 +261,29 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       setMessageCounts({});
     }
   };
+  const [tiempoRestante, setTiempoRestante] = useState(45);
 
   useEffect(() => {
     obtenerConteoMensajes();
     const interval = setInterval(() => {
       obtenerConteoMensajes();
+      setTiempoRestante(45); // reiniciar el contador después de la petición
     }, 45000); // Actualizar cada 45 segundos
+
     return () => clearInterval(interval);
   }, [url]);
 
   useEffect(() => {
+    const intervaloContador = setInterval(() => {
+      setTiempoRestante((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000); // actualizar cada segundo
+
+    return () => clearInterval(intervaloContador);
+  }, []);
+
+  useEffect(() => {
     const usuarioKick = localStorage.getItem('kick_user');
 
-    // Enviar creatorId al conectar
     console.log('usu', usuarioKick)
     if (usuarioKick === 'lucaslunacl') {
       console.log('entro')
@@ -402,7 +412,12 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
             <Grid style={{ display: 'flex', flexDirection: isMobile && 'column', alignItems: 'start', gap: '10px', marginBottom: '5%', zIndex: 9999 }}>
               <Card sx={{ mt: 4, width: isMobile ? '100%' : '30%', border: '2px dashed #2a2e38' }}>
                 <CardContent sx={{ maxHeight: 300, overflowY: 'auto' }}>
-                  <Typography variant="h6">Participantes: {participantes?.length}</Typography>
+                  <Grid style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+
+                    <Typography variant="h6">Participantes: {participantes?.length}</Typography>
+                    <Typography variant="h6">⏳ Próxima actualización en: {tiempoRestante} segundos</Typography>
+                  </Grid>
+
                   <List>
                     {participantes?.map((u, i) => {
                       const { color, bonus } = getUserColor(messageCounts[u?.nombre] || 0);
