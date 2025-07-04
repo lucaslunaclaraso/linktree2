@@ -435,7 +435,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                     })}
                   </List>
                 </CardContent>
-                <Typography style={{fontSize:14}}>⏳ Próxima actualización en: {tiempoRestante} segundos</Typography>
+                <Typography style={{fontSize:14, textAlign:'center'}}>⏳ Los colores se actualizan en: {tiempoRestante} segundos</Typography>
 
               </Card>
 
