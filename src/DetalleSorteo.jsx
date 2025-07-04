@@ -411,7 +411,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
             <Grid style={{ display: 'flex', flexDirection: isMobile && 'column', alignItems: 'start', gap: '10px', marginBottom: '5%', zIndex: 9999 }}>
               <Grid style={{display:'flex', flexDirection: 'column', gap:'10px'}}>
-                <Card sx={{ mt: 4, width: isMobile ? '100%' : '30%', border: '2px dashed #2a2e38', display: 'flex', flexDirection: 'column' }}>
+                <Card sx={{ mt: 4, width: isMobile ? '100%' : '100%', border: '2px dashed #2a2e38', display: 'flex', flexDirection: 'column' }}>
                   <CardContent sx={{ maxHeight: 300, overflowY: 'auto' }}>
                     <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
