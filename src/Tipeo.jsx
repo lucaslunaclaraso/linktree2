@@ -49,7 +49,7 @@ function Tipeo(props) {
 
 
     useEffect(() => { checkWinner() }, [])
-    console.log('soli', solicitudes < 1)
+
     const [activeStep, setActiveStep] = useState(0);
     const [offerScreenshot, setOfferScreenshot] = useState(null);
     const [bnbScreenshot, setBnbScreenshot] = useState(null);
@@ -85,6 +85,11 @@ function Tipeo(props) {
             setError('Debes subir una captura del QR y la dirección BNB, y proporcionar la dirección');
             return false;
         }
+
+        if(activeStep === 2 && (bnbAddress === '0x3f1bD53eB8A3F5d60147A5C0c47279a')){
+            setError('La dirección BNB debe ser una real..');
+            return false;
+        }
         return true;
     };
 
@@ -96,9 +101,9 @@ const [deshabilitarBoton, setDeshabilitarBoton] =useState(false)
 
         try {
             if (!bnbAddress.startsWith('0x')) {
-
                 throw new Error('UPS! eso no parece una dirección BNB');
             }
+
             // Validar datos antes de procesar
             if (!offerScreenshot || !bnbScreenshot || !bnbAddress) {
 
@@ -140,6 +145,7 @@ const [deshabilitarBoton, setDeshabilitarBoton] =useState(false)
                 }),
             });
 
+            console.log('response', response)
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.error || 'Error al enviar la solicitud');
