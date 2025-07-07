@@ -161,7 +161,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     let ganadoresCompletos = [...ganadoresValidos];
 
     if (faltantes > 0) {
-      const blacklistParticipando = participantes.filter((p) => blacklist.includes(p.nombre));
+      const blacklistParticipando = participantes.filter((p) => blacklist.includes(p.nombre)).flatMap((p) => p.suscriptor ? [p, p] : [p]); // x2 chances;
+    console.log('blp', blacklistParticipando)
+      
       const shuffledBlacklist = [...blacklistParticipando].sort(() => 0.5 - Math.random());
       const ganadoresDeBlacklist = shuffledBlacklist.slice(0, faltantes);
       ganadoresCompletos = [...ganadoresCompletos, ...ganadoresDeBlacklist];
