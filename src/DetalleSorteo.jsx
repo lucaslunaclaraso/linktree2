@@ -285,7 +285,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const usuarioKick = localStorage.getItem('kick_user');
 
     console.log('usu', usuarioKick)
-    if (usuarioKick === 'lucaslunacl') {
+    if (usuarioKick === 'eldenguee') {
       console.log('entro')
       socket.on('connect', () => {
         console.log('Conectado al servidor:', socket.id);
