@@ -285,7 +285,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const usuarioKick = localStorage.getItem('kick_user');
 
     console.log('usu', usuarioKick)
-    if (usuarioKick === 'eldenguee') {
+    if (usuarioKick === 'lucaslunacl') {
       console.log('entro')
       socket.on('connect', () => {
         console.log('Conectado al servidor:', socket.id);
@@ -301,9 +301,10 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       setCurrentRaffleId(data.raffleId);
       setMessageCounts({});
     });
-    socket.on('nuevo-mensaje', handleChatMessage);
+
+    // socket.on('nuevo-mensaje', handleChatMessage);
     return () => {
-      socket.off('nuevo-mensaje', handleChatMessage);
+      // socket.off('nuevo-mensaje', handleChatMessage);
     };
   }, []);
 
