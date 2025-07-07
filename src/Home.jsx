@@ -177,21 +177,21 @@ const Home = (props) => {
             padding: 50,
             gap: '10px',
             justifyContent: 'center',
-            
+            marginTop: '50px'
           }}>
 
 
-            <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15,  }}>
-              {/* <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '28px', fontFamily: 'Outfit,sans-serif' }} >
+            <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15, marginTop: '10%'  }}>
+              <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '28px', fontFamily: 'Outfit,sans-serif' }} >
                 Bienvenidos a
-              </Typography> */}
-              {/* <img src={logo} style={{ width: props.isMobile ? '100%' : '40%' }} /> */}
-              {/* <Grid style={{ zIndex: 1, width: '100%' }}>
+              </Typography>
+              <img src={logo} style={{ width: props.isMobile ? '100%' : '40%' }} />
+              <Grid style={{ zIndex: 1, width: '100%' }}>
                 <img src={globet} className='vip-rewards-rewards-imgs-goblet' />
                 <img src={dice} className='vip-rewards-rewards-imgs-dice' />
                 <img src={bomb} className='vip-rewards-rewards-imgs-bomb' />
                 <img src={roulette} className='vip-rewards-rewards-imgs-roulette' />
-              </Grid> */}
+              </Grid>
             </Grid>
 
 
