@@ -106,7 +106,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       const response = await axios.put(`https://backmu.vercel.app/sorteo/${url}/ganadores`, {
         ganadores,
       });
-      console.log('Ganadores guardados:', response.data);
+      
       return response.data;
     } catch (error) {
       console.error('Error al guardar ganadores:', error);
@@ -153,7 +153,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const participantesValidos = participantes
     .filter((p) => !blacklist.includes(p.nombre))
     .flatMap((p) => p.suscriptor ? [p, p] : [p]); // x2 chances
-    console.log('p', participantesValidos)
+   
     const premiosTotales = sorteo?.premios || 0;
     const shuffledValidos = [...participantesValidos].sort(() => 0.5 - Math.random());
     const ganadoresValidos = shuffledValidos.slice(0, premiosTotales);
@@ -162,7 +162,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     if (faltantes > 0) {
       const blacklistParticipando = participantes.filter((p) => blacklist.includes(p.nombre)).flatMap((p) => p.suscriptor ? [p, p] : [p]); // x2 chances;
-    console.log('blp', blacklistParticipando)
+    
       
       const shuffledBlacklist = [...blacklistParticipando].sort(() => 0.5 - Math.random());
       const ganadoresDeBlacklist = shuffledBlacklist.slice(0, faltantes);
