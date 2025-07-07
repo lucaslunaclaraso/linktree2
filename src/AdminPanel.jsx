@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import Nlayout from './Nlayout';
-
+import { BrowserQRCodeReader } from '@zxing/browser';
 const AdminPanel = (props) => {
     const [solicitudes, setSolicitudes] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -132,10 +132,52 @@ const AdminPanel = (props) => {
             }
         }
     };
+    const decodeQRFromUrl = async (imageUrl) => {
+       
+        try {
+            const reader = new BrowserQRCodeReader();
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = imageUrl;
+            await new Promise((res) => (img.onload = res));
+            const result = await reader.decodeFromImageElement(img);
+            return result?.getText() || null;
+        } catch (err) {
+            console.warn('QR no leído:', err);
+            return null;
+        }
+    };
+    const [verificaciones, setVerificaciones] = useState({});
+    useEffect(() => {
+        const verificarQRSolicitudes = async () => {
+          const resultados= {};
+      
+          const pendientes = solicitudes.filter((s) => s.status === 'pending');
+      
+          for (const solicitud of pendientes) {
+            if (!solicitud.bnbScreenshot || !solicitud.bnbAddress) {
+              resultados[solicitud.id] = 'pending';
+              continue;
+            }
+      
+            const qrText = await decodeQRFromUrl(solicitud.bnbScreenshot);
+      
+            if (qrText?.trim().toLowerCase() === solicitud.bnbAddress.trim().toLowerCase()) {
+              resultados[solicitud.id] = 'ok';
+            } else {
+              resultados[solicitud.id] = 'fail';
+            }
+          }
+      
+          setVerificaciones((prev) => ({ ...prev, ...resultados }));
+        };
+      
+        verificarQRSolicitudes();
+      }, [solicitudes]);
     return (
         <Nlayout >
-           
-            <Box sx={{  mx: 'auto', my: 4, p: 2, minHeight: '90vh' }} className="backgroundAnimado" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+
+            <Box sx={{ mx: 'auto', my: 4, p: 2, minHeight: '90vh' }} className="backgroundAnimado" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
                 {/* SVG como fondo */}
                 <svg ref={svgRef}
                     xmlns="http://www.w3.org/2000/svg"
@@ -177,10 +219,10 @@ const AdminPanel = (props) => {
                     <Grid style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
                         <Typography variant="h4" align="center" gutterBottom>
-                            Solicitudes de Tipeo - 
+                            Solicitudes de Tipeo -
                         </Typography>
                         <Typography variant="h4" align="center" gutterBottom>
-                           Faltan:   {solicitudes?.filter((sorteo) => sorteo.status === 'pending').length}
+                            Faltan:   {solicitudes?.filter((sorteo) => sorteo.status === 'pending').length}
                         </Typography>
                     </Grid>
                     {error && (
@@ -240,7 +282,15 @@ const AdminPanel = (props) => {
                                                     Ver Captura
                                                 </Button>
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell sx={{
+                                                color:
+                                                    verificaciones[solicitud.id] === 'ok'
+                                                        ? 'green'
+                                                        : verificaciones[solicitud.id] === 'fail'
+                                                            ? 'red'
+                                                            : 'inherit',
+                                                fontWeight: 'bold',
+                                            }}>
                                                 {solicitud.bnbAddress}
                                             </TableCell>
                                             <TableCell>

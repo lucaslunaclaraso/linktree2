@@ -11,6 +11,8 @@ import vault from './vault.jpg'
 import ej2 from './ejpaso2.jpg'
 import ej3 from './ejpaso3.jpg'
 import successImg from './withdraw.jpg'
+import { BrowserQRCodeReader } from '@zxing/browser'
+
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -86,12 +88,12 @@ function Tipeo(props) {
             return false;
         }
 
-       
+
         return true;
     };
 
-const [deshabilitarBoton, setDeshabilitarBoton] =useState(false)
-
+    const [deshabilitarBoton, setDeshabilitarBoton] = useState(false)
+   
     const handleRequestTipeo = async () => {
         setLoading(true);
         setError('');
@@ -100,7 +102,7 @@ const [deshabilitarBoton, setDeshabilitarBoton] =useState(false)
             if (!bnbAddress.startsWith('0x')) {
                 throw new Error('UPS! eso no parece una dirección BNB');
             }
-            if(activeStep === 2 && (bnbAddress === '0x3f1bD53eB8A3F5d60147A5C0c47279a')){
+            if (activeStep === 2 && (bnbAddress === '0x3f1bD53eB8A3F5d60147A5C0c47279a')) {
                 setError('La dirección BNB debe ser una real..');
                 return false;
             }
@@ -190,7 +192,7 @@ const [deshabilitarBoton, setDeshabilitarBoton] =useState(false)
     // Manejar cambio de archivo y subir a Cloudinary
     const handleFileChange = (setFile, setUrl) => async (event) => {
         const file = event.target.files[0];
-        
+
         if (file) {
             setFile(file);
             try {
@@ -249,7 +251,7 @@ const [deshabilitarBoton, setDeshabilitarBoton] =useState(false)
                                 Instrucciones:
                             </Typography>
                             <Button onClick={() => openImage(paso1)} style={{ margin: '0 auto', display: 'flex', background: 'red', color: 'white' }}>Ver tutorial</Button>
-                            
+
 
 
                         </Box>
@@ -639,226 +641,226 @@ const [deshabilitarBoton, setDeshabilitarBoton] =useState(false)
                             </Grid>
                             :
 
-                    <Grid style={{
-                        backgroundImage: `
+                            <Grid style={{
+                                backgroundImage: `
     linear-gradient(to bottom, rgba(63, 61, 69, 0.8), rgba(63, 61, 69, 0)),
     url(${backgroundImg})
   `,
-                        backgroundSize: 'cover',
-                        backgroundRepeat: 'no-repeat',
-                        height: '980px',
-                        backgroundColor: '#3f3d45',
-                        margin: '0 auto',
-                        position: 'relative',
-                        backgroundPosition: '50%',
-                        marginTop: props.isMobile ? '1%' : '2%'
-                    }}>
-                        <Grid className='container' style={{
-                            padding: props.isMobile ? 10 : 50,
-                            gap: '10px',
-                            justifyContent: 'center',
+                                backgroundSize: 'cover',
+                                backgroundRepeat: 'no-repeat',
+                                height: '980px',
+                                backgroundColor: '#3f3d45',
+                                margin: '0 auto',
+                                position: 'relative',
+                                backgroundPosition: '50%',
+                                marginTop: props.isMobile ? '1%' : '2%'
+                            }}>
+                                <Grid className='container' style={{
+                                    padding: props.isMobile ? 10 : 50,
+                                    gap: '10px',
+                                    justifyContent: 'center',
 
-                        }}>
-                            <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
+                                }}>
+                                    <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
 
 
-                            </Grid>
+                                    </Grid>
 
-                            <Box sx={{ mx: 'auto', my: 1, mt: '8%' }}>
-                                <Paper
-                                    elevation={!success && 8}
-                                    sx={{
-                                        maxWidth: !props.isMobile ? 600 : '100%',
-                                        margin: '0 auto',
-                                        borderRadius: success ? 'none' : 2,
-                                        overflow: 'hidden',
-                                        backgroundColor: success ? 'transparent' : '#1a2c38',
-                                        color: '#fff',
-                                        p: 2,
-                                    }}
-                                >
-                                    {
-                                        !success &&
-                                        <>
-                                            <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                                                📝 Solicitud de tipeo
-                                            </Typography>
-
-                                            <Box
-                                                sx={{
-                                                    display: 'flex',
-                                                    justifyContent: 'space-between',
-                                                    backgroundColor: '#1e293b',
-                                                    borderRadius: '999px',
-                                                    p: '6px',
-                                                    mb: 3,
-                                                }}
-                                            >
-                                                {steps.map((label, index) => (
-                                                    <Box
-                                                        key={label}
-                                                        sx={{
-                                                            flex: 1,
-                                                            textAlign: 'center',
-                                                            borderRadius: '999px',
-                                                            backgroundColor: activeStep === index ? '#334155' : 'transparent',
-                                                            color: '#fff',
-                                                            fontWeight: 'bold',
-                                                            py: 1,
-                                                            transition: 'background-color 0.3s',
-                                                        }}
-                                                    >
-                                                        <Typography variant="body1">{label}</Typography>
-                                                    </Box>
-                                                ))}
-                                            </Box>
-                                        </>
-                                    }
-
-                                    {success ? (
-                                        <Box
+                                    <Box sx={{ mx: 'auto', my: 1, mt: '8%' }}>
+                                        <Paper
+                                            elevation={!success && 8}
                                             sx={{
-                                                backgroundColor: '#0c1b26',
-                                                borderRadius: '12px',
-                                                padding: 3,
-                                                width: '80%',
+                                                maxWidth: !props.isMobile ? 600 : '100%',
                                                 margin: '0 auto',
-                                                textAlign: 'center',
-                                                color: 'white',
+                                                borderRadius: success ? 'none' : 2,
+                                                overflow: 'hidden',
+                                                backgroundColor: success ? 'transparent' : '#1a2c38',
+                                                color: '#fff',
+                                                p: 2,
                                             }}
                                         >
-                                            {/* Título con ícono y botón cerrar */}
-                                            <Box
-                                                sx={{
-                                                    display: 'flex',
-                                                    justifyContent: 'space-between',
-                                                    alignItems: 'center',
-                                                    mb: 2,
-                                                }}
-                                            >
-                                                <Typography sx={{ fontWeight: 'bold' }}>Solicitud de tipeo</Typography>
-                                                <Button sx={{ color: 'white' }} size="small">✕</Button>
-                                            </Box>
+                                            {
+                                                !success &&
+                                                <>
+                                                    <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                                                        📝 Solicitud de tipeo
+                                                    </Typography>
 
-                                            {/* Imagen */}
-                                            <Box sx={{ mb: 2 }}>
-                                                <img
-                                                    src={successImg}// Colocá la ruta correcta a tu imagen
-                                                    alt="Caja fuerte"
-                                                    style={{ width: '100%', height: 'auto', margin: '0 auto' }}
-                                                />
-                                            </Box>
+                                                    <Box
+                                                        sx={{
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between',
+                                                            backgroundColor: '#1e293b',
+                                                            borderRadius: '999px',
+                                                            p: '6px',
+                                                            mb: 3,
+                                                        }}
+                                                    >
+                                                        {steps.map((label, index) => (
+                                                            <Box
+                                                                key={label}
+                                                                sx={{
+                                                                    flex: 1,
+                                                                    textAlign: 'center',
+                                                                    borderRadius: '999px',
+                                                                    backgroundColor: activeStep === index ? '#334155' : 'transparent',
+                                                                    color: '#fff',
+                                                                    fontWeight: 'bold',
+                                                                    py: 1,
+                                                                    transition: 'background-color 0.3s',
+                                                                }}
+                                                            >
+                                                                <Typography variant="body1">{label}</Typography>
+                                                            </Box>
+                                                        ))}
+                                                    </Box>
+                                                </>
+                                            }
 
-                                            {/* Mensaje principal */}
-                                            <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold', mb: 2 }}>
-                                                ¡Se completó tu solicitud de tipeo!
-                                            </Typography>
-
-                                            {/* Cuadro con correo */}
-                                            <Paper
-                                                elevation={0}
-                                                sx={{
-                                                    backgroundColor: '#15232f',
-                                                    color: 'white',
-                                                    padding: 2,
-                                                    borderRadius: '8px',
-                                                    mb: 3,
-                                                }}
-                                                style={{ border: '2px dashed #2a2e38' }}
-                                            >
-                                                <Typography sx={{ fontSize: '0.9rem', textAlign: 'left' }}>
-                                                    Cuando tu tipeo esté listo te llegará un correo a:
-                                                </Typography>
-                                                <Typography sx={{ fontWeight: 'bold', mt: 1, textAlign: 'left' }}>
-                                                    {userEmail}
-                                                </Typography>
-
-                                            </Paper>
-                                            <Box style={{display:'flex', alignItems:'center', gap:'5px', marginBottom: '5px'}}>
-
-                                                <Typography sx={{ fontSize: '0.9rem', textAlign: 'left' }}>
-                                                    Dirección de retiro:
-                                                </Typography>
-                                                <Typography sx={{ fontWeight: 'bold', mt: 1, textAlign: 'left' }}>
-                                                    {bnbAddress}
-                                                </Typography>
-                                            </Box>
-
-                                            {/* Botón */}
-                                            <Button
-                                                fullWidth
-                                                variant="contained"
-                                                sx={{
-                                                    backgroundColor: '#007bff',
-                                                    borderRadius: '8px',
-                                                    textTransform: 'none',
-                                                    fontWeight: 'bold',
-                                                    '&:hover': {
-                                                        backgroundColor: '#0066d6',
-                                                    },
-                                                }}
-                                                onClick={redirectHome}
-                                            >
-                                                Listo
-                                            </Button>
-                                        </Box>
-                                    ) : (
-                                        <>
-                                            {error && (
-                                                <Alert severity="error" sx={{ mb: 2 }}>
-                                                    {error}
-                                                </Alert>
-                                            )}
-                                            {getStepContent(activeStep)}
-                                            {isOpen && selectedImage && (
-                                                <div
-                                                    style={{
-                                                        position: 'fixed',
-                                                        top: 0,
-                                                        left: 0,
-                                                        width: '100vw',
-                                                        height: '100vh',
-                                                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        zIndex: 99999,
+                                            {success ? (
+                                                <Box
+                                                    sx={{
+                                                        backgroundColor: '#0c1b26',
+                                                        borderRadius: '12px',
+                                                        padding: 3,
+                                                        width: '80%',
+                                                        margin: '0 auto',
+                                                        textAlign: 'center',
+                                                        color: 'white',
                                                     }}
                                                 >
-                                                    {/* Botón X para cerrar */}
-                                                    <button
-                                                        onClick={closeImage}
-                                                        style={{
-                                                            position: 'absolute',
-                                                            top: 20,
-                                                            right: 20,
-                                                            background: 'transparent',
-                                                            border: 'none',
-                                                            fontSize: '32px',
-                                                            color: '#fff',
-                                                            cursor: 'pointer',
-                                                            zIndex: 99999,
+                                                    {/* Título con ícono y botón cerrar */}
+                                                    <Box
+                                                        sx={{
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between',
+                                                            alignItems: 'center',
+                                                            mb: 2,
                                                         }}
-                                                        aria-label="Cerrar visor"
                                                     >
-                                                        &times;
-                                                    </button>
+                                                        <Typography sx={{ fontWeight: 'bold' }}>Solicitud de tipeo</Typography>
+                                                        <Button sx={{ color: 'white' }} size="small">✕</Button>
+                                                    </Box>
 
-                                                    {/* Imagen ampliada */}
-                                                    <img
-                                                        src={selectedImage}
-                                                        alt="Expanded"
-                                                        style={{
-                                                            maxWidth: '90%',
-                                                            maxHeight: '90%',
-                                                            borderRadius: 10,
-                                                            boxShadow: '0 0 20px rgba(0,0,0,0.5)',
+                                                    {/* Imagen */}
+                                                    <Box sx={{ mb: 2 }}>
+                                                        <img
+                                                            src={successImg}// Colocá la ruta correcta a tu imagen
+                                                            alt="Caja fuerte"
+                                                            style={{ width: '100%', height: 'auto', margin: '0 auto' }}
+                                                        />
+                                                    </Box>
+
+                                                    {/* Mensaje principal */}
+                                                    <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold', mb: 2 }}>
+                                                        ¡Se completó tu solicitud de tipeo!
+                                                    </Typography>
+
+                                                    {/* Cuadro con correo */}
+                                                    <Paper
+                                                        elevation={0}
+                                                        sx={{
+                                                            backgroundColor: '#15232f',
+                                                            color: 'white',
+                                                            padding: 2,
+                                                            borderRadius: '8px',
+                                                            mb: 3,
                                                         }}
-                                                        onClick={(e) => e.stopPropagation()} // evita que se cierre al hacer click sobre la imagen
-                                                    />
-                                                </div>
-                                            )}
-                                            {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+                                                        style={{ border: '2px dashed #2a2e38' }}
+                                                    >
+                                                        <Typography sx={{ fontSize: '0.9rem', textAlign: 'left' }}>
+                                                            Cuando tu tipeo esté listo te llegará un correo a:
+                                                        </Typography>
+                                                        <Typography sx={{ fontWeight: 'bold', mt: 1, textAlign: 'left' }}>
+                                                            {userEmail}
+                                                        </Typography>
+
+                                                    </Paper>
+                                                    <Box style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '5px' }}>
+
+                                                        <Typography sx={{ fontSize: '0.9rem', textAlign: 'left' }}>
+                                                            Dirección de retiro:
+                                                        </Typography>
+                                                        <Typography sx={{ fontWeight: 'bold', mt: 1, textAlign: 'left' }}>
+                                                            {bnbAddress}
+                                                        </Typography>
+                                                    </Box>
+
+                                                    {/* Botón */}
+                                                    <Button
+                                                        fullWidth
+                                                        variant="contained"
+                                                        sx={{
+                                                            backgroundColor: '#007bff',
+                                                            borderRadius: '8px',
+                                                            textTransform: 'none',
+                                                            fontWeight: 'bold',
+                                                            '&:hover': {
+                                                                backgroundColor: '#0066d6',
+                                                            },
+                                                        }}
+                                                        onClick={redirectHome}
+                                                    >
+                                                        Listo
+                                                    </Button>
+                                                </Box>
+                                            ) : (
+                                                <>
+                                                    {error && (
+                                                        <Alert severity="error" sx={{ mb: 2 }}>
+                                                            {error}
+                                                        </Alert>
+                                                    )}
+                                                    {getStepContent(activeStep)}
+                                                    {isOpen && selectedImage && (
+                                                        <div
+                                                            style={{
+                                                                position: 'fixed',
+                                                                top: 0,
+                                                                left: 0,
+                                                                width: '100vw',
+                                                                height: '100vh',
+                                                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                zIndex: 99999,
+                                                            }}
+                                                        >
+                                                            {/* Botón X para cerrar */}
+                                                            <button
+                                                                onClick={closeImage}
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    top: 20,
+                                                                    right: 20,
+                                                                    background: 'transparent',
+                                                                    border: 'none',
+                                                                    fontSize: '32px',
+                                                                    color: '#fff',
+                                                                    cursor: 'pointer',
+                                                                    zIndex: 99999,
+                                                                }}
+                                                                aria-label="Cerrar visor"
+                                                            >
+                                                                &times;
+                                                            </button>
+
+                                                            {/* Imagen ampliada */}
+                                                            <img
+                                                                src={selectedImage}
+                                                                alt="Expanded"
+                                                                style={{
+                                                                    maxWidth: '90%',
+                                                                    maxHeight: '90%',
+                                                                    borderRadius: 10,
+                                                                    boxShadow: '0 0 20px rgba(0,0,0,0.5)',
+                                                                }}
+                                                                onClick={(e) => e.stopPropagation()} // evita que se cierre al hacer click sobre la imagen
+                                                            />
+                                                        </div>
+                                                    )}
+                                                    {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
                                                 {
                                                     activeStep !== 0 &&
                                                     <Button
@@ -884,12 +886,12 @@ const [deshabilitarBoton, setDeshabilitarBoton] =useState(false)
                                                     )}
                                                 </Button> 
                                             </Box> */}
-                                        </>
-                                    )}
-                                </Paper>
-                            </Box>
-                        </Grid>
-                    </Grid>
+                                                </>
+                                            )}
+                                        </Paper>
+                                    </Box>
+                                </Grid>
+                            </Grid>
                 }
             </Grid>
         </Nlayout>
@@ -900,4 +902,3 @@ export default Tipeo
 
 
 
-  

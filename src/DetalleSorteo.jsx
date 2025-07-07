@@ -150,7 +150,10 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
   const sortear = async () => {
     const blacklist = await obtenerGanadoresDelSorteoAnterior();
-    const participantesValidos = participantes.filter((p) => !blacklist.includes(p.nombre));
+    const participantesValidos = participantes
+    .filter((p) => !blacklist.includes(p.nombre))
+    .flatMap((p) => p.suscriptor ? [p, p] : [p]); // x2 chances
+    console.log('p', participantesValidos)
     const premiosTotales = sorteo?.premios || 0;
     const shuffledValidos = [...participantesValidos].sort(() => 0.5 - Math.random());
     const ganadoresValidos = shuffledValidos.slice(0, premiosTotales);
@@ -246,8 +249,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     if (messageCount >= 200) return { color: '#ff0000cc', bonus: 10 }; // Rojo (+10%)
     if (messageCount >= 150) return { color: '#ed6e07cc', bonus: 8 }; // Naranja (+8%)
     if (messageCount >= 100) return { color: '#bec800cc', bonus: 6 }; // Amarillo (+6%)
-    if (messageCount >= 7) return { color: '#33e64bcc', bonus: 4 }; // Verde Claro (+4%)
-    if (messageCount >= 3) return { color: '#008a13cc', bonus: 2 }; // Verde Oscuro (+2%)
+    if (messageCount >= 70) return { color: '#33e64bcc', bonus: 4 }; // Verde Claro (+4%)
+    if (messageCount >= 30) return { color: '#008a13cc', bonus: 2 }; // Verde Oscuro (+2%)
 
     return { color: 'black', bonus: 0 }; // Default (sin bonus)
   };
