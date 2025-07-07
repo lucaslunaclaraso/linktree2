@@ -106,7 +106,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       const response = await axios.put(`https://backmu.vercel.app/sorteo/${url}/ganadores`, {
         ganadores,
       });
-      
+
       return response.data;
     } catch (error) {
       console.error('Error al guardar ganadores:', error);
@@ -151,9 +151,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   const sortear = async () => {
     const blacklist = await obtenerGanadoresDelSorteoAnterior();
     const participantesValidos = participantes
-    .filter((p) => !blacklist.includes(p.nombre))
-    .flatMap((p) => p.suscriptor ? [p, p] : [p]); // x2 chances
-   
+      .filter((p) => !blacklist.includes(p.nombre))
+      .flatMap((p) => p.suscriptor ? [p, p] : [p]); // x2 chances
+
     const premiosTotales = sorteo?.premios || 0;
     const shuffledValidos = [...participantesValidos].sort(() => 0.5 - Math.random());
     const ganadoresValidos = shuffledValidos.slice(0, premiosTotales);
@@ -162,8 +162,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     if (faltantes > 0) {
       const blacklistParticipando = participantes.filter((p) => blacklist.includes(p.nombre)).flatMap((p) => p.suscriptor ? [p, p] : [p]); // x2 chances;
-    
-      
+
+
       const shuffledBlacklist = [...blacklistParticipando].sort(() => 0.5 - Math.random());
       const ganadoresDeBlacklist = shuffledBlacklist.slice(0, faltantes);
       ganadoresCompletos = [...ganadoresCompletos, ...ganadoresDeBlacklist];
@@ -288,27 +288,32 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
   useEffect(() => {
     const usuarioKick = localStorage.getItem('kick_user');
+    console.log('usu', usuarioKick);
 
-    console.log('usu', usuarioKick)
     if (usuarioKick === 'lucaslunacl' || usuarioKick === 'eldenguee') {
-      console.log('entro')
+      console.log('entro');
+
+      socket.connect(); // 🔹 conectar explícitamente si estás usando `autoConnect: false`
+
       socket.on('connect', () => {
         console.log('Conectado al servidor:', socket.id);
         socket.emit('register-creator', { creatorId: '15789-52' });
         socket.emit('start-raffle', { raffleId: url });
+      });
 
+      socket.on('raffle-started', (data) => {
+        console.log(data.message);
+        setCurrentRaffleId(data.raffleId);
+        setMessageCounts({});
       });
     }
 
-    socket.on('raffle-started', (data) => {
-      console.log(data.message);
-      console.log('falle')
-      setCurrentRaffleId(data.raffleId);
-      setMessageCounts({});
-    });
-
-    // socket.on('nuevo-mensaje', handleChatMessage);
+    // ✅ Desconectar al desmontar
     return () => {
+      socket.disconnect();
+      socket.off('connect');
+      socket.off('raffle-started');
+      // También desregistrá otros eventos si los usás
       // socket.off('nuevo-mensaje', handleChatMessage);
     };
   }, []);
