@@ -206,14 +206,10 @@
   }
   
   .fondo {
-    background-image: 
-      linear-gradient(to bottom, rgba(63, 61, 69, 0.8) 0%, rgba(63, 61, 69, 0.6) 50%, rgba(63, 61, 69, 0) 100%),
-      url('./vip_rewards.svg'),
-      url('./rewards.png'),
-      url('./main_intro.jpg');
+    background:url('./backgroundDengue.jpg') ;
   
-    background-size: cover, cover, contain, cover; /* o ajustá según necesidad */
-    background-position: center, center, center 50%, center; /* centrado para cada capa */
+    background-size: cover; /* o ajustá según necesidad */
+    background-position:initial; /* centrado para cada capa */
     background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
     mask-image: linear-gradient( black 80%, transparent);
   }
