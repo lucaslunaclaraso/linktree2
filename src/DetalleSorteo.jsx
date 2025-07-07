@@ -287,7 +287,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     console.log('usu', usuarioKick)
     if (usuarioKick === 'lucaslunacl') {
       console.log('entro')
-      socket.on('connect', () => {
+      socket.on('connection', () => {
         console.log('Conectado al servidor:', socket.id);
         socket.emit('register-creator', { creatorId: '15789-52' });
         socket.emit('start-raffle', { raffleId: url });
