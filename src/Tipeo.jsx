@@ -205,6 +205,69 @@ function Tipeo(props) {
             }
         }
     };
+
+    const decodeQRFromUrl = async (imageUrl) => {
+        try {
+            const reader = new BrowserQRCodeReader();
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = imageUrl;
+    
+            await new Promise((resolve, reject) => {
+                img.onload = () => {
+                    if (img.naturalWidth === 0 || img.naturalHeight === 0) {
+                        reject(new Error('Imagen sin dimensiones válidas'));
+                    } else {
+                        resolve();
+                    }
+                };
+                img.onerror = () => reject(new Error('Error al cargar imagen'));
+            });
+    
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width * 2;
+            canvas.height = img.height * 2;
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    
+            const result = await reader.decodeFromCanvas(canvas);
+            return result?.getText() || null;
+    
+        } catch (err) {
+            console.warn('QR no leído:', err);
+            return null;
+        }
+    };
+
+    const handleFileChangeBnB = (setFile, setUrl) => async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+    
+        const localUrl = URL.createObjectURL(file);
+    
+        // Leer QR
+        const qrTexto = await decodeQRFromUrl(localUrl);
+        if (!qrTexto) {
+            setError('No se pudo subir la imagen. Asegurate de que esté visible y claro.');
+            setDeshabilitarBoton(true)
+
+            return;
+        }
+    
+        try {
+            setIsUploading(true); // Si usás estado local para loading
+            const uploadedUrl = await uploadToCloudinary(file);
+            setDeshabilitarBoton(false)
+    
+            setFile(file);
+            setUrl(uploadedUrl);
+            setError('');
+        } catch (err) {
+            setError('Error al subir la imagen: ' + err.message);
+        } finally {
+            setIsUploading(false);
+        }
+    };
     const [isOpen, setIsOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -477,7 +540,7 @@ function Tipeo(props) {
                                 <VisuallyHiddenInput
                                     type="file"
                                     accept="image/*"
-                                    onChange={handleFileChange(setBnbScreenshot, setBnbScreenshotUrl)}
+                                    onChange={handleFileChangeBnB(setBnbScreenshot, setBnbScreenshotUrl)}
                                 />
                             </Button>
 

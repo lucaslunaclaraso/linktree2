@@ -133,47 +133,61 @@ const AdminPanel = (props) => {
         }
     };
     const decodeQRFromUrl = async (imageUrl) => {
-       
+        console.log('img', imageUrl);
         try {
             const reader = new BrowserQRCodeReader();
             const img = new Image();
-            img.crossOrigin = 'anonymous';
+            img.crossOrigin = 'anonymous'; // Para evitar problemas de CORS
             img.src = imageUrl;
-            await new Promise((res) => (img.onload = res));
+    
+            await new Promise((resolve, reject) => {
+                img.onload = () => {
+                    if (img.naturalWidth === 0 || img.naturalHeight === 0) {
+                        reject(new Error('Imagen cargada pero sin dimensiones válidas'));
+                    } else {
+                        resolve();
+                    }
+                };
+                img.onerror = () => reject(new Error('Error al cargar la imagen'));
+            });
+    
             const result = await reader.decodeFromImageElement(img);
+            
             return result?.getText() || null;
         } catch (err) {
             console.warn('QR no leído:', err);
             return null;
         }
     };
+    
     const [verificaciones, setVerificaciones] = useState({});
+    
     useEffect(() => {
         const verificarQRSolicitudes = async () => {
-          const resultados= {};
-      
-          const pendientes = solicitudes.filter((s) => s.status === 'pending');
-      
-          for (const solicitud of pendientes) {
-            if (!solicitud.bnbScreenshot || !solicitud.bnbAddress) {
-              resultados[solicitud.id] = 'pending';
-              continue;
+            const resultados = {};
+            const pendientes = solicitudes.filter((s) => s.status === 'pending');
+    
+            for (const solicitud of pendientes) {
+                if (!solicitud.bnbScreenshot || !solicitud.bnbAddress) {
+                    resultados[solicitud.id] = 'pending';
+                    continue;
+                }
+    
+                const qrText = await decodeQRFromUrl(solicitud.bnbScreenshot);
+              
+    
+                if (qrText?.trim().toLowerCase() === solicitud.bnbAddress.trim().toLowerCase()) {
+                    resultados[solicitud.id] = 'ok';
+                } else {
+                    resultados[solicitud.id] = 'fail';
+                }
             }
-      
-            const qrText = await decodeQRFromUrl(solicitud.bnbScreenshot);
-      
-            if (qrText?.trim().toLowerCase() === solicitud.bnbAddress.trim().toLowerCase()) {
-              resultados[solicitud.id] = 'ok';
-            } else {
-              resultados[solicitud.id] = 'fail';
-            }
-          }
-      
-          setVerificaciones((prev) => ({ ...prev, ...resultados }));
+    
+            setVerificaciones((prev) => ({ ...prev, ...resultados }));
         };
-      
+    
         verificarQRSolicitudes();
-      }, [solicitudes]);
+    }, [solicitudes]);
     return (
         <Nlayout >
 
