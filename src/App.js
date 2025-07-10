@@ -273,7 +273,7 @@ function App() {
                 <Route path='/crearlink' element={<RutaPrivada><Paneltipeo isMobile={isMobile} /></RutaPrivada>} />
                 <Route path="/tipeos/:url" element={<RutaPrivada><TipeoCustom isMobile={isMobile} /> </RutaPrivada>} />
 
-                <Route path="/listado" element={<RutaPrivada><ListadoSorteos sorteos={sorteos} /> </RutaPrivada>} />
+                <Route path="/listado" element={<ListadoSorteos sorteos={sorteos} /> } />
 
                 <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/solicitudes" element={<RutaPrivada><AdminPanel isMobile={isMobile} /> </RutaPrivada> } />
