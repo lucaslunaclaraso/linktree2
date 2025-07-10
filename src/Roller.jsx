@@ -2,16 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography } from '@mui/material';
 import io from 'socket.io-client';
 
-const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
-  transports: ['websocket', 'polling'],
-});
+// const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
+//   transports: ['websocket', 'polling'],
+// });
 
+// 🎁 Premios con probabilidades
 const items = [
-  { name: 'AK-47', color: '#ef5350' },
-  { name: 'Desert Eagle', color: '#42a5f5' },
-  { name: 'AWP', color: 'blue' },
-  { name: 'M4A4', color: '#ffca28' },
-  { name: 'USP-S', color: '#ab47bc' },
+  { name: '0 Tipeos', color: '#616161', probability: 51 },
+  { name: '1 Tipeo', color: '#42a5f5', probability: 26 },
+  { name: '2 Tipeos', color: '#ffca28', probability: 13 },
+  { name: '5 Tipeos', color: '#ab47bc', probability: 10 },
 ];
 
 const ITEM_WIDTH = 180;
@@ -28,7 +28,7 @@ const Roller = () => {
   const audioRef = useRef(null);
   const iframeRef = useRef(null);
   const eventosRef = useRef([]);
-  const queueRef = useRef([]); // ⬅️ Cola de usuarios
+  const queueRef = useRef([]);
 
   const totalItemsWidth = items.length * ITEM_WIDTH;
   const maxOffset = totalItemsWidth * SPEED_MULTIPLIER * 2;
@@ -46,6 +46,18 @@ const Roller = () => {
 
   const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
+  // 🔢 Función para elegir ítem por probabilidad
+  const getRandomItemIndex = () => {
+    const total = items.reduce((sum, item) => sum + item.probability, 0);
+    const rand = Math.random() * total;
+    let acc = 0;
+    for (let i = 0; i < items.length; i++) {
+      acc += items[i].probability;
+      if (rand <= acc) return i;
+    }
+    return items.length - 1;
+  };
+
   const startRoll = () => {
     if (rolling) return;
 
@@ -53,7 +65,7 @@ const Roller = () => {
     setOffset(0);
     audioRef.current.play().catch(() => { });
 
-    const targetItemIndex = Math.floor(Math.random() * items.length);
+    const targetItemIndex = getRandomItemIndex();
     const baseOffset = (items.length + targetItemIndex) * ITEM_WIDTH + ITEM_WIDTH / 2 - (VISIBLE_ITEMS * ITEM_WIDTH) / 2;
     const extraLoops = items.length * ITEM_WIDTH * SPEED_MULTIPLIER;
     const targetOffset = -(baseOffset + extraLoops);
@@ -77,7 +89,7 @@ const Roller = () => {
 
         setTimeout(() => {
           setRolling(false);
-          processQueue(); // ⬅️ Sigue con el siguiente de la cola
+          processQueue();
         }, 10000);
       }
     };
@@ -87,7 +99,6 @@ const Roller = () => {
 
   const processQueue = () => {
     if (queueRef.current.length === 0) return;
-    console.log(' queueRef.current', queueRef.current)
     const nextUser = queueRef.current.shift();
     setLastSub(nextUser);
     setRolling(true);
@@ -96,7 +107,6 @@ const Roller = () => {
   };
 
   const handleNuevoFollow = ({ username }) => {
-
     queueRef.current.push(username);
     eventosRef.current.push({
       tipo: 'follow',
@@ -110,14 +120,10 @@ const Roller = () => {
     }
   };
 
-
   useEffect(() => {
-
     socket.on('nuevo-follow', handleNuevoFollow);
     return () => {
       socket.off('nuevo-follow', handleNuevoFollow);
-
-
     };
   }, [rolling]);
 
@@ -132,7 +138,7 @@ const Roller = () => {
     <Box
       sx={{
         textAlign: 'center',
-        bgcolor: 'green',
+        bgcolor: 'black',
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
