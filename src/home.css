@@ -7,6 +7,14 @@
     .superpuesto {
         font-size: 1.5rem;
     }
+    .fondo {
+      background-image:  url('./dengue-pagina-celular.png') !important;
+  
+    background-size: cover; /* o ajustá según necesidad */
+    background-position: top; /* centrado para cada capa */
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    mask-image: linear-gradient( black 80%, transparent);
+    }
 }
 
 /* Endpoint para todas las pantallas */
@@ -206,14 +214,10 @@
   }
   
   .fondo {
-    background-image: 
-    linear-gradient(to bottom, rgba(63, 61, 69, 0.8) 0%, rgba(63, 61, 69, 0.6) 50%, rgba(63, 61, 69, 0) 100%),
-    url('./vip_rewards.svg'),
-    url('./rewards.png'),
-    url('./main_intro.jpg');
+    background-image:  url('./dengue-pagina.png');
 
-  background-size: cover, cover, contain, cover; /* o ajustá según necesidad */
-  background-position: center, center, center 50%, center; /* centrado para cada capa */
+  background-size: cover; /* o ajustá según necesidad */
+  background-position: top; /* centrado para cada capa */
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
   mask-image: linear-gradient( black 80%, transparent);
   }
