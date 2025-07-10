@@ -14,6 +14,7 @@
     background-position: top; /* centrado para cada capa */
     background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
     mask-image: linear-gradient( black 80%, transparent);
+    height: 500px !important;
     }
 }
 

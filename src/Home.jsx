@@ -163,7 +163,7 @@ const Home = (props) => {
   const venta = dolar?.[0]?.venta || 0;
   return (
     <Nlayout>
-      <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '-35%' : '0%', width: '100%' }}>
+      <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '0%' : '0%', width: '100%' }}>
         <Grid style={{
 
           backgroundRepeat: 'no-repeat',
@@ -177,7 +177,7 @@ const Home = (props) => {
             padding: 50,
             gap: '10px',
             justifyContent: 'center',
-            
+
           }}>
 
 
@@ -195,7 +195,7 @@ const Home = (props) => {
             </Grid> */}
 
 
-            <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px',marginTop: '35%' }} >
+            <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: props.isMobile ? '100%' : '35%' }} >
               <Button
                 style={{
                   background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), linear-gradient(94deg, #365512 29.94%,#36f705 83.55%)',
@@ -203,7 +203,7 @@ const Home = (props) => {
                   padding: 15,
                   borderRadius: '100px',
                   gap: '10px',
-                  
+
                 }}
                 className='botonCod'
                 href='https://kick.com/eldenguee'
@@ -245,7 +245,7 @@ const Home = (props) => {
             </div>
           </Grid>
         </Grid>
-        
+
 
         <Grid style={{ display: 'flex', flexDirection: 'column', height: '100vh' }} className="backgroundAnimado" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
 
