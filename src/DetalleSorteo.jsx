@@ -9,7 +9,7 @@ import { useAuth } from './authContext';
 import io from 'socket.io-client';
 import { FaFacebook } from "react-icons/fa";
 
-const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
+const socket = io('https://hot-ghosts-smell.loca.lt', {
   transports: ['websocket', 'polling'],
 });
 
@@ -251,8 +251,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     if (messageCount >= 200) return { color: '#ff0000cc', bonus: 10 }; // Rojo (+10%)
     if (messageCount >= 150) return { color: '#ed6e07cc', bonus: 8 }; // Naranja (+8%)
     if (messageCount >= 100) return { color: '#bec800cc', bonus: 6 }; // Amarillo (+6%)
-    if (messageCount >= 70) return { color: '#33e64bcc', bonus: 4 }; // Verde Claro (+4%)
-    if (messageCount >= 30) return { color: '#008a13cc', bonus: 2 }; // Verde Oscuro (+2%)
+    if (messageCount >= 45) return { color: '#33e64bcc', bonus: 4 }; // Verde Claro (+4%)
+    if (messageCount >= 15) return { color: '#008a13cc', bonus: 2 }; // Verde Oscuro (+2%)
 
     return { color: 'black', bonus: 0 }; // Default (sin bonus)
   };
