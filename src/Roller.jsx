@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography } from '@mui/material';
 import io from 'socket.io-client';
 
-// const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
-//   transports: ['websocket', 'polling'],
-// });
+const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
+  transports: ['websocket', 'polling'],
+});
 
 // 🎁 Premios con probabilidades
 const items = [
