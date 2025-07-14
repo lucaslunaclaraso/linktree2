@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography } from '@mui/material';
 import io from 'socket.io-client';
+import axios from 'axios';
 
-const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
+const socket = io('https://rotten-hands-fetch.loca.lt', {
   transports: ['websocket', 'polling'],
 });
 
@@ -87,6 +88,23 @@ const Roller = () => {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
 
+        // ✅ Enviar tipeos al backend si no es "0 Tipeos"
+        const prizeName = items[targetItemIndex].name;
+        if (prizeName !== '0 Tipeos') {
+          const cantidad = parseInt(prizeName.split(' ')[0]); // Extrae el número
+          if (!isNaN(cantidad) && lastSub) {
+            axios.put(`https://backmu.vercel.app/sorteo/${lastSub}/incrementar-solicitudes`, {
+              cantidad,
+            })
+              .then((res) => {
+                console.log('Actualización exitosa:', res.data);
+              })
+              .catch((err) => {
+                console.error('Error al actualizar tipeos:', err);
+              });
+          }
+        }
+
         setTimeout(() => {
           setRolling(false);
           processQueue();
@@ -98,6 +116,7 @@ const Roller = () => {
   };
 
   const processQueue = () => {
+    console.log('queueRef.current.length', queueRef.current.length)
     if (queueRef.current.length === 0) return;
     const nextUser = queueRef.current.shift();
     setLastSub(nextUser);
@@ -133,12 +152,17 @@ const Roller = () => {
       if (audioRef.current) audioRef.current.pause();
     };
   }, []);
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log('Conectado al servidor:', socket.id);
 
+    });
+  }, [])
   return (
     <Box
       sx={{
         textAlign: 'center',
-        bgcolor: 'black',
+        bgcolor: 'green',
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
@@ -218,12 +242,7 @@ const Roller = () => {
         </>
       )}
 
-      <iframe
-        ref={iframeRef}
-        src="https://botrix.live/alerts?bid=3DaOGe3SpkYHh7JprKrZ9A"
-        style={{ display: 'none' }}
-        title="BotRix Alerts Widget"
-      />
+
 
       {winner && rolling && (
         <Typography

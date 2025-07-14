@@ -20,9 +20,13 @@ import {
     TextField,
     Grid,
 } from '@mui/material';
+import Tesseract from "tesseract.js";
 import axios from 'axios';
 import Nlayout from './Nlayout';
 import { BrowserQRCodeReader } from '@zxing/browser';
+import { FaCheck } from 'react-icons/fa6';
+import { BiError } from "react-icons/bi";
+
 const AdminPanel = (props) => {
     const [solicitudes, setSolicitudes] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -86,6 +90,8 @@ const AdminPanel = (props) => {
         setSelectedScreenshot(url);
         setOpenDialog(true);
     };
+
+
     const [bnb, setBnb] = useState()
     const [openBnb, setOpenBnb] = useState(false)
     const handleOpenAdrres = (add) => {
@@ -132,14 +138,36 @@ const AdminPanel = (props) => {
             }
         }
     };
+    const [mensajeOCR, setMensajeOCR] = useState("");
+    const procesarOCR = async (imageUrl) => {
+        setMensajeOCR("Procesando imagen...");
+
+        try {
+            const result = await Tesseract.recognize(imageUrl, "eng");
+            const textoDetectado = result.data.text.toUpperCase();
+
+            
+
+            if (textoDetectado.includes("ELDENGUEE")) {
+                setMensajeOCR("✅ ¡Código ELDENGUEE detectado!");
+                return 'DETECTADO';
+            } else {
+                setMensajeOCR("❌ No se detectó el código ELDENGUEE.");
+                return 'ERROR';
+            }
+        } catch (err) {
+            console.error("Error OCR:", err);
+            setMensajeOCR("❌ Error al procesar la imagen.");
+        }
+    };
     const decodeQRFromUrl = async (imageUrl) => {
-        console.log('img', imageUrl);
+
         try {
             const reader = new BrowserQRCodeReader();
             const img = new Image();
             img.crossOrigin = 'anonymous'; // Para evitar problemas de CORS
             img.src = imageUrl;
-    
+
             await new Promise((resolve, reject) => {
                 img.onload = () => {
                     if (img.naturalWidth === 0 || img.naturalHeight === 0) {
@@ -150,44 +178,71 @@ const AdminPanel = (props) => {
                 };
                 img.onerror = () => reject(new Error('Error al cargar la imagen'));
             });
-    
+
             const result = await reader.decodeFromImageElement(img);
-            
+
             return result?.getText() || null;
         } catch (err) {
             console.warn('QR no leído:', err);
             return null;
         }
     };
-    
+
     const [verificaciones, setVerificaciones] = useState({});
-    
+    const [verificacionCode, setVerificacionCode] = useState({});
+
     useEffect(() => {
         const verificarQRSolicitudes = async () => {
             const resultados = {};
             const pendientes = solicitudes.filter((s) => s.status === 'pending');
-    
+
             for (const solicitud of pendientes) {
                 if (!solicitud.bnbScreenshot || !solicitud.bnbAddress) {
                     resultados[solicitud.id] = 'pending';
                     continue;
                 }
-    
+
                 const qrText = await decodeQRFromUrl(solicitud.bnbScreenshot);
-              
-    
+
+
                 if (qrText?.trim().toLowerCase() === solicitud.bnbAddress.trim().toLowerCase()) {
                     resultados[solicitud.id] = 'ok';
                 } else {
                     resultados[solicitud.id] = 'fail';
                 }
             }
-    
+
             setVerificaciones((prev) => ({ ...prev, ...resultados }));
         };
-    
+
+        const verificarCodigo = async () => {
+            const resultados = {};
+            const pendientes = solicitudes.filter((s) => s.status === 'pending');
+
+            for (const solicitud of pendientes) {
+                if (!solicitud.offerScreenshot) {
+                    resultados[solicitud.id] = 'pending';
+                    continue;
+                }
+
+                const qrText = await procesarOCR(solicitud.offerScreenshot);
+                console.log('qrText', qrText)
+
+                if (qrText === 'DETECTADO') {
+                    resultados[solicitud.id] = 'ok';
+                } else {
+                    resultados[solicitud.id] = 'fail';
+                }
+
+            }
+            setVerificacionCode((prev) => ({ ...prev, ...resultados }));
+
+        }
+
         verificarQRSolicitudes();
+        verificarCodigo();
     }, [solicitudes]);
+    
     return (
         <Nlayout >
 
@@ -278,7 +333,7 @@ const AdminPanel = (props) => {
                                             })}</TableCell>
                                             <TableCell>{solicitud.nombre}</TableCell>
                                             <TableCell>{solicitud.email}</TableCell>
-                                            <TableCell>
+                                            <TableCell style={{display:'flex', alignItems:'center', gap: 5}}>
                                                 <Button
 
                                                     onClick={() => handleOpenScreenshot(solicitud.offerScreenshot)}
@@ -286,6 +341,11 @@ const AdminPanel = (props) => {
                                                 >
                                                     Ver Captura
                                                 </Button>
+                                                {
+                                                    verificacionCode[solicitud.id] === 'ok' ?
+                                                        <FaCheck style={{color:'green'}}/> :
+                                                        <BiError style={{color:'red'}}/>
+                                                }
                                             </TableCell>
                                             <TableCell>
                                                 <Button
