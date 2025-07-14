@@ -140,9 +140,9 @@ const Roller = () => {
   };
 
   useEffect(() => {
-    socket.on('nuevo-follow', handleNuevoFollow);
+    socket.on('nuevo-sub', handleNuevoFollow);
     return () => {
-      socket.off('nuevo-follow', handleNuevoFollow);
+      socket.off('nuevo-sub', handleNuevoFollow);
     };
   }, [rolling]);
 
