@@ -10,7 +10,7 @@ import io from 'socket.io-client';
 import { FaFacebook } from "react-icons/fa";
 import { FaDiscord } from "react-icons/fa";
 
-const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
+const socket = io('https://socket.eldenguee.com', {
   transports: ['websocket', 'polling'],
 });
 
