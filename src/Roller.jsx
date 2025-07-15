@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import io from 'socket.io-client';
 import axios from 'axios';
 
-const socket = io('https://mighty-beers-allow.loca.lt', {
+const socket = io('https://25a4-54-39-131-40.ngrok-free.app', {
   transports: ['websocket', 'polling'],
 });
 
@@ -152,12 +152,7 @@ const Roller = () => {
       if (audioRef.current) audioRef.current.pause();
     };
   }, []);
-  useEffect(() => {
-    socket.on('connect', () => {
-      console.log('Conectado al servidor:', socket.id);
-
-    });
-  }, [])
+ 
   return (
     <Box
       sx={{
