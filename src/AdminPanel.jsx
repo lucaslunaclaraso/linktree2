@@ -146,7 +146,7 @@ const AdminPanel = (props) => {
             const result = await Tesseract.recognize(imageUrl, "eng");
             const textoDetectado = result.data.text.toUpperCase();
 
-            
+
 
             if (textoDetectado.includes("ELDENGUEE")) {
                 setMensajeOCR("✅ ¡Código ELDENGUEE detectado!");
@@ -190,6 +190,7 @@ const AdminPanel = (props) => {
 
     const [verificaciones, setVerificaciones] = useState({});
     const [verificacionCode, setVerificacionCode] = useState({});
+    const [verificacionIP, setVerificacionIP] = useState({});
 
     useEffect(() => {
         const verificarQRSolicitudes = async () => {
@@ -239,10 +240,40 @@ const AdminPanel = (props) => {
 
         }
 
+        const verificarIPsDuplicadas = () => {
+            const ipMap = {};
+            const resultados = {};
+
+            const pendientes = solicitudes.filter((s) => s.status === 'pending');
+
+            for (const solicitud of pendientes) {
+                const ip = solicitud.ip;
+
+                if (!ip) {
+                    resultados[solicitud.id] = 'pending';
+                    continue;
+                }
+
+                // Limpiar "::ffff:" si está presente
+                const cleanIp = ip.replace(/^::ffff:/, '');
+
+                if (ipMap[cleanIp]) {
+                    // Si ya existe otra solicitud con la misma IP → marcar ambas como duplicadas
+                    resultados[solicitud.id] = 'duplicate';
+                    resultados[ipMap[cleanIp]] = 'duplicate';
+                } else {
+                    ipMap[cleanIp] = solicitud.id;
+                }
+            }
+
+            setVerificacionIP(resultados);
+        };
+
         verificarQRSolicitudes();
         verificarCodigo();
+        verificarIPsDuplicadas()
     }, [solicitudes]);
-    
+
     return (
         <Nlayout >
 
@@ -333,7 +364,7 @@ const AdminPanel = (props) => {
                                             })}</TableCell>
                                             <TableCell>{solicitud.nombre}</TableCell>
                                             <TableCell>{solicitud.email}</TableCell>
-                                            <TableCell style={{display:'flex', alignItems:'center', gap: 5}}>
+                                            <TableCell style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                                                 <Button
 
                                                     onClick={() => handleOpenScreenshot(solicitud.offerScreenshot)}
@@ -343,8 +374,8 @@ const AdminPanel = (props) => {
                                                 </Button>
                                                 {
                                                     verificacionCode[solicitud.id] === 'ok' ?
-                                                        <FaCheck style={{color:'green'}}/> :
-                                                        <BiError style={{color:'red'}}/>
+                                                        <FaCheck style={{ color: 'green' }} /> :
+                                                        <BiError style={{ color: 'red' }} />
                                                 }
                                             </TableCell>
                                             <TableCell>
@@ -367,7 +398,13 @@ const AdminPanel = (props) => {
                                             }}>
                                                 {solicitud.bnbAddress}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell sx={{
+                                                color:
+                                                    verificacionIP[solicitud.id] === 'duplicate'
+                                                        ? 'red'
+                                                        : 'inherit',
+                                                fontWeight: verificacionIP[solicitud.id] === 'duplicate' ? 'bold' : 'normal',
+                                            }}>
                                                 {solicitud.ip}
                                             </TableCell>
                                             <TableCell>
