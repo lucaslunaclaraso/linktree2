@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import io from 'socket.io-client';
 import axios from 'axios';
 
-const socket = io('https://angry-cougars-show.loca.lt', {
+const socket = io('https://mighty-beers-allow.loca.lt', {
   transports: ['websocket', 'polling'],
 });
 

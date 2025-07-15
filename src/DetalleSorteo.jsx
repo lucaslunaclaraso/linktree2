@@ -10,7 +10,7 @@ import io from 'socket.io-client';
 import { FaFacebook } from "react-icons/fa";
 import { FaDiscord } from "react-icons/fa";
 
-const socket = io('https://angry-cougars-show.loca.lt', {
+const socket = io('https://mighty-beers-allow.loca.lt', {
   transports: ['websocket', 'polling'],
 });
 
