@@ -9,7 +9,7 @@ import { useAuth } from './authContext';
 import io from 'socket.io-client';
 import { FaFacebook } from "react-icons/fa";
 
-const socket = io('https://rotten-hands-fetch.loca.lt', {
+const socket = io('https://salty-banks-win.loca.lt', {
   transports: ['websocket', 'polling'],
 });
 
