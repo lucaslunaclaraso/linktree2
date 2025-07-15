@@ -94,10 +94,15 @@ function Tipeo(props) {
 
     const [deshabilitarBoton, setDeshabilitarBoton] = useState(false)
    
+    const getPublicIP = async () => {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        return data.ip;
+      };
     const handleRequestTipeo = async () => {
         setLoading(true);
         setError('');
-
+        const ip = await getPublicIP();
         try {
             if (!bnbAddress.startsWith('0x')) {
                 throw new Error('UPS! eso no parece una dirección BNB');
@@ -144,6 +149,7 @@ function Tipeo(props) {
                     offerScreenshot: offerScreenshotUrl,
                     bnbScreenshot: bnbScreenshotUrl,
                     bnbAddress,
+                    ip
                 }),
             });
 

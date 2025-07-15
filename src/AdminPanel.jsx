@@ -316,7 +316,7 @@ const AdminPanel = (props) => {
                                         <TableCell>Captura Ajustes</TableCell>
                                         <TableCell>Captura BNB</TableCell>
                                         <TableCell>Dirección BNB</TableCell>
-                                        <TableCell>Estado</TableCell>
+                                        <TableCell>IP</TableCell>
                                         <TableCell>Acciones</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -368,8 +368,7 @@ const AdminPanel = (props) => {
                                                 {solicitud.bnbAddress}
                                             </TableCell>
                                             <TableCell>
-                                                {solicitud.status === 'pending' ? 'Pendiente' :
-                                                    solicitud.status === 'accepted' ? 'Aceptada' : 'Rechazada'}
+                                                {solicitud.ip}
                                             </TableCell>
                                             <TableCell>
                                                 {solicitud.status === 'pending' && (

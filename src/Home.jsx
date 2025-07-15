@@ -196,7 +196,7 @@ const Home = (props) => {
 
 
             <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: props.isMobile ? '100%' : '35%' }} >
-              <Button
+              {/* <Button
                 style={{
                   background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), linear-gradient(94deg, #365512 29.94%,#36f705 83.55%)',
                   color: 'white',
@@ -211,7 +211,7 @@ const Home = (props) => {
               >
                 <SiKick style={{ color: 'white' }} />
                 <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif' }}>Seguir en Kick</Typography>
-              </Button>
+              </Button> */}
 
               {/* <Button
 
