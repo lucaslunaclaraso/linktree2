@@ -8,8 +8,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from './authContext';
 import io from 'socket.io-client';
 import { FaFacebook } from "react-icons/fa";
+import { FaDiscord } from "react-icons/fa";
 
-const socket = io('https://salty-banks-win.loca.lt', {
+const socket = io('https://flat-foxes-tickle.loca.lt', {
   transports: ['websocket', 'polling'],
 });
 
@@ -474,7 +475,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                             <Grid style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                               <Typography style={{ fontWeight: 'bold' }}>Puesto {index + 1}:</Typography>
                               <Typography style={{ color }}> {ganador} {participante?.facebook && (
-                                <FaFacebook style={{ marginLeft: '8px', color: '#3b5998' }} />
+                                <FaDiscord  style={{ marginLeft: '8px', color: '#3b5998' }} />
                               )}
                                {participante?.suscriptor && (
                                     <span title="Suscriptor">
