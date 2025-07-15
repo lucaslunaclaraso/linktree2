@@ -10,7 +10,7 @@ import io from 'socket.io-client';
 import { FaFacebook } from "react-icons/fa";
 import { FaDiscord } from "react-icons/fa";
 
-const socket = io('https://tricky-kids-dig.loca.lt', {
+const socket = io('https://angry-cougars-show.loca.lt', {
   transports: ['websocket', 'polling'],
 });
 
@@ -442,7 +442,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                                     {u?.suscriptor ? <strong>{u?.nombre}</strong> : u?.nombre}
                                   </span> {bonus > 0 && <span> (+{bonus}%) </span>}
 
-                                  {u?.facebook && <FaFacebook style={{ marginLeft: '8px', color: '#3b5998' }} />}
+                                  {u?.facebook && <FaDiscord style={{ marginLeft: '8px', color: '#3b5998' }} />}
 
                                   {u?.suscriptor && (
                                     <span title="Suscriptor">
