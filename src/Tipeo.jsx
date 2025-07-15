@@ -302,7 +302,7 @@ function Tipeo(props) {
                                 </Typography>
 
                                 <Link
-                                    href="https://stake1021.com/?offer=eldenguee&c=1590cd3460"
+                                    href="https://stake1022.com/?offer=eldenguee&c=1590cd3460"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     sx={{
@@ -313,7 +313,7 @@ function Tipeo(props) {
                                         wordBreak: 'break-all',
                                     }}
                                 >
-                                    https://stake1021.com/?offer=eldenguee&c=1590cd3460
+                                    https://stake1022.com/?offer=eldenguee&c=1590cd3460
                                 </Link>
                             </Box>
                             <Typography sx={{ fontWeight: 'bold', mb: 1, display: 'inline-block' }}>
