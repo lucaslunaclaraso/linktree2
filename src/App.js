@@ -25,6 +25,7 @@ import { IoCloseCircleOutline } from 'react-icons/io5';
 import backg from './main_intro.jpg'
 import ListadoLinks from './ListadoLinks';
 import DarCoins from './DarCoins';
+import ListadoEventos from './ListadoEventos';
 
 const style = {
     position: 'absolute',
@@ -274,6 +275,7 @@ function App() {
                 <Route path="/tipeos/:url" element={<RutaPrivada><TipeoCustom isMobile={isMobile} /> </RutaPrivada>} />
 
                 <Route path="/listado" element={<RutaPrivada><ListadoSorteos sorteos={sorteos} /> </RutaPrivada>} />
+                <Route path="/eventos" element={<RutaPrivada><ListadoEventos sorteos={sorteos} /> </RutaPrivada>} />
 
                 <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/solicitudes" element={<RutaPrivada><AdminPanel isMobile={isMobile} /> </RutaPrivada>} />
