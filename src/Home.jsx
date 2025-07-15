@@ -92,13 +92,23 @@ const Home = (props) => {
     // Agrega más enlaces según sea necesario
   ];
 
-  const videos = [
-    { id: 'https://www.youtube.com/watch?v=YmfVcnZv_9s&ab_channel=dengueetimba', title: 'BOMBAZO EN LA STARLIGHT 1000, WANTED Y JAWSOME🤑', img: 'YmfVcnZv_9s' },
-    { id: 'https://www.youtube.com/watch?v=8CAWnDTVYqo&ab_channel=dengueetimba', title: 'GANE 23 MILLONES!! 🤑 SACO MAX WIN EN NO LIMIT 🤯 BONOS DE $1000000 💸', img: '8CAWnDTVYqo' },
-    { id: 'https://www.youtube.com/watch?v=WzxSV4Ktmg4&ab_channel=dengueetimba', title: 'CONEXIONES INSANAS EN NUEVA MÁQUINA!', img: 'WzxSV4Ktmg4' },
-    { id: 'https://www.youtube.com/watch?v=VNDGtOG2XbE&ab_channel=dengueetimba', title: 'PAGOS INSANOS EN DOG HOUSE, BIG BASS Y HOT FIESTA😎🍀', img: 'VNDGtOG2XbE' },
+  const [videos, setVideos] = useState([])
 
-  ];
+
+
+  async function getLatestVideos() {
+    const res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UClHz_OivZ3U26asPaeGXxXw&maxResults=5&order=date&type=video&key=AIzaSyBT5sflU58-ZF3vua_I5fFYbyAE13mTa3c`);
+    const data = await res.json();
+
+    const videos = data.items.map((item) => ({
+      id: item.id.videoId,
+      title: item.snippet.title,
+      url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+      thumbnail: item.snippet.thumbnails.medium.url,
+    }));
+
+    setVideos(videos);
+  }
   const handleScroll = () => {
     const target = document.querySelector("#menu2");
     if (target) {
@@ -123,6 +133,9 @@ const Home = (props) => {
       }
     }
   };
+  useEffect(() => {
+    getLatestVideos()
+  }, [])
 
   const handleMouseLeave = () => {
     setMousePos({ x: -100, y: -100 });
@@ -392,12 +405,12 @@ const Home = (props) => {
           <Grid style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', flexWrap: props.isMobile && 'wrap' }}>
 
 
-            {videos.map((video, index) => (
-
+            {videos.map((video, index) => {              
+              return(
               <Grid>
-                <a href={video.id} target="_blank" rel="noopener noreferrer" >
+                <a href={video.url} target="_blank" rel="noopener noreferrer" >
                   <img
-                    src={`https://img.youtube.com/vi/${video.img}/maxresdefault.jpg`}
+                    src={video.thumbnail}
                     alt={video.title}
                     style={{ width: '100%', borderRadius: '10px' }}
                     className="hover-scale shiny-hover"
@@ -406,7 +419,7 @@ const Home = (props) => {
                 <p style={{ color: 'white' }}>{video.title}</p>
               </Grid>
 
-            ))}
+            )})}
 
 
           </Grid>
@@ -476,7 +489,8 @@ const Home = (props) => {
                   padding: '0 15px'
 
                 }}
-              >Unirse</Button>
+                href="https://discord.gg/2SVdrpbmzb" target='_blank'>
+                Unirse</Button>
             </Box>
             <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: 10, border: '1px solid #1877F2', width: props.isMobile ? '85%' : '30%', borderRadius: 10, boxShadow: '0 0 5px #1877F2' }}>
               <FaFacebookSquare style={{ color: '#1877F2', fontSize: 35 }} />
