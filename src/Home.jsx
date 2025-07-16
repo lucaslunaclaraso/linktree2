@@ -92,12 +92,14 @@ const Home = (props) => {
     // Agrega más enlaces según sea necesario
   ];
 
-  const [videos, setVideos] = useState([])
-
-
-
+  const CHANNEL_ID = 'UClHz_OivZ3U26asPaeGXxXw';
+  const API_KEY = 'AIzaSyBT5sflU58-ZF3vua_I5fFYbyAE13mTa3c';
+  const [videos, setVideos] = useState([]);
+  const ONE_DAY = 24 * 60 * 60 * 1000;
   async function getLatestVideos() {
-    const res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UClHz_OivZ3U26asPaeGXxXw&maxResults=5&order=date&type=video&key=AIzaSyBT5sflU58-ZF3vua_I5fFYbyAE13mTa3c`);
+    const res = await fetch(
+      `https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&maxResults=5&order=date&type=video&key=${API_KEY}`
+    );
     const data = await res.json();
 
     const videos = data.items.map((item) => ({
@@ -107,8 +109,26 @@ const Home = (props) => {
       thumbnail: item.snippet.thumbnails.medium.url,
     }));
 
+    // Guardar en localStorage
+    localStorage.setItem('videos', JSON.stringify(videos));
+    localStorage.setItem('videosTimestamp', Date.now());
     setVideos(videos);
   }
+
+  useEffect(() => {
+    const cachedVideos = localStorage.getItem('videos');
+    const timestamp = localStorage.getItem('videosTimestamp');
+
+    if (cachedVideos && timestamp) {
+      const age = Date.now() - parseInt(timestamp, 10);
+      if (age < ONE_DAY) {
+        setVideos(JSON.parse(cachedVideos));
+        return; // No hace falta actualizar
+      }
+    }
+
+    getLatestVideos();
+  }, []);
   const handleScroll = () => {
     const target = document.querySelector("#menu2");
     if (target) {
@@ -133,9 +153,7 @@ const Home = (props) => {
       }
     }
   };
-  useEffect(() => {
-    getLatestVideos()
-  }, [])
+  
 
   const handleMouseLeave = () => {
     setMousePos({ x: -100, y: -100 });
