@@ -90,20 +90,20 @@ const Roller = () => {
 
         // ✅ Enviar tipeos al backend si no es "0 Tipeos"
         const prizeName = items[targetItemIndex].name;
-        if (prizeName !== '0 Tipeos') {
-          const cantidad = parseInt(prizeName.split(' ')[0]); // Extrae el número
-          if (!isNaN(cantidad) && lastSub) {
-            axios.put(`https://backmu.vercel.app/sorteo/${lastSub}/incrementar-solicitudes`, {
-              cantidad,
-            })
-              .then((res) => {
-                console.log('Actualización exitosa:', res.data);
-              })
-              .catch((err) => {
-                console.error('Error al actualizar tipeos:', err);
-              });
-          }
-        }
+        // if (prizeName !== '0 Tipeos') {
+        //   const cantidad = parseInt(prizeName.split(' ')[0]); // Extrae el número
+        //   if (!isNaN(cantidad) && lastSub) {
+        //     axios.put(`https://backmu.vercel.app/sorteo/${lastSub}/incrementar-solicitudes`, {
+        //       cantidad,
+        //     })
+        //       .then((res) => {
+        //         console.log('Actualización exitosa:', res.data);
+        //       })
+        //       .catch((err) => {
+        //         console.error('Error al actualizar tipeos:', err);
+        //       });
+        //   }
+        // }
 
         setTimeout(() => {
           setRolling(false);
@@ -140,9 +140,9 @@ const Roller = () => {
   };
 
   useEffect(() => {
-    socket.on('nuevo-sub', handleNuevoFollow);
+    socket.on('nuevo-follow', handleNuevoFollow);
     return () => {
-      socket.off('nuevo-sub', handleNuevoFollow);
+      socket.off('nuevo-follow', handleNuevoFollow);
     };
   }, [rolling]);
 
