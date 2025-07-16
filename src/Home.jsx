@@ -405,7 +405,7 @@ const Home = (props) => {
           <Grid style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', flexWrap: props.isMobile && 'wrap' }}>
 
 
-            {videos.map((video, index) => {              
+            {videos?.map((video, index) => {              
               return(
               <Grid>
                 <a href={video.url} target="_blank" rel="noopener noreferrer" >

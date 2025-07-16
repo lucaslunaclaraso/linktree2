@@ -9,10 +9,10 @@ const socket = io('https://socket.eldenguee.com', {
 
 // 🎁 Premios con probabilidades
 const items = [
-  { name: '0 Tipeos', color: '#616161', probability: 51 },
-  { name: '1 Tipeo', color: '#42a5f5', probability: 26 },
-  { name: '2 Tipeos', color: '#ffca28', probability: 13 },
-  { name: '5 Tipeos', color: '#ab47bc', probability: 10 },
+  { name: 0, color: '#616161', probability: 51 },
+  { name: 1 , color: '#42a5f5', probability: 26 },
+  { name: 2 , color: '#ffca28', probability: 13 },
+  { name: 5, color: '#ab47bc', probability: 10 },
 ];
 
 const ITEM_WIDTH = 180;
@@ -21,6 +21,8 @@ const ROLL_DURATION = 2000;
 const SPEED_MULTIPLIER = 5;
 
 const Roller = () => {
+  const cantidadRef = useRef(1); // valor por defecto
+
   const [rolling, setRolling] = useState(false);
   const [offset, setOffset] = useState(0);
   const [winner, setWinner] = useState(null);
@@ -90,11 +92,13 @@ const Roller = () => {
 
         // ✅ Enviar tipeos al backend si no es "0 Tipeos"
         const prizeName = items[targetItemIndex].name;
-        if (prizeName !== '0 Tipeos') {
-          const cantidad = parseInt(prizeName.split(' ')[0]); // Extrae el número
-          if (!isNaN(cantidad) && lastSub) {
+        if (prizeName !== 0) {
+          const baseAmount = prizeName // "1 Tipeo" -> 1
+          const total = baseAmount * (cantidadRef.current || 1); // Multiplicamos
+
+          if (!isNaN(total) && lastSub) {
             axios.put(`https://backmu.vercel.app/sorteo/${lastSub}/incrementar-solicitudes`, {
-              cantidad,
+              cantidad: total,
             })
               .then((res) => {
                 console.log('Actualización exitosa:', res.data);
@@ -125,7 +129,10 @@ const Roller = () => {
     startRoll();
   };
 
-  const handleNuevoFollow = ({ username }) => {
+  const handleNuevoFollow = ({ username, cantidad = 1 }) => {
+    console.log('user', username)
+    console.log('cantidad', cantidad)
+    cantidadRef.current = cantidad; // guardamos cantidad de subs
     queueRef.current.push(username);
     eventosRef.current.push({
       tipo: 'follow',
@@ -152,7 +159,7 @@ const Roller = () => {
       if (audioRef.current) audioRef.current.pause();
     };
   }, []);
- 
+
   return (
     <Box
       sx={{
@@ -228,7 +235,7 @@ const Roller = () => {
                       }),
                     }}
                   >
-                    {item.name}
+                    {item.name * cantidadRef.current} Tipeos
                   </Box>
                 ))}
               </Box>
@@ -250,7 +257,7 @@ const Roller = () => {
             textTransform: 'uppercase',
           }}
         >
-          ¡Ganaste: {winner.name}!
+          ¡Ganaste: {winner.name * cantidadRef.current} Tipeos!
         </Typography>
       )}
     </Box>

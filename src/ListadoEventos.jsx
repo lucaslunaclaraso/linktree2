@@ -15,7 +15,8 @@ export default function ListadoEventos() {
     const obtenerSorteos = async () => {
         try {
             const res = await axios.get('https://backmu.vercel.app/sorteo/suscripcionesEventos');
-            setListadoEventos(res.data?.recordset || []);
+            
+            setListadoEventos(res.data.data || []);
         } catch (error) {
             console.error('Error al obtener sorteos:', error);
         }
@@ -128,7 +129,7 @@ export default function ListadoEventos() {
                                         <Grid item xs={12} sm={6}>
                                             <Typography variant="h6">{sorteo.nombre}</Typography>
                                             <Typography variant="body2" color="text.secondary">
-                                                Fecha: {new Date(sorteo.fecha_creacion).toLocaleDateString()}
+                                                Fecha: {new Date(sorteo.fecha).toLocaleDateString()}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12} sm={6} textAlign="right">
@@ -138,7 +139,7 @@ export default function ListadoEventos() {
                                                     color="green"
                                                     
                                                 >
-                                                    <Typography variant="h6">Ganó {sorteo.premios} Tipeos!</Typography>
+                                                    <Typography variant="h6">Ganó {sorteo.premio} Tipeos!</Typography>
 
                                                 </Typography>
                                             </Tooltip>
