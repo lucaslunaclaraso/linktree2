@@ -41,15 +41,12 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       const ip = await getPublicIP();
 
       // Pre-verificación en el frontend usando los datos de participantes
+      // Contar cuentas por IP para determinar si es multicuenta
       const cuentasPorIp = participantes.filter(p => p.ip === ip).length;
-      console.log('cuentas', cuentasPorIp)
-      if (cuentasPorIp >= 1) {
-        setUnirseSorteo(true);
-        alert('ERROR: Ya no te podes unir.');
-        return;
-      }
+      const esMulticuenta = cuentasPorIp >= 2; // true si hay 2 o más cuentas con la misma IP
+      console.log('cuentas por IP:', cuentasPorIp, 'es_multicuenta:', esMulticuenta);
 
-      const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre, mail, ip });
+      const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre, mail, ip, esMulticuenta });
       const peticionUser = await axios.post(`https://backmu.vercel.app/sorteo/crearUser`, { nombre, mail });
 
       if (peticion?.data?.success) {
@@ -165,8 +162,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   const sortear = async () => {
     const blacklist = await obtenerGanadoresDelSorteoAnterior();
 
-    const participantesValidos = participantes
-      .filter((p) => !blacklist.includes(p.nombre));
+    const participantesValidos = participantes.filter(
+      p => !p.esMulticuenta && !blacklist.includes(p.mail)
+    );
 
     // Generamos un array con más chances, pero sin permitir repeticiones
     const poolDeChances = participantesValidos.flatMap((p) =>
