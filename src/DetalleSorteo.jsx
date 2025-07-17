@@ -151,33 +151,65 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
   const sortear = async () => {
     const blacklist = await obtenerGanadoresDelSorteoAnterior();
+  
     const participantesValidos = participantes
-      .filter((p) => !blacklist.includes(p.nombre))
-      .flatMap((p) => p.suscriptor ? [p, p] : [p]); // x2 chances
-
+      .filter((p) => !blacklist.includes(p.nombre));
+  
+    // Generamos un array con más chances, pero sin permitir repeticiones
+    const poolDeChances = participantesValidos.flatMap((p) =>
+      p.suscriptor ? [p.nombre, p.nombre] : [p.nombre]
+    );
+  
+    // Mezclar
+    const shuffled = [...poolDeChances].sort(() => 0.5 - Math.random());
+  
     const premiosTotales = sorteo?.premios || 0;
-    const shuffledValidos = [...participantesValidos].sort(() => 0.5 - Math.random());
-    const ganadoresValidos = shuffledValidos.slice(0, premiosTotales);
-    const faltantes = premiosTotales - ganadoresValidos.length;
-    let ganadoresCompletos = [...ganadoresValidos];
-
-    if (faltantes > 0) {
-      const blacklistParticipando = participantes.filter((p) => blacklist.includes(p.nombre)).flatMap((p) => p.suscriptor ? [p, p] : [p]); // x2 chances;
-
-
-      const shuffledBlacklist = [...blacklistParticipando].sort(() => 0.5 - Math.random());
-      const ganadoresDeBlacklist = shuffledBlacklist.slice(0, faltantes);
-      ganadoresCompletos = [...ganadoresCompletos, ...ganadoresDeBlacklist];
+  
+    // Elegimos ganadores únicos sin repetir
+    const ganadoresSet = new Set();
+    for (const nombre of shuffled) {
+      if (!ganadoresSet.has(nombre)) {
+        ganadoresSet.add(nombre);
+        if (ganadoresSet.size === premiosTotales) break;
+      }
     }
-
+  
+    let ganadoresCompletos = [...ganadoresSet].map((nombre) =>
+      participantes.find((p) => p.nombre === nombre)
+    );
+  
+    // Si faltan ganadores, recurrimos a los de la blacklist
+    const faltantes = premiosTotales - ganadoresCompletos.length;
+    if (faltantes > 0) {
+      const blacklistParticipando = participantes
+        .filter((p) => blacklist.includes(p.nombre));
+  
+      const poolBlacklist = blacklistParticipando.flatMap((p) =>
+        p.suscriptor ? [p.nombre, p.nombre] : [p.nombre]
+      );
+  
+      const shuffledBlacklist = [...poolBlacklist].sort(() => 0.5 - Math.random());
+  
+      for (const nombre of shuffledBlacklist) {
+        if (!ganadoresSet.has(nombre)) {
+          ganadoresSet.add(nombre);
+          ganadoresCompletos.push(
+            blacklistParticipando.find((p) => p.nombre === nombre)
+          );
+          if (ganadoresCompletos.length === premiosTotales) break;
+        }
+      }
+    }
+  
     setGanadores(ganadoresCompletos);
     const nombresGanadores = ganadoresCompletos.map((p) => p.nombre);
     guardarGanadores(url, nombresGanadores);
-
+  
     if (nombresGanadores.includes(usuarioKick)) {
       setOpen(true);
     }
   };
+  
 
   useEffect(() => {
     let intervalo;
