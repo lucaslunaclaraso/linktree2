@@ -93,12 +93,12 @@ function Tipeo(props) {
     };
 
     const [deshabilitarBoton, setDeshabilitarBoton] = useState(false)
-   
+
     const getPublicIP = async () => {
         const res = await fetch('https://api.ipify.org?format=json');
         const data = await res.json();
         return data.ip;
-      };
+    };
     const handleRequestTipeo = async () => {
         setLoading(true);
         setError('');
@@ -107,7 +107,10 @@ function Tipeo(props) {
             if (!bnbAddress.startsWith('0x')) {
                 throw new Error('UPS! eso no parece una dirección BNB');
             }
-            if (activeStep === 2 && (bnbAddress === '0x3f1bD53eB8A3F5d60147A5C0c47279a')) {
+            if (activeStep === 2 && (
+                bnbAddress?.toLowerCase() === '0x3f1bD53eB8A3F5d60147A5C0c47279a...' ||
+                bnbAddress?.toLowerCase() === '0x3f1bD53eB8A3F5d60147A5C0c47279a'
+            )) {
                 setError('La dirección BNB debe ser una real..');
                 return false;
             }
@@ -218,7 +221,7 @@ function Tipeo(props) {
             const img = new Image();
             img.crossOrigin = 'anonymous';
             img.src = imageUrl;
-    
+
             await new Promise((resolve, reject) => {
                 img.onload = () => {
                     if (img.naturalWidth === 0 || img.naturalHeight === 0) {
@@ -229,16 +232,16 @@ function Tipeo(props) {
                 };
                 img.onerror = () => reject(new Error('Error al cargar imagen'));
             });
-    
+
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             canvas.width = img.width * 2;
             canvas.height = img.height * 2;
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    
+
             const result = await reader.decodeFromCanvas(canvas);
             return result?.getText() || null;
-    
+
         } catch (err) {
             console.warn('QR no leído:', err);
             return null;
@@ -248,9 +251,9 @@ function Tipeo(props) {
     const handleFileChangeBnB = (setFile, setUrl) => async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-    
+
         const localUrl = URL.createObjectURL(file);
-    
+
         // Leer QR
         const qrTexto = await decodeQRFromUrl(localUrl);
         if (!qrTexto) {
@@ -259,12 +262,12 @@ function Tipeo(props) {
 
             return;
         }
-    
+
         try {
             setIsUploading(true); // Si usás estado local para loading
             const uploadedUrl = await uploadToCloudinary(file);
             setDeshabilitarBoton(false)
-    
+
             setFile(file);
             setUrl(uploadedUrl);
             setError('');
