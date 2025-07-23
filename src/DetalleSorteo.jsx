@@ -43,7 +43,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       // Pre-verificación en el frontend usando los datos de participantes
       // Contar cuentas por IP para determinar si es multicuenta
       const cuentasPorIp = participantes.filter(p => p.ip === ip).length;
-      const esMulticuenta = cuentasPorIp >= 2; // true si hay 2 o más cuentas con la misma IP
+      const esMulticuenta = cuentasPorIp >= 1; // true si hay 2 o más cuentas con la misma IP
       console.log('cuentas por IP:', cuentasPorIp, 'es_multicuenta:', esMulticuenta);
 
       const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre, mail, ip, esMulticuenta });
