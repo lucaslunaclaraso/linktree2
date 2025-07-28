@@ -8,7 +8,7 @@
         font-size: 1.5rem;
     }
     .fondo {
-      background-image:  url('./dengue-pagina-celular.png') !important;
+      background-image:  url('https://i.imgur.com/weLZcbU.gif') !important;
   
     background-size: cover; /* o ajustá según necesidad */
     background-position: top; /* centrado para cada capa */
@@ -215,7 +215,7 @@
   }
   
   .fondo {
-    background-image:  url('./dengue-1870.png');
+    background-image:  url('https://i.imgur.com/LTZKdAA.gif');
 
   background-size: cover; /* o ajustá según necesidad */
   background-position: top; /* centrado para cada capa */

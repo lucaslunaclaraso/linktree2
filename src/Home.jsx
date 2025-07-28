@@ -37,6 +37,7 @@ import dice from './dice.svg'
 import bomb from './bomb.png'
 import roulette from './roulette.svg'
 import reward from './rewards.png'
+
 const LinkItem = ({ parrafo, title, url, imagen, isImage, gif }) => {
 
   const copyToClipboard = () => {
@@ -153,7 +154,7 @@ const Home = (props) => {
       }
     }
   };
-  
+
 
   const handleMouseLeave = () => {
     setMousePos({ x: -100, y: -100 });
@@ -195,87 +196,76 @@ const Home = (props) => {
   return (
     <Nlayout>
       <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '0%' : '0%', width: '100%' }}>
-        <Grid style={{
+        <Grid
+          style={{
+            height: '750px',
+            backgroundColor: '#3f3d45',
+            margin: '0 auto',
+            position: 'relative',
+            overflow: 'hidden', // clave para que el video no se desborde
+          }}
+          className="fondo"
+        >
+          {/* VIDEO DE FONDO */}
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              zIndex: 0,
+              pointerEvents: 'none',
+              maskImage: 'linear-gradient(black 80%, transparent)',
+              WebkitMaskImage: 'linear-gradient(black 80%, transparent)', // para Safari
+            }}
+          >
+            <source src="https://drive.google.com/file/d/1XvcaQ-KtqAiM4GTICthMxz5k6NljAvKq/view" type="video/mp4" />
+          </video>
 
-          backgroundRepeat: 'no-repeat',
-          height: '750px',
-          backgroundColor: '#3f3d45',
-          margin: '0 auto',
-          position: 'relative',
-
-        }} className='fondo'>
-          <Grid className='container' style={{
-            padding: 50,
-            gap: '10px',
-            justifyContent: 'center',
-
-          }}>
-
-
-            {/* <Grid style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 15,   }}>
-              <Typography style={{ color: 'white', fontWeight: 'bold', fontSize: '28px', fontFamily: 'Outfit,sans-serif' }} >
-                Bienvenidos a
-              </Typography>
-              <img src={logo} style={{ width: props.isMobile ? '100%' : '40%' }} />
-              <Grid style={{ zIndex: 1, width: '100%' }}>
-                <img src={globet} className='vip-rewards-rewards-imgs-goblet' />
-                <img src={dice} className='vip-rewards-rewards-imgs-dice' />
-                <img src={bomb} className='vip-rewards-rewards-imgs-bomb' />
-                <img src={roulette} className='vip-rewards-rewards-imgs-roulette' />
-              </Grid>
-            </Grid> */}
-
-
-            <Grid style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: props.isMobile ? '100%' : '35%' }} >
-              {/* <Button
-                style={{
-                  background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), linear-gradient(94deg, #365512 29.94%,#36f705 83.55%)',
-                  color: 'white',
-                  padding: 15,
-                  borderRadius: '100px',
-                  gap: '10px',
-
-                }}
-                className='botonCod'
-                href='https://kick.com/eldenguee'
-                target='_blank'
-              >
-                <SiKick style={{ color: 'white' }} />
-                <Typography style={{ color: 'white', fontFamily: 'Outfit,sans-serif' }}>Seguir en Kick</Typography>
-              </Button> */}
-
-              {/* <Button
-
-                sx={{
-                  color: 'black',
-                  fontWeight: 'bold',
-                  padding: '0.75rem 2rem',
-                  fontSize: '.8rem',
-                  fontFamily: 'Outfit,sans-serif',
-                  backgroundImage: `linear-gradient(317deg,#b58a1b 4.52%,#e0c060 34.37%,#ffeeb2 50.47%,#ffe77c 65.63%,#ffca41 110.56%)`,
-                  border: '2px solid #e0c060',
-                  borderRadius: '100px',
-                  boxShadow: '0 0 8px rgba(118, 118, 245, 0.8)',
-                  textTransform: 'uppercase',
-                  transition: 'all 0.3s ease-in-out',
-                  '&:hover': {
-                    boxShadow: '0 0 16px rgba(118, 118, 245, 1)',
-                    transform: 'scale(1.05)',
-                  },
-                }}
-                href='/listado'
-              >
-                Solicitar Tipeo
-              </Button> */}
+          {/* CONTENIDO ENCIMA */}
+          <Grid
+            className="container"
+            style={{
+              padding: 50,
+              gap: '10px',
+              justifyContent: 'center',
+              position: 'relative', // importante para que esté sobre el video
+              zIndex: 1,
+            }}
+          >
+            <Grid
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                marginTop: props.isMobile ? '100%' : '35%',
+              }}
+            >
+              {/* tu contenido acá */}
             </Grid>
 
-            <div class="intro-scroll-wrapper tablet-max-hide" >
-              <PiMouseScrollThin style={{ zIndex: 1, cursor: 'pointer', position: 'relative', height: '65px', color: 'white', fontSize: 45 }} onClick={handleScroll} />
-
-
+            <div className="intro-scroll-wrapper tablet-max-hide">
+              <PiMouseScrollThin
+                style={{
+                  zIndex: 1,
+                  cursor: 'pointer',
+                  position: 'relative',
+                  height: '65px',
+                  color: 'white',
+                  fontSize: 45,
+                }}
+                onClick={handleScroll}
+              />
             </div>
           </Grid>
         </Grid>
+
 
 
         <Grid style={{ display: 'flex', flexDirection: 'column', height: '100vh' }} className="backgroundAnimado" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
@@ -423,21 +413,22 @@ const Home = (props) => {
           <Grid style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', flexWrap: props.isMobile && 'wrap' }}>
 
 
-            {videos?.map((video, index) => {              
-              return(
-              <Grid>
-                <a href={video.url} target="_blank" rel="noopener noreferrer" >
-                  <img
-                    src={video.thumbnail}
-                    alt={video.title}
-                    style={{ width: '100%', borderRadius: '10px' }}
-                    className="hover-scale shiny-hover"
-                  />
-                </a>
-                <p style={{ color: 'white' }}>{video.title}</p>
-              </Grid>
+            {videos?.map((video, index) => {
+              return (
+                <Grid>
+                  <a href={video.url} target="_blank" rel="noopener noreferrer" >
+                    <img
+                      src={video.thumbnail}
+                      alt={video.title}
+                      style={{ width: '100%', borderRadius: '10px' }}
+                      className="hover-scale shiny-hover"
+                    />
+                  </a>
+                  <p style={{ color: 'white' }}>{video.title}</p>
+                </Grid>
 
-            )})}
+              )
+            })}
 
 
           </Grid>
