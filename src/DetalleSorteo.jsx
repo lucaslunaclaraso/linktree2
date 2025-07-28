@@ -541,7 +541,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                               <Typography style={{ fontWeight: 'bold' }}>Puesto {index + 1}:</Typography>
                               <Typography style={{ color }}> {ganador} {participante?.facebook && (
                                 <FaDiscord style={{ marginLeft: '8px', color: '#3b5998' }} />
-                                <FaDiscord style={{ marginLeft: '8px', color: '#3b5998' }} />
+                                
                               )}
                                 {participante?.suscriptor && (
                                   <span title="Suscriptor">
