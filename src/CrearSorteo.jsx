@@ -3,11 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Typography, TextField, Button, Card, CardContent } from '@mui/material';
 import axios from 'axios';
 import Nlayout from './Nlayout';
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 export default function CrearSorteo() {
     const [titulo, setTitulo] = useState('');
     const [clave, setClave] = useState('');
     const [premios, setPremios] = useState('');
+    const [tipo, setTipo] = useState('Normal');
+    console.log('tipo', tipo)
     const navigate = useNavigate();
 
     const handleCrear = async () => {
@@ -15,7 +20,8 @@ export default function CrearSorteo() {
             const response = await axios.post('https://backmu.vercel.app/sorteo', {
                 titulo,
                 premios,
-                clave
+                clave,
+                tipo
             });
 
             const { id, url } = response.data;
@@ -26,11 +32,14 @@ export default function CrearSorteo() {
         }
     };
 
+    const handleChange = (event) => {
+        setTipo(event.target.value);
+    };
     return (
         <Nlayout>
             <Box p={4}>
                 <Card>
-                    <CardContent>
+                    <CardContent style={{display:'flex', flexDirection:'column', gap: '15px'}}>
                         <Typography variant="h5" gutterBottom>Crear sorteo</Typography>
                         <TextField
                             fullWidth
@@ -47,6 +56,7 @@ export default function CrearSorteo() {
                             value={premios}
                             onChange={(e) => setPremios(e.target.value)}
                         />
+
                         <TextField
                             fullWidth
                             label="Palabra Clave"
@@ -54,6 +64,21 @@ export default function CrearSorteo() {
                             value={clave}
                             onChange={(e) => setClave(e.target.value)}
                         />
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Tipo de Sorteo</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={tipo}
+                                label="Tipo de Sorteo"
+                                onChange={handleChange}
+                            >
+                                <MenuItem value={'Normal'}>Normal</MenuItem>
+                                <MenuItem value={'Suscriptores'}>Suscriptores</MenuItem>
+
+                            </Select>
+                        </FormControl>
+
                         <Button variant="contained" color="primary" fullWidth onClick={handleCrear}>
                             Crear
                         </Button>
