@@ -180,6 +180,9 @@ function Nlayout(props) {
     const toCrearCode = () => {
         window.location.href = "/crearCode"
     }
+    const toCanjearCode = () => {
+        window.location.href = "/canjear"
+    }
     const toListaCodigos = () => {
         window.location.href = "/listaCodigos"
     }
@@ -340,6 +343,19 @@ function Nlayout(props) {
                                     fontSize: 16,
                                     fontFamily: 'Outfit,sans-serif'
                                 }} >Shop</Typography>
+
+                            </div>
+                            <div onClick={() => toCanjearCode()} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                                <FaBagShopping style={{ color: 'white' }} className='itemMenu' />
+
+                                <Typography sx={{
+                                    background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    fontWeight: 'bold',
+                                    fontSize: 16,
+                                    fontFamily: 'Outfit,sans-serif'
+                                }} >Canjear</Typography>
 
                             </div>
 
@@ -759,7 +775,7 @@ function Nlayout(props) {
                     </Link>
 
 
-                    <a onClick={() => setOpenModal(true)} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                    {/* <a onClick={() => setOpenModal(true)} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
                         <PiRankingFill style={{ color: 'white' }} className='itemMenu' />
 
                         <Typography sx={{
@@ -770,6 +786,19 @@ function Nlayout(props) {
                             fontSize: 16,
                             fontFamily: 'Outfit,sans-serif'
                         }} >Rankings</Typography>
+
+                    </a> */}
+                    <a onClick={() => toCanjearCode()} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                        <FaBagShopping style={{ color: 'white' }} className='itemMenu' />
+
+                        <Typography sx={{
+                            background: 'linear-gradient(180deg,#fff -31.86%,#a8a6af 132.28%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            fontWeight: 'bold',
+                            fontSize: 16,
+                            fontFamily: 'Outfit,sans-serif'
+                        }} >Canjear</Typography>
 
                     </a>
 

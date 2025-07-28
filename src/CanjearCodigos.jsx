@@ -3,11 +3,12 @@ import Nlayout from './Nlayout'
 import { Button, Grid, Paper, TextField, Typography } from '@mui/material'
 import backgroundImg from './main_intro.jpg';
 import axios from 'axios';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 function CanjearCodigos(props) {
     const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
     const svgRef = useRef(null);
-
+    const captchaRef = useRef(null);
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -40,11 +41,19 @@ function CanjearCodigos(props) {
     // Canjear código
     const canjearCodigo = async () => {
         try {
+            const token = captchaRef.current.getValue();
+
+            if (!token) {
+                setMensaje('Por favor completa el captcha.');
+                return;
+            }
             const response = await axios.post(`https://backmu.vercel.app/solicitudes/canjear-codigo`, {
                 nombre: nombre,
                 codigo: codigoCanjeo,
             });
+
             setMensaje(response.data.mensaje || 'Código canjeado correctamente');
+            captchaRef.current.reset(); // limpia el captcha
         } catch (error) {
             setMensaje(error.response?.data?.error || 'Error al canjear código');
         }
@@ -96,6 +105,10 @@ function CanjearCodigos(props) {
                     <Paper style={{ width: props.isMobile ? '80%' : '40%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
                         <TextField fullWidth label="Canjear Código" variant="filled" value={codigoCanjeo} onChange={(e) => setCodigoCanjeo(e.target.value)} />
+                        <ReCAPTCHA
+                            sitekey="6LexiJIrAAAAAFXEPfKUDsUpmt5xbaPlzZ6qccOp"
+                            ref={captchaRef}
+                        />
                         <Button onClick={canjearCodigo}>Canjear</Button>
                         {mensaje && <p style={{ color: 'black' }}>{mensaje}</p>}
 
