@@ -42,13 +42,13 @@ const buttonBase = {
 function Nlayout(props) {
     const { username, logout } = useAuth();
     const [open, setOpen] = useState(false);
-    
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    
+
     const [user, setUser] = useState(null); // State to store user data (name, logged-in status)
-   
+
 
 
     const redirectUri = "/callback";
@@ -176,6 +176,12 @@ function Nlayout(props) {
 
     const toPanel = () => {
         window.location.href = "/panel"
+    }
+    const toCrearCode = () => {
+        window.location.href = "/crearCode"
+    }
+    const toListaCodigos = () => {
+        window.location.href = "/listaCodigos"
     }
     const toPanelSorteo = () => {
         window.location.href = "/listado"
@@ -336,6 +342,8 @@ function Nlayout(props) {
                                 }} >Shop</Typography>
 
                             </div>
+
+                            
 
                         </Grid>
                     }
@@ -603,7 +611,9 @@ function Nlayout(props) {
                                 <MenuItem onClick={isLoggedIn && isValidUser ? redirectListadoLinks : handleOpen}>Listado de Links</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? toPanelSorteo : ''}>Lista de Sorteos</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? toPanelEventos : ''}>Lista de Eventos</MenuItem>
+                                <MenuItem onClick={isLoggedIn && isValidUser ? toListaCodigos : ''}>Lista Códigos</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? toPanel : ''}>Crear Sorteo</MenuItem>
+                                <MenuItem onClick={isLoggedIn && isValidUser ? toCrearCode : ''}>Crear Código</MenuItem>
                             </>
                         }
 
