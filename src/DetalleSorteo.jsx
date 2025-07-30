@@ -10,6 +10,7 @@ import io from 'socket.io-client';
 import { FaFacebook } from "react-icons/fa";
 import { FaDiscord } from "react-icons/fa";
 import { FaYoutube } from 'react-icons/fa6';
+import { v4 as uuidv4 } from 'uuid';
 
 const socket = io('https://socket.eldenguee.com', {
   transports: ['websocket', 'polling'],
@@ -46,14 +47,25 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const data = await res.json();
     return data.ip;
   };
+
+  // Usa localStorage para guardar un UUID único por navegador
+  const getOrCreateUUID = () => {
+    let uuid = localStorage.getItem('userUUID');
+    if (!uuid) {
+      uuid = uuidv4();
+      localStorage.setItem('userUUID', uuid);
+    }
+    return uuid;
+  };
   const UnirseAlSorteo = async (nombre, mail, facebook) => {
     try {
       const ip = await getPublicIP(); // aún se usa para enviar al backend
-
+      const uuid = getOrCreateUUID();
       const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, {
         nombre,
         mail,
         ip,
+        uuid
       });
 
       if (peticion?.data?.success) {
