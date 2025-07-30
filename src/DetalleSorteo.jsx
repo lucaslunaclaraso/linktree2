@@ -48,29 +48,24 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   };
   const UnirseAlSorteo = async (nombre, mail, facebook) => {
     try {
-      const ip = await getPublicIP();
+      const ip = await getPublicIP(); // aún se usa para enviar al backend
 
-      // Pre-verificación en el frontend usando los datos de participantes
-      // Contar cuentas por IP para determinar si es multicuenta
-      const cuentasPorIp = participantes.filter(p => p.ip === ip).length;
-      const esMulticuenta = cuentasPorIp >= 1; // true si hay 2 o más cuentas con la misma IP
-      console.log('cuentas por IP:', cuentasPorIp, 'es_multicuenta:', esMulticuenta);
-
-      const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, { nombre, mail, ip, esMulticuenta });
-      const peticionUser = await axios.post(`https://backmu.vercel.app/sorteo/crearUser`, { nombre, mail });
+      const peticion = await axios.post(`https://backmu.vercel.app/sorteo/${url}/unirse`, {
+        nombre,
+        mail,
+        ip,
+      });
 
       if (peticion?.data?.success) {
         setUnirseSorteo(true);
-
-        obtenerSorteos();// Reiniciar userMessageCounts y limpiar localStorage para este sorteo
-
+        obtenerSorteos(); // recargar datos
       } else {
-        setUnirseSorteo(true);
-        alert('ERROR');
+        // Muestra mensaje de error si el backend responde con error
+        alert(peticion?.data?.error || 'No se pudo unir al sorteo.');
       }
     } catch (error) {
-      setUnirseSorteo(true);
-      alert('ERROR');
+      console.error('Error al unirse al sorteo:', error);
+      alert('Ocurrió un error al enviar la solicitud.');
     }
   };
 
@@ -94,17 +89,17 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   }
   const getYoutubeComments = async () => {
     const youtube = await obtenerSorteos()
-    
+
     // ✅ Extraer el videoId desde la URL
     const match = youtube.video.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
     const videoId = match ? match[1] : null;
-  
+
     if (!videoId) {
       console.error('❌ No se pudo encontrar un videoId en el string:', youtube);
       return;
     }
 
-   
+
     try {
       const response = await axios.get('https://www.googleapis.com/youtube/v3/commentThreads', {
         params: {
@@ -126,7 +121,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   };
 
   const actualizarYoutubeDesdeComentario = (comentarios) => {
-    
+
     const usuarioKick = localStorage.getItem('kick_user');
     if (!usuarioKick) return;
 
@@ -136,7 +131,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const match = comentarios.find(comentario =>
       comentario.toLowerCase().includes(nombre)
     );
-    
+
     if (match) {
       axios.post(`https://backmu.vercel.app/sorteo/${url}/actualizar-youtube`, {
         nombre: usuarioKick,
@@ -155,7 +150,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     setTimeout(() => {
       actualizar()
-      
+
 
     }, [3000])
 
@@ -374,9 +369,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     return { color: 'black', bonus: 0 }; // Default (sin bonus)
   };
   const API_KEY = 'AIzaSyBT5sflU58-ZF3vua_I5fFYbyAE13mTa3c';
-  
-  
-  
+
+
+
   const obtenerConteoMensajes = async () => {
     try {
       const response = await axios.get(`https://backmu.vercel.app/sorteo/${url}/conteo-mensajes`);
@@ -615,7 +610,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
                                     <svg width="18px" height="18px" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_746_28171)"><path d="M30 0C31.1046 0 32 0.895431 32 2V30C32 31.1046 31.1046 32 30 32H2C0.895431 32 0 31.1046 0 30V2C0 0.895431 0.895431 4.10637e-08 2 0H30ZM15.9648 5C15.7748 5.00005 15.588 5.05204 15.4238 5.15039C15.2596 5.24878 15.124 5.39057 15.0303 5.56055L9.82812 15.0176L3.55078 11.8906C3.36913 11.7985 3.16534 11.7607 2.96387 11.7822C2.76241 11.8038 2.57048 11.8842 2.41113 12.0127C2.25235 12.1408 2.13185 12.3126 2.06348 12.5078C1.99511 12.7031 1.98143 12.9144 2.02441 13.1172L4.58301 25.127C4.63544 25.3782 4.77165 25.6034 4.96777 25.7627C5.16376 25.9217 5.40762 26.0056 5.65723 26H26.251C26.5009 26.0057 26.7453 25.9219 26.9414 25.7627C27.1376 25.6034 27.2737 25.3782 27.3262 25.127L29.9697 13.1172C30.0187 12.9103 30.0086 12.6932 29.9404 12.4922C29.8722 12.2912 29.7485 12.1151 29.585 11.9844C29.4215 11.8537 29.2249 11.7743 29.0186 11.7559C28.8122 11.7374 28.6049 11.7802 28.4219 11.8799L22.1025 15.0283L16.9004 5.56055C16.8066 5.39054 16.6701 5.24878 16.5059 5.15039C16.3416 5.05207 16.1549 5 15.9648 5Z" fill="url(#paint0_linear_746_28171)"></path><path d="M30 0C31.1046 0 32 0.895431 32 2V30C32 31.1046 31.1046 32 30 32H2C0.895431 32 0 31.1046 0 30V2C0 0.895431 0.895431 4.10637e-08 2 0H30ZM15.9648 5C15.7748 5.00005 15.588 5.05204 15.4238 5.15039C15.2596 5.24878 15.124 5.39057 15.0303 5.56055L9.82812 15.0176L3.55078 11.8906C3.36913 11.7985 3.16534 11.7607 2.96387 11.7822C2.76241 11.8038 2.57048 11.8842 2.41113 12.0127C2.25235 12.1408 2.13185 12.3126 2.06348 12.5078C1.99511 12.7031 1.98143 12.9144 2.02441 13.1172L4.58301 25.127C4.63544 25.3782 4.77165 25.6034 4.96777 25.7627C5.16376 25.9217 5.40762 26.0056 5.65723 26H26.251C26.5009 26.0057 26.7453 25.9219 26.9414 25.7627C27.1376 25.6034 27.2737 25.3782 27.3262 25.127L29.9697 13.1172C30.0187 12.9103 30.0086 12.6932 29.9404 12.4922C29.8722 12.2912 29.7485 12.1151 29.585 11.9844C29.4215 11.8537 29.2249 11.7743 29.0186 11.7559C28.8122 11.7374 28.6049 11.7802 28.4219 11.8799L22.1025 15.0283L16.9004 5.56055C16.8066 5.39054 16.6701 5.24878 16.5059 5.15039C16.3416 5.05207 16.1549 5 15.9648 5Z" fill="url(#paint1_linear_746_28171)"></path></g><defs><linearGradient id="paint0_linear_746_28171" x1="18.8102" y1="-12.7222" x2="2.88536" y2="39.1063" gradientUnits="userSpaceOnUse"><stop stop-color="#FF6A4A"></stop><stop offset="1" stop-color="#C70C00"></stop></linearGradient><linearGradient id="paint1_linear_746_28171" x1="15.7467" y1="-4.75575" x2="16.321" y2="39.0672" gradientUnits="userSpaceOnUse"><stop stop-color="#FFC900"></stop><stop offset="0.99" stop-color="#FF9500"></stop></linearGradient><clipPath id="clip0_746_28171"><rect width="32" height="32" fill="white"></rect></clipPath></defs></svg>
                                   </span>
                                 )}
-                               
+
                               </Typography>
 
 
