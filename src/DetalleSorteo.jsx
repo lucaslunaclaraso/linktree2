@@ -65,7 +65,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       }
     } catch (error) {
       console.error('Error al unirse al sorteo:', error);
-      alert('Ocurrió un error al enviar la solicitud.');
+      alert('Ocurrió un error al unirse.');
     }
   };
 
