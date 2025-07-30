@@ -126,7 +126,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   };
 
   const actualizarYoutubeDesdeComentario = (comentarios) => {
-    console.log('come', comentarios)
+    
     const usuarioKick = localStorage.getItem('kick_user');
     if (!usuarioKick) return;
 
@@ -136,7 +136,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const match = comentarios.find(comentario =>
       comentario.toLowerCase().includes(nombre)
     );
-    console.log('match', match)
+    
     if (match) {
       axios.post(`https://backmu.vercel.app/sorteo/${url}/actualizar-youtube`, {
         nombre: usuarioKick,
@@ -155,7 +155,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     setTimeout(() => {
       actualizar()
-      getYoutubeComments();
+      
 
     }, [3000])
 
@@ -392,6 +392,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     obtenerConteoMensajes();
     const interval = setInterval(() => {
       obtenerConteoMensajes();
+      getYoutubeComments();
       setTiempoRestante(45); // reiniciar el contador después de la petición
     }, 45000); // Actualizar cada 45 segundos
 
