@@ -10,6 +10,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 export default function CrearSorteo() {
     const [titulo, setTitulo] = useState('');
     const [clave, setClave] = useState('');
+    const [video, setVideo] = useState('');
     const [premios, setPremios] = useState('');
     const [tipo, setTipo] = useState('Normal');
     console.log('tipo', tipo)
@@ -21,6 +22,7 @@ export default function CrearSorteo() {
                 titulo,
                 premios,
                 clave,
+                video,
                 tipo
             });
 
@@ -39,7 +41,7 @@ export default function CrearSorteo() {
         <Nlayout>
             <Box p={4}>
                 <Card>
-                    <CardContent style={{display:'flex', flexDirection:'column', gap: '15px'}}>
+                    <CardContent style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <Typography variant="h5" gutterBottom>Crear sorteo</Typography>
                         <TextField
                             fullWidth
@@ -64,6 +66,15 @@ export default function CrearSorteo() {
                             value={clave}
                             onChange={(e) => setClave(e.target.value)}
                         />
+
+                        <TextField
+                            fullWidth
+                            label="URL video"
+                            margin="normal"
+                            value={video}
+                            onChange={(e) => setVideo(e.target.value)}
+                        />
+                        
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Tipo de Sorteo</InputLabel>
                             <Select
