@@ -339,14 +339,17 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   };
   const API_KEY = 'AIzaSyBT5sflU58-ZF3vua_I5fFYbyAE13mTa3c';
   const getYoutubeComments = async (youtubeUrl) => {
+    console.log('yt', youtubeUrl)
     // ✅ Extraer el videoId desde la URL
-    const searchParams = new URLSearchParams(new URL(youtubeUrl).search);
-    const videoId = searchParams.get('v');
-
+    const match = youtubeUrl.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
+    const videoId = match ? match[1] : null;
+  
     if (!videoId) {
-      console.error('❌ No se pudo extraer el videoId de la URL');
+      console.error('❌ No se pudo encontrar un videoId en el string:', youtubeUrl);
       return;
     }
+
+   
     try {
       const response = await axios.get('https://www.googleapis.com/youtube/v3/commentThreads', {
         params: {
