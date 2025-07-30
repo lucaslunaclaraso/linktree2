@@ -31,6 +31,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const peticion = await axios.get(`https://backmu.vercel.app/sorteo/${url}`);
     setSorteo(peticion?.data?.sorteo);
     setParticipantes(peticion?.data?.participantes);
+    return peticion?.data?.sorteo;
   };
 
 
@@ -91,6 +92,39 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       });
     }
   }
+  const getYoutubeComments = async () => {
+    const youtube = await obtenerSorteos()
+    
+    // ✅ Extraer el videoId desde la URL
+    const match = youtube.video.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
+    const videoId = match ? match[1] : null;
+  
+    if (!videoId) {
+      console.error('❌ No se pudo encontrar un videoId en el string:', youtube);
+      return;
+    }
+
+   
+    try {
+      const response = await axios.get('https://www.googleapis.com/youtube/v3/commentThreads', {
+        params: {
+          part: 'snippet',
+          videoId: videoId,
+          key: API_KEY,
+          maxResults: 50,
+          order: 'time' // o 'time' para los más recientes
+        }
+      });
+
+
+      const comments = response.data.items.map(item => item.snippet.topLevelComment.snippet.textDisplay);
+
+      actualizarYoutubeDesdeComentario(comments)
+    } catch (error) {
+      console.error('Error al obtener comentarios:', error.response?.data || error.message);
+    }
+  };
+
   const actualizarYoutubeDesdeComentario = (comentarios) => {
     console.log('come', comentarios)
     const usuarioKick = localStorage.getItem('kick_user');
@@ -102,7 +136,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     const match = comentarios.find(comentario =>
       comentario.toLowerCase().includes(nombre)
     );
-
+    console.log('match', match)
     if (match) {
       axios.post(`https://backmu.vercel.app/sorteo/${url}/actualizar-youtube`, {
         nombre: usuarioKick,
@@ -121,6 +155,8 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     setTimeout(() => {
       actualizar()
+      getYoutubeComments();
+
     }, [3000])
 
   }, []);
@@ -338,37 +374,9 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     return { color: 'black', bonus: 0 }; // Default (sin bonus)
   };
   const API_KEY = 'AIzaSyBT5sflU58-ZF3vua_I5fFYbyAE13mTa3c';
-  const getYoutubeComments = async (youtubeUrl) => {
-    console.log('yt', youtubeUrl)
-    // ✅ Extraer el videoId desde la URL
-    const match = youtubeUrl.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
-    const videoId = match ? match[1] : null;
   
-    if (!videoId) {
-      console.error('❌ No se pudo encontrar un videoId en el string:', youtubeUrl);
-      return;
-    }
-
-   
-    try {
-      const response = await axios.get('https://www.googleapis.com/youtube/v3/commentThreads', {
-        params: {
-          part: 'snippet',
-          videoId: videoId,
-          key: API_KEY,
-          maxResults: 50,
-          order: 'time' // o 'time' para los más recientes
-        }
-      });
-
-
-      const comments = response.data.items.map(item => item.snippet.topLevelComment.snippet.textDisplay);
-
-      actualizarYoutubeDesdeComentario(comments)
-    } catch (error) {
-      console.error('Error al obtener comentarios:', error.response?.data || error.message);
-    }
-  };
+  
+  
   const obtenerConteoMensajes = async () => {
     try {
       const response = await axios.get(`https://backmu.vercel.app/sorteo/${url}/conteo-mensajes`);
@@ -384,7 +392,6 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
     obtenerConteoMensajes();
     const interval = setInterval(() => {
       obtenerConteoMensajes();
-      getYoutubeComments(sorteo?.video);
       setTiempoRestante(45); // reiniciar el contador después de la petición
     }, 45000); // Actualizar cada 45 segundos
 
