@@ -1,32 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Reproductor.css";
 
 export default function Reproductor() {
-  const [audios, setAudios] = useState([]); // lista de audios pendientes
-  const [mostrados, setMostrados] = useState(new Set()); // IDs ya mostrados
+  const [audios, setAudios] = useState([]);
+  const [mostrados, setMostrados] = useState(new Set());
 
+  // Cargar audios
   const cargarAudio = async () => {
     try {
       const res = await fetch("https://backmu.vercel.app/solicitudes/audios", {
         cache: "no-store",
       });
-
       if (res.ok) {
         const data = await res.json();
         if (!mostrados.has(data.id)) {
-          // ID nuevo
           setAudios((prev) => [
             ...prev,
-            { id: data.id, url: data.url, play: true, key: `${data.id}-${Date.now()}` },
-          ]);
-          setMostrados((prev) => new Set(prev).add(data.id));
-        }
-      } else if (res.status === 304) {
-        const data = await res.json();
-        if (!mostrados.has(data.id)) {
-          setAudios((prev) => [
-            ...prev,
-            { id: data.id, url: data.url, play: false, key: `${data.id}-${Date.now()}` },
+            { id: data.id, url: data.url, key: `${data.id}-${Date.now()}` },
           ]);
           setMostrados((prev) => new Set(prev).add(data.id));
         }
@@ -38,7 +28,7 @@ export default function Reproductor() {
 
   useEffect(() => {
     cargarAudio();
-    const interval = setInterval(cargarAudio, 15000); // cada 15s
+    const interval = setInterval(cargarAudio, 15000);
     return () => clearInterval(interval);
   }, [mostrados]);
 
@@ -48,7 +38,6 @@ export default function Reproductor() {
         <AudioBubble
           key={audioItem.key}
           src={audioItem.url}
-          play={audioItem.play}
           onEnded={() =>
             setAudios((prev) => prev.filter((a) => a.key !== audioItem.key))
           }
@@ -58,48 +47,57 @@ export default function Reproductor() {
   );
 }
 
-function AudioBubble({ src, play, onEnded }) {
-  const audioRef = React.useRef(null);
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  const [showBubble, setShowBubble] = React.useState(false);
-  console.log('play', play)
-  console.log('src', src)
+function AudioBubble({ src, onEnded }) {
+  const audioRef = useRef(null);
+  const [showBubble, setShowBubble] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  // Mostrar burbuja y reproducir
   useEffect(() => {
     setShowBubble(true);
-    if (play) {
-      const timeout = setTimeout(() => {
-        if (audioRef.current) {
-          audioRef.current.muted = true; // autoplay permitido
-          console.log('audioRef.current.muted', audioRef.current.muted)
-          audioRef.current.play().catch(console.error);
-        }
-      }, 1000);
-      return () => clearTimeout(timeout);
-    }
-  }, [src, play]);
+    const timeout = setTimeout(() => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      audio.muted = true; // permite autoplay
+      audio.src = src;
 
+      audio.addEventListener(
+        "canplaythrough",
+        () => {
+          audio.muted = false;
+          audio.play().catch(console.error);
+        },
+        { once: true }
+      );
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [src]);
+
+  // Eventos de audio
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    const onPlay = () => {
+
+    const handlePlay = () => {
+      if (audio) audio.muted = false; // habilita sonido
       setIsPlaying(true);
-      audioRef.current.muted = false;
-    }
-    const onPause = () => setIsPlaying(false);
-    const onAudioEnded = () => {
+    };
+    const handlePause = () => setIsPlaying(false);
+    const handleEnded = () => {
       setIsPlaying(false);
       setShowBubble(false);
       onEnded();
     };
 
-    audio.addEventListener("play", onPlay);
-    audio.addEventListener("pause", onPause);
-    audio.addEventListener("ended", onAudioEnded);
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
+    audio.addEventListener("ended", handleEnded);
 
     return () => {
-      audio.removeEventListener("play", onPlay);
-      audio.removeEventListener("pause", onPause);
-      audio.removeEventListener("ended", onAudioEnded);
+      audio.removeEventListener("play", handlePlay);
+      audio.removeEventListener("pause", handlePause);
+      audio.removeEventListener("ended", handleEnded);
     };
   }, [onEnded]);
 
@@ -107,13 +105,13 @@ function AudioBubble({ src, play, onEnded }) {
 
   return (
     <div className="whatsapp-bubble">
-      <div className="audio-icon">▶️</div>
-      <audio ref={audioRef} autoPlay muted={isPlaying ? false : true} src={src} />
-      <div className={`wave ${isPlaying ? "active" : ""}`}>
+      {/* <div className="audio-icon">▶️</div> */}
+      <audio ref={audioRef} autoPlay muted />
+      {/* <div className={`wave ${isPlaying ? "active" : ""}`}>
         <span></span>
         <span></span>
         <span></span>
-      </div>
+      </div> */}
     </div>
   );
 }
