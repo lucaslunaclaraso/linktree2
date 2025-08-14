@@ -38,16 +38,13 @@ function Tienda(props) {
     const [error, setError] = useState()
     const canjearPremio = async (nombre, canje) => {
         const response = await axios.post('https://backmu.vercel.app/solicitudes/canjear', { nombre, canje })
-        console.log('re', response.data.valido)
-        if (response.data?.length >= 1) {
+        console.log('re', response.data)
+        if (response.data?.success) {
             setOpen(true)
             if (canje == 1) {
                 setMonto(500)
-            } else if (canje == 2) {
-                setMonto(1000)
-            } else if (canje == 3) {
-                setMonto(1500)
-            }
+                window.location.href = '/grabar';
+            } 
         }
 
         if (!response.data.valido) {
@@ -108,7 +105,7 @@ function Tienda(props) {
                                         marginBottom: 1,
                                     }}
                                 >
-                                    1 Solicitud de tipeo
+                                    Enviar Audio de Voz en Stream
                                 </Typography>
                                 <Typography
                                     variant="body2"
@@ -117,14 +114,14 @@ function Tienda(props) {
                                         lineHeight: 1.6,
                                     }}
                                 >
-                                    Adquiere una solicitud de tipeo para agilizar tus tareas. Perfecto para gestionar tu tiempo de forma eficiente.
+                                    Envia un audio de voz en el stream y se reproducirá en el mismo.
                                 </Typography>
                             </CardContent>
                             <CardActions sx={{ padding: '0 16px 16px 16px', justifyContent: 'flex-end' }}>
                                 <StyledButton size="small" onClick={() => canjearPremio(nombre, 1)}> $DCoins 500 - Canjear</StyledButton>
                             </CardActions>
                         </StyledCard>
-                        <StyledCard>
+                        {/* <StyledCard>
                             <CardContent sx={{ padding: 3 }}>
                                 <Typography
                                     variant="h5"
@@ -150,8 +147,8 @@ function Tienda(props) {
                             <CardActions sx={{ padding: '0 16px 16px 16px', justifyContent: 'flex-end' }}>
                                 <StyledButton size="small" onClick={() => canjearPremio(nombre, 2)}>$DCoins 1000 - Canjear</StyledButton>
                             </CardActions>
-                        </StyledCard>
-                        <StyledCard>
+                        </StyledCard> */}
+                        {/* <StyledCard>
                             <CardContent sx={{ padding: 3 }}>
                                 <Typography
                                     variant="h5"
@@ -177,7 +174,7 @@ function Tienda(props) {
                             <CardActions sx={{ padding: '0 16px 16px 16px', justifyContent: 'flex-end' }}>
                                 <StyledButton size="small" onClick={() => canjearPremio(nombre, 3)}>$DCoins 1500 - Canjear</StyledButton>
                             </CardActions>
-                        </StyledCard>
+                        </StyledCard> */}
 
 
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import io from 'socket.io-client';
 import axios from 'axios';
+import video from './video-ruleta.mp4';
 
 // Conexión con Socket.IO
 const socket = io('https://socket.eldenguee.com', {
@@ -17,7 +18,7 @@ const items = [
 ];
 
 const ITEM_WIDTH = 180;
-const VISIBLE_ITEMS = 5; // Aumentado para mostrar más ítems
+const VISIBLE_ITEMS = 5;
 const ROLL_DURATION = 8000;
 const SPEED_MULTIPLIER = 5;
 
@@ -27,8 +28,10 @@ const Roller = () => {
   const [offset, setOffset] = useState(0);
   const [winner, setWinner] = useState(null);
   const [lastSub, setLastSub] = useState(null);
+  const [showVideo, setShowVideo] = useState(true); // State to toggle video/roulette
   const animationRef = useRef(null);
   const audioRef = useRef(null);
+  const videoRef = useRef(null); // Ref for video element
   const eventosRef = useRef([]);
   const queueRef = useRef([]);
 
@@ -65,9 +68,10 @@ const Roller = () => {
   const startRoll = () => {
     if (rolling) return;
 
+    setRolling(true);
     setWinner(null);
     setOffset(0);
-    audioRef.current.play().catch(() => { });
+    audioRef.current.play().catch(() => {});
 
     const targetItemIndex = getRandomItemIndex();
     const baseOffset = (items.length + targetItemIndex) * ITEM_WIDTH + ITEM_WIDTH / 2 - (VISIBLE_ITEMS * ITEM_WIDTH) / 2;
@@ -93,7 +97,6 @@ const Roller = () => {
 
         // Enviar tipeos al backend
         const prizeName = items[targetItemIndex].name;
-        console.log('prize', prizeName)
         if (prizeName !== 0) {
           const baseAmount = prizeName;
           const total = baseAmount * (cantidadRef.current || 1);
@@ -114,6 +117,7 @@ const Roller = () => {
 
         setTimeout(() => {
           setRolling(false);
+          setShowVideo(false); // Reset to show video again
           processQueue();
         }, 8000);
       }
@@ -123,13 +127,13 @@ const Roller = () => {
   };
 
   const processQueue = () => {
-    console.log('queueRef.current.length', queueRef.current.length)
     if (queueRef.current.length === 0) return;
     const nextUser = queueRef.current.shift();
     setLastSub(nextUser);
-    setRolling(true);
-    setWinner(null);
-    startRoll();
+    setShowVideo(true); // Show video before starting roll
+    if (videoRef.current) {
+      videoRef.current.play(); // Play video
+    }
   };
 
   const handleNuevoFollow = ({ username, cantidad = 1 }) => {
@@ -144,7 +148,7 @@ const Roller = () => {
       fecha: new Date().toLocaleString(),
     });
 
-    if (!rolling) {
+    if (!rolling && queueRef.current.length === 1) {
       processQueue();
     }
   };
@@ -163,6 +167,19 @@ const Roller = () => {
     };
   }, []);
 
+  // Handle video end to start roulette
+  const handleVideoEnd = () => {
+    setShowVideo(false); // Hide video
+    startRoll(); // Start roulette
+  };
+
+  const rarityGradients = {
+    common: 'linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0))',
+    uncommon: 'linear-gradient(to top, rgba(66,165,245,1), rgba(66,165,245,0))',
+    rare: 'linear-gradient(to top, rgba(255,202,40,1), rgba(255,202,40,0))',
+    legendary: 'linear-gradient(to top, rgba(171,71,188,1), rgba(171,71,188,0))',
+  };
+
   return (
     <Box
       sx={{
@@ -173,12 +190,37 @@ const Roller = () => {
         alignItems: 'center',
         justifyContent: 'center',
         p: 2,
-        background: 'green',
+        background: 'green', // Match green screen for seamless transition
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {lastSub && rolling && (
+      {showVideo && lastSub && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 10,
+          }}
+        >
+          <video
+            ref={videoRef}
+            src={video}
+            autoPlay
+            onEnded={handleVideoEnd}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+        </Box>
+      )}
+
+      {!showVideo && lastSub && rolling && (
         <Typography
           variant="h6"
           gutterBottom
@@ -194,21 +236,38 @@ const Roller = () => {
         </Typography>
       )}
 
-      {rolling && (
+      {!showVideo && rolling && (
         <Box
           sx={{
             position: 'relative',
             width: { xs: '100%', sm: `${VISIBLE_ITEMS * ITEM_WIDTH}px` },
-            height: 300, // Aumentada para dar espacio al carrusel
+            height: 300,
             mx: 'auto',
             perspective: '1000px',
             overflow: 'hidden',
-            border: '4px solid #2a4066', // Color azul metálico de la caja
+            border: '4px solid #2a4066',
             borderRadius: 12,
-            boxShadow: '0 8px 24px rgba(0,0,0,0.7), inset 0 0 20px rgba(0, 102, 204, 0.3)', // Sombra y brillo interno
-            background: 'linear-gradient(135deg, #1e2a44 0%, #2a4066 100%)', // Fondo azul oscuro
+            boxShadow: '0 8px 24px rgba(0,0,0,0.7), inset 0 0 20px rgba(0, 102, 204, 0.3)',
+            background: 'linear-gradient(135deg, #1e2a44 0%, #2a4066 100%)',
           }}
         >
+          {/* Palo vertical */}
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              left: '55%',
+              transform: 'translateX(-50%)',
+              width: 3,
+              background: 'linear-gradient(180deg, #6f00ff, #ff005e, #0000ff)',
+              boxShadow: '0 0 15px 5px rgba(111, 0, 255, 0.7), 0 0 15px 5px rgba(255, 0, 94, 0.7)',
+              animation: 'glitchAnimation 2s infinite alternate',
+              zIndex: 99998,
+              height: '70%',
+            }}
+          />
+
           {/* Círculo central */}
           <Box
             sx={{
@@ -219,22 +278,19 @@ const Roller = () => {
               width: 300,
               height: 300,
               borderRadius: '50%',
-              border: '4px solid #ffd700', // Borde dorado
-              background: 'rgba(255, 215, 0, 0.1)', // Fondo difuminado amarillo
+              border: '4px solid #ffd700',
+              background: 'rgba(255, 215, 0, 0.1)',
               zIndex: 99999,
-              boxShadow: '0 0 20px rgba(255, 215, 0, 0.5)', // Resplandor
+              boxShadow: '0 0 20px rgba(255, 215, 0, 0.5)',
             }}
           />
           {/* Difuminado en los bordes */}
           <Box
             sx={{
               position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'radial-gradient(circle, rgba(0,0,0,0) 10%, rgba(0,0,0,0.8) 80%)',
-              zIndex: 9999,
+              inset: 0,
+              background: 'radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 70%)',
+              zIndex: 5,
               pointerEvents: 'none',
             }}
           />
@@ -246,6 +302,8 @@ const Roller = () => {
               transition: rolling ? 'none' : 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)',
               position: 'relative',
               zIndex: 2,
+              height: '100%',
+              alignItems: 'center',
             }}
           >
             {repeatedItems.map((item, idx) => (
@@ -253,7 +311,7 @@ const Roller = () => {
                 key={idx}
                 sx={{
                   width: ITEM_WIDTH,
-                  height: 250,
+                  height: 150,
                   flexShrink: 0,
                   display: 'flex',
                   alignItems: 'center',
@@ -268,6 +326,7 @@ const Roller = () => {
                   letterSpacing: 1,
                   transform: 'rotateY(10deg)',
                   transition: 'all 0.3s',
+                  background: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0))',
                   ...(winner?.name === item.name && {
                     boxShadow: '0 0 30px #ffd700, inset 0 0 15px #ffd700',
                     border: '2px solid #ffd700',
@@ -282,9 +341,20 @@ const Roller = () => {
                     height: '100%',
                     objectFit: 'contain',
                   },
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '60%',
+                    background: rarityGradients[item.rarity] || 'transparent',
+                    pointerEvents: 'none',
+                    zIndex: 1,
+                  },
                 }}
               >
-
                 <Typography
                   sx={{
                     position: 'absolute',
@@ -303,7 +373,7 @@ const Roller = () => {
         </Box>
       )}
 
-      {winner && rolling && (
+      {winner && !showVideo && rolling && (
         <Typography
           sx={{
             mt: 4,
@@ -318,7 +388,22 @@ const Roller = () => {
         </Typography>
       )}
 
-      
+      {/* <Button
+        variant="contained"
+        color="secondary"
+        disabled={rolling}
+        onClick={() => {
+          cantidadRef.current = 1;
+          setLastSub('Usuario de prueba');
+          setShowVideo(true);
+          if (videoRef.current) {
+            videoRef.current.play();
+          }
+        }}
+        sx={{ mt: 3 }}
+      >
+        Probar ruleta
+      </Button> */}
     </Box>
   );
 };

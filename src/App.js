@@ -29,6 +29,8 @@ import ListadoEventos from './ListadoEventos';
 import CanjearCodigos from './CanjearCodigos';
 import CrearCodigos from './CrearCodigos';
 import ListaCodigos from './ListaCodigos';
+import Grabar from './Grabar';
+import Reproductor from './Reproductor';
 
 const style = {
     position: 'absolute',
@@ -282,12 +284,14 @@ function App() {
 
                 <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} isMobile={isMobile} /></RutaPrivada>} />
                 <Route path="/solicitudes" element={<RutaPrivada><AdminPanel isMobile={isMobile} /> </RutaPrivada>} />
+                <Route path="/grabar" element={<Grabar nombre={nombre}  isMobile={isMobile} />} />
+                <Route path="/audio" element={<Reproductor  isMobile={isMobile} />} />
 
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/listalinks" element={<RutaPrivada><ListadoLinks isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/dar-coins" element={<RutaPrivada><DarCoins isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/tipeo" element={<Tipeo nombre={nombre} isMobile={isMobile} />} />
-                <Route path="/canjear" element={<CanjearCodigos isMobile={isMobile} /> } />
+                <Route path="/canjear" element={<CanjearCodigos isMobile={isMobile} />} />
                 <Route path="/crearCode" element={<RutaPrivada><CrearCodigos isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/listaCodigos" element={<RutaPrivada><ListaCodigos isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/ruleta" element={<Roller nombre={nombre} />} />

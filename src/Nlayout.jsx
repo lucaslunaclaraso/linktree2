@@ -192,6 +192,9 @@ function Nlayout(props) {
     const toPanelEventos = () => {
         window.location.href = "/eventos"
     }
+    const toShop = () => {
+        window.location.href = "/shop"
+    }
 
     const [width, setWidth] = useState(window.innerWidth);
 
@@ -332,7 +335,7 @@ function Nlayout(props) {
 
 
 
-                            <div onClick={() => setOpenModal(true)} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                            <div onClick={() => toShop()} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
                                 <FaBagShopping style={{ color: 'white' }} className='itemMenu' />
 
                                 <Typography sx={{
@@ -804,7 +807,7 @@ function Nlayout(props) {
 
 
 
-                    <a onClick={() => setOpenModal(true)} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
+                    <a onClick={() => toShop()} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }} className='itemMenu'>
                         <FaBagShopping style={{ color: 'white' }} className='itemMenu' />
 
                         <Typography sx={{
