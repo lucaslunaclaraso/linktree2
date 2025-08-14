@@ -98,7 +98,6 @@ function AudioBubble({ src, onEnded, nombre,idKey }) {
       setShowBubble(false)
     }, 16000);
   
-    clearTimeout(timeout);
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
     audio.addEventListener("ended", handleEnded);
@@ -107,7 +106,8 @@ function AudioBubble({ src, onEnded, nombre,idKey }) {
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
       audio.removeEventListener("ended", handleEnded);
-      setShowBubble(false);
+      clearTimeout(timeout);
+
 
     };
   }, [onEnded]);
