@@ -98,7 +98,7 @@ function AudioBubble({ src, onEnded, nombre,idKey }) {
       setShowBubble(false)
     }, 16000);
   
-    return () => clearTimeout(timeout);
+    clearTimeout(timeout);
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
     audio.addEventListener("ended", handleEnded);
