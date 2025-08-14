@@ -26,11 +26,11 @@
     background: #34b7f1;
     border-radius: 2px;
     animation: waveAnim 1s infinite ease-in-out;
-    animation-play-state: paused; /* ⛔ Pausado por defecto */
+    animation-play-state: paused;
   }
   
   .wave.active span {
-    animation-play-state: running; /* ▶ Activo cuando hay audio */
+    animation-play-state: running;
   }
   
   .wave span:nth-child(1) { animation-delay: 0s; }
