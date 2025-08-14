@@ -29,6 +29,8 @@ export default function Reproductor() {
       audioRef.current.play().catch(() => {});
       setEnabled(true);
     }
+    setEnabled(true);
+
   };
 
   useEffect(() => {
