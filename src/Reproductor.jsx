@@ -17,7 +17,7 @@ export default function Reproductor() {
         if (!mostrados.has(data.id)) {
           setAudios((prev) => [
             ...prev,
-            { id: data.id, url: data.url, key: `${data.id}-${Date.now()}`, nombre: data.nombre },
+            { id: data.id, url: data.url, key: `${data.id}-${Date.now()}`, nombre : data.nombre },
           ]);
           setMostrados((prev) => new Set(prev).add(data.id));
         }
@@ -39,7 +39,7 @@ export default function Reproductor() {
         <AudioBubble
           key={audioItem.key}
           src={audioItem.url}
-          nombre={audioItem.nombre}
+          nombre ={audioItem.nombre}
           onEnded={() =>
             setAudios((prev) => prev.filter((a) => a.key !== audioItem.key))
           }
@@ -100,6 +100,8 @@ function AudioBubble({ src, onEnded, nombre }) {
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
       audio.removeEventListener("ended", handleEnded);
+      setShowBubble(false);
+
     };
   }, [onEnded]);
 
@@ -117,11 +119,10 @@ function AudioBubble({ src, onEnded, nombre }) {
         <Typography>{nombre}</Typography>
         {/* <div className="play-btn" onClick={handlePlay}>▶</div> */}
         <div className={`wave ${isPlaying ? "active" : ""}`}>
-          {Array.from({ length: 18 }).map((_, i) => (
-            <span key={i}></span>
-          ))}
+        <div className={`wave active`}>
+          {Array.from({ length: 18 }).map((_, i) => <span key={i}></span>)}
         </div>
-
+        </div>
       </div>
 
       <audio ref={audioRef} autoPlay muted />
