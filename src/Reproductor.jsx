@@ -38,5 +38,7 @@ export default function Reproductor() {
     }
   }, [audioSrc]);
 
-  return <audio ref={audioRef} src={audioSrc} autoPlay={true} ></audio>;
+  return<iframe ref={audioRef}  src={audioSrc} allow="autoplay" style="display:none" id="iframeAudio">
+</iframe>
+  ;
 }
