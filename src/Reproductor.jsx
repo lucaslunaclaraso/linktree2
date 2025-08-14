@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
+import "./Reproductor.css"; // ⬅ Importa los estilos
 
 export default function Reproductor() {
   const [audioSrc, setAudioSrc] = useState(null);
   const [ultimoId, setUltimoId] = useState(null);
+  const [enabled, setEnabled] = useState(false);
   const audioRef = useRef(null);
+  const [showBubble, setShowBubble] = useState(false); // animación
 
   const cargarAudio = async () => {
     try {
@@ -20,23 +23,50 @@ export default function Reproductor() {
     }
   };
 
+  const enableAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = true;
+      audioRef.current.play().catch(() => {});
+      setEnabled(true);
+    }
+  };
+
   useEffect(() => {
+    if (!enabled) return;
     cargarAudio();
     const interval = setInterval(cargarAudio, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [enabled]);
 
-  // Reproducir cuando cambie la URL
   useEffect(() => {
-    if (audioSrc && audioRef.current) {
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((error) => {
-          console.log("No se pudo reproducir automáticamente, esperando interacción del usuario");
-        });
-      }
-    }
-  }, [audioSrc]);
+    if (enabled && audioSrc && audioRef.current) {
+      setShowBubble(true); // mostrar burbuja animada
 
-  return <audio ref={audioRef} src={audioSrc} autoPlay={true} ></audio>;
+      setTimeout(() => {
+        audioRef.current.src = audioSrc;
+        audioRef.current.muted = false;
+        audioRef.current.play().catch((err) => {
+          console.log("Error al reproducir:", err);
+        });
+      }, 1000); // ⏳ delay de 1s antes de reproducir
+    }
+  }, [audioSrc, enabled]);
+
+  return (
+    <div>
+      {!enabled && (
+        <button onClick={enableAudio}>🔊 Activar audio</button>
+      )}
+
+      {showBubble && (
+        <div className="whatsapp-bubble">
+          <div className="audio-icon">▶️</div>
+          <audio ref={audioRef} autoPlay />
+          <div className="wave">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
