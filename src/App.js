@@ -31,6 +31,7 @@ import CrearCodigos from './CrearCodigos';
 import ListaCodigos from './ListaCodigos';
 import Grabar from './Grabar';
 import Reproductor from './Reproductor';
+import ListadoAudios from './ListadoAudios';
 
 const style = {
     position: 'absolute',
@@ -289,6 +290,7 @@ function App() {
 
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/listalinks" element={<RutaPrivada><ListadoLinks isMobile={isMobile} /> </RutaPrivada>} />
+                <Route path="/listaaudios" element={<RutaPrivada><ListadoAudios isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/dar-coins" element={<RutaPrivada><DarCoins isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/tipeo" element={<Tipeo nombre={nombre} isMobile={isMobile} />} />
                 <Route path="/canjear" element={<CanjearCodigos isMobile={isMobile} />} />

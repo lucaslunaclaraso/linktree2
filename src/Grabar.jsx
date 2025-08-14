@@ -12,7 +12,7 @@ export default function Grabar(props) {
     const [seconds, setSeconds] = useState(0);
     const [cargar, setCargar] = useState()
     const [solicitudes, setSolicitudes] = useState()
-    const nombre = 'lucaslunacl'
+    const nombre = localStorage.getItem('kick_user')
 
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
@@ -104,7 +104,7 @@ export default function Grabar(props) {
             const backendRes = await fetch("https://backmu.vercel.app/solicitudes/audios", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ url: audioUrl }),
+                body: JSON.stringify({ url: audioUrl, nombre:nombre }),
             });
 
             if (!backendRes.ok) {

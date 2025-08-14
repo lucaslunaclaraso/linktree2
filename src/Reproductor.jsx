@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./Reproductor.css";
-
+import dengue from './dengue.png'
+import { Typography } from "@mui/material";
 export default function Reproductor() {
   const [audios, setAudios] = useState([]);
   const [mostrados, setMostrados] = useState(new Set());
@@ -16,7 +17,7 @@ export default function Reproductor() {
         if (!mostrados.has(data.id)) {
           setAudios((prev) => [
             ...prev,
-            { id: data.id, url: data.url, key: `${data.id}-${Date.now()}` },
+            { id: data.id, url: data.url, key: `${data.id}-${Date.now()}`, nombre : data.nombre },
           ]);
           setMostrados((prev) => new Set(prev).add(data.id));
         }
@@ -38,6 +39,7 @@ export default function Reproductor() {
         <AudioBubble
           key={audioItem.key}
           src={audioItem.url}
+          nombre ={audioItem.nombre}
           onEnded={() =>
             setAudios((prev) => prev.filter((a) => a.key !== audioItem.key))
           }
@@ -47,7 +49,7 @@ export default function Reproductor() {
   );
 }
 
-function AudioBubble({ src, onEnded }) {
+function AudioBubble({ src, onEnded, nombre }) {
   const audioRef = useRef(null);
   const [showBubble, setShowBubble] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -104,14 +106,26 @@ function AudioBubble({ src, onEnded }) {
   if (!showBubble) return null;
 
   return (
+
     <div className="whatsapp-bubble">
-      {/* <div className="audio-icon">▶️</div> */}
+
+      <div className="profile-pic">
+        <img src={dengue} alt="perfil" />
+      </div>
+
+      <div className="audio-wrapper">
+        <Typography>{nombre}</Typography>
+        {/* <div className="play-btn" onClick={handlePlay}>▶</div> */}
+        <div className={`wave ${isPlaying ? "active" : ""}`}>
+        <div className={`wave active`}>
+          {Array.from({ length: 18 }).map((_, i) => <span key={i}></span>)}
+        </div>
+        </div>
+      </div>
+
       <audio ref={audioRef} autoPlay muted />
-      {/* <div className={`wave ${isPlaying ? "active" : ""}`}>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div> */}
+
     </div>
+
   );
 }

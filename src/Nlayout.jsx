@@ -189,6 +189,9 @@ function Nlayout(props) {
     const toPanelSorteo = () => {
         window.location.href = "/listado"
     }
+    const toPanelAudios = () => {
+        window.location.href = "/listaaudios"
+    }
     const toPanelEventos = () => {
         window.location.href = "/eventos"
     }
@@ -631,6 +634,7 @@ function Nlayout(props) {
                                 <MenuItem onClick={isLoggedIn && isValidUser ? toPanelSorteo : ''}>Lista de Sorteos</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? toPanelEventos : ''}>Lista de Eventos</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? toListaCodigos : ''}>Lista Códigos</MenuItem>
+                                <MenuItem onClick={isLoggedIn && isValidUser ? toPanelAudios : ''}>Lista de Audios</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? toPanel : ''}>Crear Sorteo</MenuItem>
                                 <MenuItem onClick={isLoggedIn && isValidUser ? toCrearCode : ''}>Crear Código</MenuItem>
                             </>
