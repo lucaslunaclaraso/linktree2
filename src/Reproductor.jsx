@@ -17,7 +17,7 @@ export default function Reproductor() {
         if (!mostrados.has(data.id)) {
           setAudios((prev) => [
             ...prev,
-            { id: data.id, url: data.url, key: `${data.id}-${Date.now()}`, nombre : data.nombre },
+            { id: data.id, url: data.url, key: `${data.id}-${Date.now()}`, nombre: data.nombre },
           ]);
           setMostrados((prev) => new Set(prev).add(data.id));
         }
@@ -29,7 +29,7 @@ export default function Reproductor() {
 
   useEffect(() => {
     cargarAudio();
-    const interval = setInterval(cargarAudio, 15000);
+    const interval = setInterval(cargarAudio, 20000);
     return () => clearInterval(interval);
   }, [mostrados]);
 
@@ -38,10 +38,11 @@ export default function Reproductor() {
       {audios.map((audioItem) => (
         <AudioBubble
           key={audioItem.key}
+          idKey={audioItem.key}
           src={audioItem.url}
-          nombre ={audioItem.nombre}
-          onEnded={() =>
-            setAudios((prev) => prev.filter((a) => a.key !== audioItem.key))
+          nombre={audioItem.nombre}
+          onEnded={(idKey) => 
+            setAudios((prev) => prev.filter((a) => a.key !== idKey))
           }
         />
       ))}
@@ -49,7 +50,7 @@ export default function Reproductor() {
   );
 }
 
-function AudioBubble({ src, onEnded, nombre }) {
+function AudioBubble({ src, onEnded, nombre,idKey }) {
   const audioRef = useRef(null);
   const [showBubble, setShowBubble] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -87,11 +88,17 @@ function AudioBubble({ src, onEnded, nombre }) {
     };
     const handlePause = () => setIsPlaying(false);
     const handleEnded = () => {
+      console.log('entra')
       setIsPlaying(false);
       setShowBubble(false);
-      onEnded();
+      onEnded(idKey);
     };
 
+    const timeout = setTimeout(() => {
+      setShowBubble(false)
+    }, 16000);
+  
+    return () => clearTimeout(timeout);
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
     audio.addEventListener("ended", handleEnded);
@@ -105,6 +112,7 @@ function AudioBubble({ src, onEnded, nombre }) {
     };
   }, [onEnded]);
 
+  
   if (!showBubble) return null;
 
   return (
@@ -119,9 +127,9 @@ function AudioBubble({ src, onEnded, nombre }) {
         <Typography>{nombre}</Typography>
         {/* <div className="play-btn" onClick={handlePlay}>▶</div> */}
         <div className={`wave ${isPlaying ? "active" : ""}`}>
-        <div className={`wave active`}>
-          {Array.from({ length: 18 }).map((_, i) => <span key={i}></span>)}
-        </div>
+          <div className={`wave active`}>
+            {Array.from({ length: 18 }).map((_, i) => <span key={i}></span>)}
+          </div>
         </div>
       </div>
 
