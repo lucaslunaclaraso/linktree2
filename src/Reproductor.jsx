@@ -5,7 +5,8 @@ import { Typography } from "@mui/material";
 export default function Reproductor() {
   const [audios, setAudios] = useState([]);
   const [mostrados, setMostrados] = useState(new Set());
-
+  console.log('audios', audios)
+  console.log('mostrados', mostrados)
   // Cargar audios
   const cargarAudio = async () => {
     try {
@@ -35,26 +36,26 @@ export default function Reproductor() {
 
   return (
     <div>
-      {audios.map((audioItem) => (
+      {audios[0] && !mostrados.has(audios[0].id) && (
         <AudioBubble
-          key={audioItem.key}
-          idKey={audioItem.key}
-          src={audioItem.url}
-          nombre={audioItem.nombre}
-          onEnded={(idKey) => 
+          key={audios[0].key}
+          idKey={audios[0].key}
+          src={audios[0].url}
+          nombre={audios[0].nombre}
+          onEnded={(idKey) =>
             setAudios((prev) => prev.filter((a) => a.key !== idKey))
           }
         />
-      ))}
+      )}
     </div>
   );
 }
 
-function AudioBubble({ src, onEnded, nombre,idKey }) {
+function AudioBubble({ src, onEnded, nombre, idKey }) {
   const audioRef = useRef(null);
   const [showBubble, setShowBubble] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-
+  const [mostrar, setMostrar] = useState(false);
   // Mostrar burbuja y reproducir
   useEffect(() => {
     setShowBubble(true);
@@ -96,8 +97,12 @@ function AudioBubble({ src, onEnded, nombre,idKey }) {
 
     const timeout = setTimeout(() => {
       setShowBubble(false)
+      setIsPlaying(false);
+      setMostrar(true)
     }, 16000);
-  
+
+    console.log('mostrar', mostrar)
+
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
     audio.addEventListener("ended", handleEnded);
@@ -106,18 +111,19 @@ function AudioBubble({ src, onEnded, nombre,idKey }) {
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
       audio.removeEventListener("ended", handleEnded);
-      clearTimeout(timeout);
+      // clearTimeout(timeout);
 
 
     };
   }, [onEnded]);
 
-  
+
   if (!showBubble) return null;
 
   return (
 
-    <div className="whatsapp-bubble">
+
+    <div className="whatsapp-bubble" style={{ display: mostrar && 'none' }}>
 
       <div className="profile-pic">
         <img src={dengue} alt="perfil" />
