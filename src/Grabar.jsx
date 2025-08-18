@@ -127,7 +127,7 @@ export default function Grabar(props) {
         <Nlayout>
 
 
-            <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '-30%' : cargar && '-10%', width: '100%' }}>
+            <Grid style={{ background: '#11111d', marginTop: props.isMobile ? '0%' : cargar && '-10%', width: '100%' }}>
 
                 {
                     cargar ?
@@ -243,7 +243,7 @@ export default function Grabar(props) {
                                     display: "flex",
                                     flexDirection: "column",
                                     gap: "15px",
-                                    width: "50%",
+                                    width: !props.isMobile && "50%",
                                     margin: "0 auto",
                                     padding: "8%",
                                 }}
