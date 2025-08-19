@@ -5,8 +5,7 @@ import { Typography } from "@mui/material";
 export default function Reproductor() {
   const [audios, setAudios] = useState([]);
   const [mostrados, setMostrados] = useState(new Set());
-  console.log('audios', audios)
-  console.log('mostrados', mostrados)
+
   // Cargar audios
   const cargarAudio = async () => {
     try {
@@ -15,13 +14,22 @@ export default function Reproductor() {
       });
       if (res.ok) {
         const data = await res.json();
-        if (!mostrados.has(data.id)) {
-          setAudios((prev) => [
+  
+        setAudios((prev) => {
+          // si ya existe este audio en el estado, no lo agrego
+          if (prev.some((a) => a.id === data.id)) {
+            return prev;
+          }
+          return [
             ...prev,
-            { id: data.id, url: data.url, key: `${data.id}-${Date.now()}`, nombre: data.nombre },
-          ]);
-          setMostrados((prev) => new Set(prev).add(data.id));
-        }
+            {
+              id: data.id,
+              url: data.url,
+              key: `${data.id}-${Date.now()}`,
+              nombre: data.nombre,
+            },
+          ];
+        });
       }
     } catch (err) {
       console.error(err);
@@ -36,17 +44,13 @@ export default function Reproductor() {
 
   return (
     <div>
-      {audios[0] && !mostrados.has(audios[0].id) && (
-        <AudioBubble
-          key={audios[0].key}
-          idKey={audios[0].key}
-          src={audios[0].url}
-          nombre={audios[0].nombre}
-          onEnded={(idKey) =>
-            setAudios((prev) => prev.filter((a) => a.key !== idKey))
-          }
-        />
-      )}
+      {audios.map((audioItem) => (
+        <AudioBubble key={audioItem.key}
+          idKey={audioItem.key}
+          src={audioItem.url}
+          nombre={audioItem.nombre}
+          onEnded={(idKey) => setAudios((prev) => prev.filter((a) => a.key !== idKey))} />
+      ))}
     </div>
   );
 }
@@ -101,7 +105,7 @@ function AudioBubble({ src, onEnded, nombre, idKey }) {
       setMostrar(true)
     }, 16000);
 
-    console.log('mostrar', mostrar)
+
 
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
