@@ -292,7 +292,7 @@ function Tipeo(props) {
 
     const getStepContent = (step) => {
         switch (step) {
-            case 0:
+            case 1:
                 return (
                     <Box>
                         <Box style={{ backgroundColor: '#1a2c38', display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -350,7 +350,7 @@ function Tipeo(props) {
 
                     </Box>
                 );
-            case 1:
+            case 0:
                 return (
                     <Box sx={{ p: 2 }}>
 
