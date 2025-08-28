@@ -62,7 +62,7 @@ function Tipeo(props) {
     const [offerScreenshotUrl, setOfferScreenshotUrl] = useState('');
     const [bnbScreenshotUrl, setBnbScreenshotUrl] = useState('');
     const [url, setUrl] = useState('')
-    const steps = ['Paso 1', 'Paso 2', 'Paso 3'];
+    const steps = ['Paso 1', 'Paso 2', 'Paso 3', 'Paso 4'];
 
 
     const handleNext = () => {
@@ -78,11 +78,11 @@ function Tipeo(props) {
     };
 
     const validateStep = () => {
-        if (activeStep === 1 && !offerScreenshot) {
+        if (activeStep === 2 && !offerScreenshot) {
             setError('Debes subir una captura de Ajustes - Ofertas');
             return false;
         }
-        if (activeStep === 2 && (!bnbScreenshot || !bnbAddress)) {
+        if (activeStep === 3 && (!bnbScreenshot || !bnbAddress)) {
 
             setError('Debes subir una captura del QR y la dirección BNB, y proporcionar la dirección');
             return false;
@@ -353,6 +353,63 @@ function Tipeo(props) {
             case 1:
                 return (
                     <Box sx={{ p: 2 }}>
+
+                        <Typography sx={{ color: '#fff', fontWeight: 'bold', mb: 1 }}>
+                            SI SOS DE ARGENTINA Y NO ESTAS REGISTRADO EN STAKE MIRA ESTE VIDEO!
+                        </Typography>
+
+                        <Box
+                            sx={{
+                                backgroundColor: '#1e293b',
+                                borderRadius: 2,
+                                p: 2,
+                                color: '#cbd5e1',
+                                mb: 2,
+                            }}
+                            style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px', border: '2px dashed #2a2e38' }}
+                        >
+                            <video src="https://res.cloudinary.com/dks7seyl8/video/upload/v1756416979/2025-08-28_02-49-17_u2digf.mp4" controls></video>
+                            <Box sx={{ backgroundColor: '#1e293b', p: 2, borderRadius: 1, mt: 2, border: '2px dashed #2a2e38' }}>
+                                <Typography>
+                                    Es obligatorio estar registrado con el siguiente enlace y el código <strong>"eldenguee"</strong> como muestra arriba
+                                </Typography>
+
+                                <Link
+                                    href="https://stake1022.com/?offer=eldenguee&c=1590cd3460"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{
+                                        display: 'block',
+                                        mt: 1,
+                                        mb: 2,
+                                        color: '#4ade80',
+                                        wordBreak: 'break-all',
+                                    }}
+                                >
+                                    https://stake1022.com/?offer=eldenguee&c=1590cd3460
+                                </Link>
+                            </Box>
+                        </Box>
+                        <Button
+                            variant="contained"
+                            onClick={handleNext}
+
+
+                            sx={{
+                                backgroundColor: '#3b82f6',
+                                flex: 1,
+                                '&:hover': {
+                                    backgroundColor: '#2563eb',
+                                },
+                            }}
+                        >
+                            Siguiente
+                        </Button>
+                    </Box>
+                );
+            case 2:
+                return (
+                    <Box sx={{ p: 2 }}>
                         <Typography sx={{ color: '#fff', fontWeight: 'bold', mb: 1 }}>
                             Sube la captura de pantalla de Ajustes - Ofertas
                         </Typography>
@@ -449,7 +506,7 @@ function Tipeo(props) {
                         </Box>
                     </Box>
                 );
-            case 2:
+            case 3:
                 return (
                     <Box sx={{ p: 2 }}>
                         <Typography sx={{ color: '#fff', fontWeight: 'bold', mb: 1 }}>
