@@ -103,7 +103,7 @@ function Torneo(props) {
     };
 
     // Seleccionar ganador
-    const seleccionarGanador = async (rondaIndex, partidoIndex, ganador, partidoId) => {
+    const seleccionarGanador = async ( partidoIndex, partidoId,ganador) => {
         if (!esAdmin) return;
         try {
             // Avisar al backend del ganador
@@ -206,7 +206,7 @@ function Torneo(props) {
                                             >
                                                 {/* Jugador 1 */}
                                                 <Typography
-                                                    onClick={() => esAdmin && seleccionarGanador(i, j, p.jugador1)}
+                                                    onClick={() => esAdmin && seleccionarGanador(i, p.id, p.jugador1)}
                                                     sx={{
                                                         fontWeight: p.ganador === p.jugador1 ? "bold" : "normal",
                                                         color: p.ganador === p.jugador1 ? "green" : "black",
@@ -221,7 +221,7 @@ function Torneo(props) {
 
                                                 {/* Jugador 2 */}
                                                 <Typography
-                                                    onClick={() => esAdmin && seleccionarGanador(i, j, p.jugador2)}
+                                                    onClick={() => esAdmin && seleccionarGanador(i, p.id, p.jugador2)}
                                                     sx={{
                                                         fontWeight: p.ganador === p.jugador2 ? "bold" : "normal",
                                                         color: p.ganador === p.jugador2 ? "green" : "black",
