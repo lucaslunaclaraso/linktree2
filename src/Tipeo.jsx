@@ -31,7 +31,7 @@ function Tipeo(props) {
     const mailKick = localStorage.getItem('kick_mail')
     const [solicitudes, setSolicitudes] = useState()
     const [cargar, setCargar] = useState()
-    const nombre = props.nombre
+    const nombre = 'lucaslunacl'
     const [isWinner, setIsWinner] = useState()
     const checkWinner = async () => {
         setCargar(true)
@@ -368,7 +368,7 @@ function Tipeo(props) {
                             }}
                             style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px', border: '2px dashed #2a2e38' }}
                         >
-                            <video src="https://res.cloudinary.com/dks7seyl8/video/upload/v1756416979/2025-08-28_02-49-17_u2digf.mp4" controls></video>
+                            <video src="https://res.cloudinary.com/dks7seyl8/video/upload/v1756416979/2025-08-28_02-49-17_u2digf.mp4" controls style={{width:'100%'}}></video>
                             <Box sx={{ backgroundColor: '#1e293b', p: 2, borderRadius: 1, mt: 2, border: '2px dashed #2a2e38' }}>
                                 <Typography>
                                     Es obligatorio estar registrado con el siguiente enlace y el código <strong>"eldenguee"</strong> como muestra arriba
