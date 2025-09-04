@@ -1,36 +1,31 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import Nlayout from './Nlayout'
 import { Box, Typography, TextField, Button, Card, CardContent } from '@mui/material';
-import axios from 'axios';
-import Nlayout from './Nlayout';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-export default function CrearSorteo() {
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+function PanelTorneo(props) {
     const [titulo, setTitulo] = useState('');
-    const [clave, setClave] = useState('');
-    const [video, setVideo] = useState('');
-    const [premios, setPremios] = useState('');
+    const [cantidad, setCantidad] = useState('');
     const [tipo, setTipo] = useState('Normal');
-
     const navigate = useNavigate();
 
     const handleCrear = async () => {
         try {
-            const response = await axios.post('https://backmu.vercel.app/sorteo', {
+            const response = await axios.post('https://backmu.vercel.app/torneo', {
                 titulo,
-                premios,
-                clave,
-                video,
+                cantidad,               
                 tipo
             });
 
-            const { id, url } = response.data;
-            navigate(`/sorteo/${id}${clave ? `?fb=${encodeURIComponent(clave)}` : ''}`);
+            const { torneoId, url } = response.data;
+            navigate(`/torneo/${torneoId}`);
         } catch (error) {
-            console.error('Error al crear sorteo:', error);
-            alert('Hubo un error al crear el sorteo.');
+            console.error('Error al crear torneo:', error);
+            alert('Hubo un error al crear el torneo.');
         }
     };
 
@@ -42,7 +37,7 @@ export default function CrearSorteo() {
             <Box p={4}>
                 <Card>
                     <CardContent style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                        <Typography variant="h5" gutterBottom>Crear sorteo</Typography>
+                        <Typography variant="h5" gutterBottom>Crear Torneo</Typography>
                         <TextField
                             fullWidth
                             label="Título"
@@ -53,30 +48,15 @@ export default function CrearSorteo() {
                         <TextField
                             fullWidth
                             type="number"
-                            label="Cantidad de premios"
+                            label="Cantidad de Participantes (Par)"
                             margin="normal"
-                            value={premios}
-                            onChange={(e) => setPremios(e.target.value)}
+                            value={cantidad}
+                            onChange={(e) => setCantidad(e.target.value)}
                         />
 
-                        <TextField
-                            fullWidth
-                            label="Palabra Clave"
-                            margin="normal"
-                            value={clave}
-                            onChange={(e) => setClave(e.target.value)}
-                        />
 
-                        <TextField
-                            fullWidth
-                            label="URL video"
-                            margin="normal"
-                            value={video}
-                            onChange={(e) => setVideo(e.target.value)}
-                        />
-                        
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Tipo de Sorteo</InputLabel>
+                            <InputLabel id="demo-simple-select-label">Tipos de Slots</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
@@ -84,8 +64,9 @@ export default function CrearSorteo() {
                                 label="Tipo de Sorteo"
                                 onChange={handleChange}
                             >
-                                <MenuItem value={'Normal'}>Normal</MenuItem>
-                                <MenuItem value={'Suscriptores'}>Suscriptores</MenuItem>
+                                <MenuItem value={'Pragmatic'}>Pragmatic</MenuItem>
+                                <MenuItem value={'HackSaw'}>HackSaw</MenuItem>
+                                <MenuItem value={'Todos'}>Todos</MenuItem>
 
                             </Select>
                         </FormControl>
@@ -97,5 +78,8 @@ export default function CrearSorteo() {
                 </Card>
             </Box>
         </Nlayout>
-    );
+
+    )
 }
+
+export default PanelTorneo

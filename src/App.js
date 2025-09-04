@@ -32,6 +32,8 @@ import ListaCodigos from './ListaCodigos';
 import Grabar from './Grabar';
 import Reproductor from './Reproductor';
 import ListadoAudios from './ListadoAudios';
+import Torneo from './Torneo';
+import PanelTorneo from './PanelTorneo';
 
 const style = {
     position: 'absolute',
@@ -77,12 +79,14 @@ function App() {
         const usuario = localStorage.getItem('fbUser')?.replaceAll('"', "");
         const usuarioKick = localStorage.getItem('kick_user')
         const isSorteoRoute = location.pathname.startsWith('/sorteo/');
+        const isTorneoRoute = location.pathname.startsWith('/torneo/');
         const isTipeoRoute = location.pathname.startsWith('/tipeos/');
         console.log('usuarioKick', usuarioKick)
         const isLoggedIn = usuario || usuarioKick;
         // Verificar si el usuario es válido (incluye tanto fbUser como kick_user)
         const isValidUser =
             (isSorteoRoute && isLoggedIn) || (isTipeoRoute && isLoggedIn) || // Si es sorteo, todos pueden acceder
+            (isTorneoRoute && isLoggedIn) || (isTorneoRoute && isLoggedIn) || // Si es sorteo, todos pueden acceder
             (usuario === 'Lucas Luna' || usuario === 'Luis San Cristobal') ||
             (usuarioKick === 'eldenguee' || usuarioKick === 'lucaslunacl');
         const [open, setOpen] = useState(false);
@@ -122,7 +126,7 @@ function App() {
 
             const criptoRandom = crypto.randomUUID()
 
-            const state = isSorteoRoute || isTipeoRoute ? encodeURIComponent(location.pathname) : encodeURIComponent('/');
+            const state = isTorneoRoute|| isSorteoRoute || isTipeoRoute ? encodeURIComponent(location.pathname) : encodeURIComponent('/');
             const params = new URLSearchParams({
                 response_type: 'code',
                 client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
@@ -284,9 +288,14 @@ function App() {
                 <Route path="/eventos" element={<RutaPrivada><ListadoEventos sorteos={sorteos} /> </RutaPrivada>} />
 
                 <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} isMobile={isMobile} /></RutaPrivada>} />
+
+                <Route path='/crearTorneo' element={<RutaPrivada><PanelTorneo isMobile={isMobile} /> </RutaPrivada>} />
+                <Route path="/torneo/:url" element={<RutaPrivada><Torneo isMobile={isMobile} /></RutaPrivada>} />
+                <Route path="/listadoTorneos" element={<RutaPrivada><ListadoSorteos isMobile={isMobile} /> </RutaPrivada>} />
+
                 <Route path="/solicitudes" element={<RutaPrivada><AdminPanel isMobile={isMobile} /> </RutaPrivada>} />
-                <Route path="/grabar" element={<Grabar nombre={nombre}  isMobile={isMobile} />} />
-                <Route path="/audio" element={<Reproductor  isMobile={isMobile} />} />
+                <Route path="/grabar" element={<Grabar nombre={nombre} isMobile={isMobile} />} />
+                <Route path="/audio" element={<Reproductor isMobile={isMobile} />} />
 
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/listalinks" element={<RutaPrivada><ListadoLinks isMobile={isMobile} /> </RutaPrivada>} />
