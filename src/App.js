@@ -290,7 +290,7 @@ function App() {
                 <Route path="/sorteo/:url" element={<RutaPrivada><DetalleSorteo sorteos={sorteos} setSorteos={setSorteos} isMobile={isMobile} /></RutaPrivada>} />
 
                 <Route path='/crearTorneo' element={<RutaPrivada><PanelTorneo isMobile={isMobile} /> </RutaPrivada>} />
-                <Route path="/torneo/:url" element={<RutaPrivada><Torneo isMobile={isMobile} /></RutaPrivada>} />
+                <Route path="/torneo/:url" element={<RutaPrivada><Torneo isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/listadoTorneos" element={<RutaPrivada><ListadoSorteos isMobile={isMobile} /> </RutaPrivada>} />
 
                 <Route path="/solicitudes" element={<RutaPrivada><AdminPanel isMobile={isMobile} /> </RutaPrivada>} />

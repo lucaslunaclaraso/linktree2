@@ -31,7 +31,7 @@ function Tipeo(props) {
     const mailKick = localStorage.getItem('kick_mail')
     const [solicitudes, setSolicitudes] = useState()
     const [cargar, setCargar] = useState()
-    const nombre = 'lucaslunacl'
+    const nombre = localStorage.getItem('kick_user');
     const [isWinner, setIsWinner] = useState()
     const checkWinner = async () => {
         setCargar(true)
