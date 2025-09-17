@@ -12,6 +12,7 @@ export default function CrearSorteo() {
     const [clave, setClave] = useState('');
     const [video, setVideo] = useState('');
     const [premios, setPremios] = useState('');
+    const [keyword, setKeyword] = useState('');
     const [tipo, setTipo] = useState('Normal');
 
     const navigate = useNavigate();
@@ -23,7 +24,8 @@ export default function CrearSorteo() {
                 premios,
                 clave,
                 video,
-                tipo
+                tipo,
+                keyword
             });
 
             const { id, url } = response.data;
@@ -74,7 +76,7 @@ export default function CrearSorteo() {
                             value={video}
                             onChange={(e) => setVideo(e.target.value)}
                         />
-                        
+
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Tipo de Sorteo</InputLabel>
                             <Select
@@ -86,9 +88,19 @@ export default function CrearSorteo() {
                             >
                                 <MenuItem value={'Normal'}>Normal</MenuItem>
                                 <MenuItem value={'Suscriptores'}>Suscriptores</MenuItem>
+                                <MenuItem value={'Chat'}>Chat</MenuItem>
 
                             </Select>
                         </FormControl>
+                        {tipo === 'Chat' &&
+                            <TextField
+                                fullWidth
+                                label="Keyword para el chat"
+                                margin="normal"
+                                value={keyword}
+                                onChange={(e) => setKeyword(e.target.value)}
+                            />
+                        }
 
                         <Button variant="contained" color="primary" fullWidth onClick={handleCrear}>
                             Crear

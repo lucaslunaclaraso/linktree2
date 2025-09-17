@@ -236,62 +236,62 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
   const sortear = async () => {
     const blacklist = await obtenerGanadoresDelSorteoAnterior();
-  
-    // Separar participantes nuevos y de blacklist
+
+    // Separar participantes nuevos y de la lista negra
     const nuevos = participantes.filter(
-      p => !p.esMulticuenta && !blacklist.includes(p.mail)
+      p => !blacklist.includes(p.mail)
     );
-  
+
     const enBL = participantes.filter(
-      p => !p.esMulticuenta && blacklist.includes(p.mail)
+      p => blacklist.includes(p.mail)
     );
-  
+
     const premiosTotales = sorteo?.premios || 0;
-  
     const ganadoresSet = new Set();
-    let suscriptoresSeleccionados = 0;
-  
-    // Función para agregar ganadores desde un array dado
-    const agregarGanadores = (array) => {
-      const pool = array.flatMap(p => p.suscriptor ? [p.nombre, p.nombre] : [p.nombre]);
-      const shuffled = [...pool].sort(() => 0.5 - Math.random());
-  
-      for (const nombre of shuffled) {
-        const p = array.find(part => part.nombre === nombre);
-  
-        // Controlar suscriptores: máximo 2
-        if (p.suscriptor && suscriptoresSeleccionados >= 2) continue;
-  
-        if (!ganadoresSet.has(nombre)) {
-          ganadoresSet.add(nombre);
-          if (p.suscriptor) suscriptoresSeleccionados++;
-        }
-  
-        if (ganadoresSet.size === premiosTotales) break;
+
+    // 1. Priorizar participantes nuevos
+    // Creamos un array único de nombres de los nuevos y los mezclamos
+    const poolNuevos = nuevos.map(p => p.nombre).sort(() => 0.5 - Math.random());
+
+    // Agregamos ganadores del grupo de nuevos hasta que tengamos suficientes premios o se acaben los participantes nuevos
+    for (const nombre of poolNuevos) {
+      if (ganadoresSet.size < premiosTotales) {
+        ganadoresSet.add(nombre);
+      } else {
+        break;
       }
-    };
-  
-    // 1️⃣ Primero nuevos
-    agregarGanadores(nuevos);
-  
-    // 2️⃣ Si faltan, rellenar con blacklist
-    if (ganadoresSet.size < premiosTotales) {
-      agregarGanadores(enBL);
     }
-  
+
+    // 2. Si faltan ganadores, rellenamos con la lista negra
+    if (ganadoresSet.size < premiosTotales) {
+      const poolBL = enBL.map(p => p.nombre).sort(() => 0.5 - Math.random());
+
+      for (const nombre of poolBL) {
+        if (ganadoresSet.size < premiosTotales) {
+          if (!ganadoresSet.has(nombre)) { // Evitamos duplicados
+            ganadoresSet.add(nombre);
+          }
+        } else {
+          break;
+        }
+      }
+    }
+
+    // Mapeamos los nombres a los objetos de participantes completos
     const ganadoresCompletos = [...ganadoresSet].map(nombre =>
       participantes.find(p => p.nombre === nombre)
     );
-  
+
+    // Actualizamos el estado y guardamos los ganadores
     setGanadores(ganadoresCompletos);
     const nombresGanadores = ganadoresCompletos.map(p => p.nombre);
     guardarGanadores(url, nombresGanadores);
-  
+
     if (nombresGanadores.includes(usuarioKick)) {
       setOpen(true);
     }
   };
-  
+
 
 
   useEffect(() => {
@@ -405,20 +405,20 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     return () => clearInterval(intervaloContador);
   }, []);
-
+  
   useEffect(() => {
     const usuarioKick = localStorage.getItem('kick_user');
-    console.log('usu', usuarioKick);
+    console.log('effect')
 
     if (usuarioKick === 'lucaslunacl' || usuarioKick === 'eldenguee') {
-      console.log('entro');
+
 
       socket.connect(); // 🔹 conectar explícitamente si estás usando `autoConnect: false`
 
       socket.on('connect', () => {
         console.log('Conectado al servidor:', socket.id);
         socket.emit('register-creator', { creatorId: '15789-52' });
-        socket.emit('start-raffle', { raffleId: url });
+        socket.emit('start-raffle', { raffleId: url, type: sorteo?.tipo, keyword: sorteo?.keyword });
       });
 
       socket.on('raffle-started', (data) => {
