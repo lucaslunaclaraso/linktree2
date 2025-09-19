@@ -408,35 +408,35 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
   
   useEffect(() => {
     const usuarioKick = localStorage.getItem('kick_user');
-    console.log('effect')
-
-    if (usuarioKick === 'lucaslunacl' || usuarioKick === 'eldenguee') {
-
-
-      socket.connect(); // 🔹 conectar explícitamente si estás usando `autoConnect: false`
-
+  
+    if ((usuarioKick === 'lucaslunacl' || usuarioKick === 'eldenguee') && sorteo?.tipo) {
+      socket.connect();
+  
       socket.on('connect', () => {
         console.log('Conectado al servidor:', socket.id);
         socket.emit('register-creator', { creatorId: '15789-52' });
-        socket.emit('start-raffle', { raffleId: url, type: sorteo?.tipo, keyword: sorteo?.keyword });
+  
+        // 🚀 Ahora sí se envían los datos correctos
+        socket.emit('start-raffle', { 
+          raffleId: url, 
+          type: sorteo.tipo , 
+          keyword: sorteo.keyword  
+        });
       });
-
+  
       socket.on('raffle-started', (data) => {
         console.log(data.message);
         setCurrentRaffleId(data.raffleId);
         setMessageCounts({});
       });
     }
-
-    // ✅ Desconectar al desmontar
+  
     return () => {
-      socket.disconnect();
+      // socket.disconnect();
       socket.off('connect');
       socket.off('raffle-started');
-      // También desregistrá otros eventos si los usás
-      // socket.off('nuevo-mensaje', handleChatMessage);
     };
-  }, []);
+  }, [sorteo, url]); // 👈 importante: dependencias
 
   return (
     <Nlayout>
@@ -531,7 +531,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
             <Typography variant="subtitle1" style={{ color: 'white' }}>
               Premios: {sorteo?.premios}
             </Typography>
-            {!sorteo?.ganadores?.length && (
+            {!sorteo?.ganadores?.length && sorteo?.tipo !=='Chat' && (
               <Button
                 onClick={unirse}
                 variant="contained"
