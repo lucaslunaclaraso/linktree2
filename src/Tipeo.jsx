@@ -128,8 +128,8 @@ function Tipeo(props) {
                 const formData = new FormData();
 
                 formData.append('file', file);
-                formData.append('upload_preset', 'ml_default'); // Reemplaza con tu preset
-                const response = await fetch('https://api.cloudinary.com/v1_1/dks7seyl8/image/upload', {
+                formData.append('upload_preset', 'ML_DEFAULT'); // Reemplaza con tu preset
+                const response = await fetch('https://api.cloudinary.com/v1_1/dkaxati1r/image/upload', {
                     method: 'POST',
                     body: formData,
                 });
