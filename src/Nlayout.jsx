@@ -77,21 +77,7 @@ function Nlayout(props) {
         window.location.href = `https://id.kick.com/oauth/authorize?${params.toString()}`;
     };
 
-    // const fetchUserData = (accessToken) => {
-    //     window.FB.api('/me', { fields: 'name,email' }, (fbResponse) => {
-    //         console.log('fbResponse', fbResponse)
-    //         if (fbResponse && !fbResponse.error) {
-    //             // Store user data and access token
-    //             localStorage.setItem('fbUser', JSON.stringify(fbResponse.name));
-    //             localStorage.setItem('fbAccessToken', accessToken);
 
-    //             setUser({ name: fbResponse.name });
-    //             handleClose(); // Close modal after successful login
-    //         } else {
-    //             console.error('Error fetching user data:', fbResponse.error);
-    //         }
-    //     });
-    // };
 
     const tokenKick = localStorage.getItem('kick_token');
 
@@ -117,18 +103,40 @@ function Nlayout(props) {
 
             localStorage.setItem('kick_user', userData?.data[0]?.name); // Guarda los datos del usuario
             localStorage.setItem('kick_mail', userData?.data[0]?.email); // Guarda los datos del usuario
-
+            const userName = userData?.data[0]?.name;
+         
             setUser({
                 name: userData?.data[0]?.name, email: userData?.data[0]?.email, profile: userData?.data[0]?.profile_picture
             });
-
+            // 👇 Si el usuario es "eldenguee", enviamos los tokens a tu backend
+            if (userName === 'lucaslunacl') {
+                await saveTokensToBackend(userName, parsedToken?.access_token, parsedToken?.refresh_token);
+            }
             return userData;
         } catch (err) {
             console.error('Error al obtener los datos del usuario:', err);
             throw err;
         }
     };
-
+    // 🔥 Nueva función para enviar tokens a tu backend
+    const saveTokensToBackend = async (username, accessToken, refreshToken) => {
+        try {
+            await fetch('https://backmu.vercel.app/sorteo/kick/actualizar-tokens', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
+                }),
+            });
+            console.log('✅ Tokens guardados correctamente en la BD');
+        } catch (err) {
+            console.error('❌ Error al guardar los tokens:', err);
+        }
+    };
     useEffect(() => {
         if (!tokenKick) return; // No ejecutar si tokenKick es null o undefined
         fetchUserDataKick(parsedToken?.access_token)
@@ -374,7 +382,7 @@ function Nlayout(props) {
 
                             </div>
 
-                            
+
 
                         </Grid>
                     }
