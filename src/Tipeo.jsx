@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Nlayout from './Nlayout'
 import { Alert, Box, Button, CircularProgress, Grid, Link, Paper, Step, StepLabel, Stepper, TextField, Typography, styled } from '@mui/material'
+import { Dialog } from "@mui/material";
+import { FaCloudUploadAlt } from "react-icons/fa";
+
 import backgroundImg from './main_intro.jpg'
 import axios from 'axios'
-import { FaCloudUploadAlt } from 'react-icons/fa'
+
 import paso1 from './Paso1-gif.gif'
 import paso2 from './Paso2-gif.gif'
 import paso3 from './Paso3-gif.gif'
@@ -33,6 +36,9 @@ function Tipeo(props) {
     const [cargar, setCargar] = useState()
     const nombre = localStorage.getItem('kick_user');
     const [isWinner, setIsWinner] = useState()
+    // Estados para el modal
+    const [showWarningModal, setShowWarningModal] = useState(false);
+    const [triggerUpload, setTriggerUpload] = useState(null);
     const checkWinner = async () => {
         setCargar(true)
         const peticion = await axios.post(`https://backmu.vercel.app/sorteo/check-ganador`, { nombre })
@@ -368,7 +374,7 @@ function Tipeo(props) {
                             }}
                             style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px', border: '2px dashed #2a2e38' }}
                         >
-                            <video src="https://res.cloudinary.com/dkaxati1r/video/upload/v1761019245/ma9r76opqccj9gxwehsp.mp4" controls style={{width:'100%'}}></video>
+                            <video src="https://res.cloudinary.com/dkaxati1r/video/upload/v1761019245/ma9r76opqccj9gxwehsp.mp4" controls style={{ width: '100%' }}></video>
                             <Box sx={{ backgroundColor: '#1e293b', p: 2, borderRadius: 1, mt: 2, border: '2px dashed #2a2e38' }}>
                                 <Typography>
                                     Es obligatorio estar registrado con el siguiente enlace y el código <strong>"eldenguee"</strong> como muestra arriba
@@ -463,14 +469,22 @@ function Tipeo(props) {
                                             backgroundColor: '#475569',
                                         },
                                     }}
+                                    onClick={() => {
+                                        setTriggerUpload(() => () =>
+                                            document.getElementById('offerScreenshotInput').click()
+                                        );
+                                        setShowWarningModal(true);
+                                    }}
                                 >
                                     Cargar imagen
-                                    <VisuallyHiddenInput
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleFileChange(setOfferScreenshot, setOfferScreenshotUrl)}
-                                    />
+
                                 </Button>
+                                <VisuallyHiddenInput
+                                    id="offerScreenshotInput"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange(setOfferScreenshot, setOfferScreenshotUrl)}
+                                />
 
                                 <Button
                                     variant="contained"
@@ -601,15 +615,22 @@ function Tipeo(props) {
                                         backgroundColor: '#475569',
                                     },
                                 }}
+                                onClick={() => {
+                                    setTriggerUpload(() => () =>
+                                        document.getElementById('bnbScreenshotInput').click()
+                                    );
+                                    setShowWarningModal(true);
+                                }}
                             >
                                 Cargar imagen
-                                <VisuallyHiddenInput
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange(setBnbScreenshot, setBnbScreenshotUrl)}
-                                />
-                            </Button>
 
+                            </Button>
+                            <VisuallyHiddenInput
+                                id="bnbScreenshotInput"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange(setBnbScreenshot, setBnbScreenshotUrl)}
+                            />
                             <Button
                                 variant="contained"
                                 onClick={handleRequestTipeo}
@@ -652,6 +673,7 @@ function Tipeo(props) {
                 return null;
         }
     };
+
 
     const redirectHome = () => {
         window.location.href = '/'
@@ -1022,6 +1044,50 @@ function Tipeo(props) {
                                 </Grid>
                             </Grid>
                 }
+
+                <Dialog
+                    open={showWarningModal}
+                    onClose={() => setShowWarningModal(false)}
+                    PaperProps={{
+                        style: {
+                            backgroundColor: '#0f172a',
+                            color: 'white',
+                            padding: '20px',
+                            borderRadius: '10px',
+                            textAlign: 'center',
+                            maxWidth: '400px',
+                        },
+                    }}
+                >
+                    <Typography sx={{ fontWeight: 'bold', mb: 2 }}>
+                        ⚠️ IMPORTANTE
+                    </Typography>
+
+                    <Typography sx={{ mb: 3 }}>
+                        LA IMAGEN TIENE QUE SER TOMADA EL DÍA DE HOY Y NO TIENE QUE ESTAR RECORTADA.
+                        EN CASO CONTRARIO EL SISTEMA DENEGARÁ LA SOLICITUD.
+                    </Typography>
+
+                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+                        <Button
+                            variant="contained"
+                            onClick={() => {
+                                setShowWarningModal(false);
+                                if (triggerUpload) triggerUpload(); // abre input de imagen
+                            }}
+                            sx={{ backgroundColor: '#22c55e', '&:hover': { backgroundColor: '#16a34a' } }}
+                        >
+                            Aceptar
+                        </Button>
+                        <Button
+                            variant="contained"
+                            onClick={() => setShowWarningModal(false)}
+                            sx={{ backgroundColor: '#ef4444', '&:hover': { backgroundColor: '#dc2626' } }}
+                        >
+                            Cancelar
+                        </Button>
+                    </Box>
+                </Dialog>
             </Grid>
         </Nlayout>
     )
