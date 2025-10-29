@@ -35,6 +35,7 @@ import ListadoAudios from './ListadoAudios';
 import Torneo from './Torneo';
 import PanelTorneo from './PanelTorneo';
 import ListadoNoReclamados from './ListadoNoReclamados';
+import DarTipeo from './DarTipeo';
 
 const style = {
     position: 'absolute',
@@ -303,6 +304,7 @@ function App() {
                 <Route path="/listaaudios" element={<RutaPrivada><ListadoAudios isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/listanoreclamados" element={<RutaPrivada><ListadoNoReclamados isMobile={isMobile} /> </RutaPrivada> } />
                 <Route path="/dar-coins" element={<RutaPrivada><DarCoins isMobile={isMobile} /> </RutaPrivada>} />
+                <Route path="/dar-tipeos" element={<RutaPrivada><DarTipeo isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/tipeo" element={<Tipeo nombre={nombre} isMobile={isMobile} />} />
                 <Route path="/canjear" element={<CanjearCodigos isMobile={isMobile} />} />
                 <Route path="/crearCode" element={<RutaPrivada><CrearCodigos isMobile={isMobile} /> </RutaPrivada>} />
