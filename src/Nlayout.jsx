@@ -246,7 +246,7 @@ function Nlayout(props) {
         window.location.href = "/dar-coins"
     }
     const darTipeo = () => {
-        window.location.href = "/dar-tipeo"
+        window.location.href = "/dar-tipeos"
     }
     const redirectCrearSolicitudes = () => {
         window.location.href = "/crearlink"
