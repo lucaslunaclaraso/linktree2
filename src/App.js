@@ -295,7 +295,7 @@ function App() {
                 <Route path="/torneo/:url" element={<RutaPrivada><Torneo isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/listadoTorneos" element={<RutaPrivada><ListadoSorteos isMobile={isMobile} /> </RutaPrivada>} />
 
-                <Route path="/solicitudes" element={<AdminPanel isMobile={isMobile} /> } />
+                <Route path="/solicitudes" element={<RutaPrivada><AdminPanel isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/grabar" element={<Grabar nombre={nombre} isMobile={isMobile} />} />
                 <Route path="/audio" element={<Reproductor isMobile={isMobile} />} />
 

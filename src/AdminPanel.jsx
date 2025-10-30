@@ -429,7 +429,7 @@ const AdminPanel = (props) => {
                                                         >
                                                             Rechazar
                                                         </Button>
-                                                        <Button
+                                                        {/* <Button
                                                             variant="contained"
                                                             color="warning"
                                                             size="small"
@@ -448,7 +448,7 @@ const AdminPanel = (props) => {
                                                             sx={{ mr: 1, mb: { xs: 1, sm: 0 } }}
                                                         >
                                                             Devolver
-                                                        </Button>
+                                                        </Button> */}
                                                     </Grid>
                                                 )}
                                             </TableCell>
