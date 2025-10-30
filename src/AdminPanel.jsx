@@ -59,13 +59,13 @@ const AdminPanel = (props) => {
         setOpenRazon(true);
     };
     // Manejar acción de aceptar/rechazar
-    const handleAction = async (id, action, razon) => {
+    const handleAction = async (id, action, razon, nombre) => {
         setLoading(true);
         setError('');
         try {
             const response = await axios.put(
                 `https://backmu.vercel.app/solicitudes/${id}/update`,
-                { status: action, razon: razon },
+                { status: action, razon: razon , nombre: nombre},
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -429,17 +429,17 @@ const AdminPanel = (props) => {
                                                         >
                                                             Rechazar
                                                         </Button>
-                                                        {/* <Button
+                                                         <Button
                                                             variant="contained"
                                                             color="warning"
                                                             size="small"
-                                                            onClick={() => handleAction(solicitud.id, 'accepted')}
+                                                            onClick={() => handleAction(solicitud.id, 'vetado','',solicitud.nombre)}
                                                             disabled={loading}
                                                             sx={{ mr: 1, mb: { xs: 1, sm: 0 } }}
                                                         >
                                                             Vetar
                                                         </Button>
-                                                        <Button
+                                                       {/* <Button
                                                             variant="contained"
                                                             color="info"
                                                             size="small"

@@ -233,16 +233,35 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
       return [];
     }
   };
+  const obtenerBlackList = async () => {
+    try {
+      const response = await fetch(`https://backmu.vercel.app/solicitudes/blacklist`);
+      const data = await response.json();
+     
+      return Array.isArray(data) ? data : [];
+    } catch (err) {
+      console.error('Error al obtener la blacklist:', err);
+      return [];
+    }
+  };
 
   const sortear = async () => {
     const blacklist = await obtenerGanadoresDelSorteoAnterior();
+    const blackListReal = await obtenerBlackList()
+
+   
+
+    // 1️⃣ Filtramos los participantes excluyendo los que están en la blacklist real
+    const participantesValidos = participantes.filter(
+      p => !blackListReal.includes(p.nombre)
+    );
 
     // Separar participantes nuevos y de la lista negra
-    const nuevos = participantes.filter(
+    const nuevos = participantesValidos.filter(
       p => !blacklist.includes(p.mail)
     );
 
-    const enBL = participantes.filter(
+    const enBL = participantesValidos.filter(
       p => blacklist.includes(p.mail)
     );
 
@@ -405,32 +424,32 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
 
     return () => clearInterval(intervaloContador);
   }, []);
-  
+
   useEffect(() => {
     const usuarioKick = localStorage.getItem('kick_user');
-  
+
     if ((usuarioKick === 'lucaslunacl' || usuarioKick === 'eldenguee') && sorteo?.tipo) {
       socket.connect();
-  
+
       socket.on('connect', () => {
         console.log('Conectado al servidor:', socket.id);
         socket.emit('register-creator', { creatorId: '15789-52' });
-  
+
         // 🚀 Ahora sí se envían los datos correctos
-        socket.emit('start-raffle', { 
-          raffleId: url, 
-          type: sorteo.tipo , 
-          keyword: sorteo.keyword  
+        socket.emit('start-raffle', {
+          raffleId: url,
+          type: sorteo.tipo,
+          keyword: sorteo.keyword
         });
       });
-  
+
       socket.on('raffle-started', (data) => {
         console.log(data.message);
         setCurrentRaffleId(data.raffleId);
         setMessageCounts({});
       });
     }
-  
+
     return () => {
       // socket.disconnect();
       socket.off('connect');
@@ -531,7 +550,7 @@ export default function DetalleSorteo({ sorteos, setSorteos, isMobile }) {
             <Typography variant="subtitle1" style={{ color: 'white' }}>
               Premios: {sorteo?.premios}
             </Typography>
-            {!sorteo?.ganadores?.length && sorteo?.tipo !=='Chat' && (
+            {!sorteo?.ganadores?.length && sorteo?.tipo !== 'Chat' && (
               <Button
                 onClick={unirse}
                 variant="contained"

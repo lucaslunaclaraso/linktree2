@@ -128,7 +128,7 @@ function App() {
 
             const criptoRandom = crypto.randomUUID()
 
-            const state = isTorneoRoute|| isSorteoRoute || isTipeoRoute ? encodeURIComponent(location.pathname) : encodeURIComponent('/');
+            const state = isTorneoRoute || isSorteoRoute || isTipeoRoute ? encodeURIComponent(location.pathname) : encodeURIComponent('/');
             const params = new URLSearchParams({
                 response_type: 'code',
                 client_id: '01JW6K1RY4R70K7B6KSJ8GK5CV',
@@ -302,7 +302,7 @@ function App() {
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/listalinks" element={<RutaPrivada><ListadoLinks isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/listaaudios" element={<RutaPrivada><ListadoAudios isMobile={isMobile} /> </RutaPrivada>} />
-                <Route path="/listanoreclamados" element={<RutaPrivada><ListadoNoReclamados isMobile={isMobile} /> </RutaPrivada> } />
+                <Route path="/listanoreclamados" element={<RutaPrivada><ListadoNoReclamados isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/dar-coins" element={<RutaPrivada><DarCoins isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/dar-tipeos" element={<RutaPrivada><DarTipeo isMobile={isMobile} /> </RutaPrivada>} />
                 <Route path="/tipeo" element={<Tipeo nombre={nombre} isMobile={isMobile} />} />
